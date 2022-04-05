@@ -6,9 +6,22 @@ var port = process.env.PORT || 3000;
 
 app.use(express.static('public'));
 
+// Routes
+
 app.get('/', function(request, response) {
   response.sendFile(__dirname + '/index.html');
 });
+
+app.get('/chat', function(request, response) {
+  response.sendFile(__dirname + '/chat.html');
+});
+
+app.get('/ping', function(request, response) {
+  response.json({ ping: 'pong!' })
+});
+
+
+// Socketry
 
 io.on('connection', function(socket) {
   console.log('a user connected');
