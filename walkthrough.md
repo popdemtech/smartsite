@@ -64,6 +64,8 @@ The deployed application can be accessed by navigating in the browser to the URL
 $ heroku open
 ```
 
+---
+
 ## Add Functionality to the Frontend
 Adding functionality to a website takes it from being a presentational asset to an interactive asset. This functionality is what will keep you and the site's visitors engaged and coming back.
 
