@@ -28,7 +28,7 @@ app.get('/ping', function(request, response) {
 });
 
 app.get('/hello-world', function(request, response) {
-  const showDog = request.query.showDog;
+  const showDog = request.query.showDog == 'false' ? false : true;
   response.render('hello-world', {
     showDog,
     date: new Date()
@@ -37,6 +37,10 @@ app.get('/hello-world', function(request, response) {
 
 app.get('/hello-dog', function(request, response) {
   response.redirect('/hello-world?showDog=true');
+});
+
+app.get('/generate-pdf', function(request, response) {
+  response.render('generate-pdf');
 });
 
 // Socketry
