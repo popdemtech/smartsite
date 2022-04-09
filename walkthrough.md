@@ -354,8 +354,6 @@ The strategy for selecting and replacing text with JavaScript is to keep a recor
 ### Resources
 Data attributes: [https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes)
 
----
-
 ## Add Authentication with Auth0
 1. Sign up for Auth0 and follow the NodeJS walkthrough
 * Sign up for Auth0. They provide a free tier.
