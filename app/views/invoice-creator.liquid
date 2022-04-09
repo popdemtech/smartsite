@@ -72,10 +72,10 @@ th, td {
 
     <div class="top-box"></div>
     <div class="invoice">
-      <div class="invoice-number">Invoice #0045</div>
-      <div class="invoice-date">Date: 04/02/2022</div>
-      <div class="invoice-due-date">Due Date: 04/17/2022</div>
-      <div class="invoice-balance-due">Balance Due: $880.00</div>
+      <div data-pdf-field="invoice-number">Invoice <span class="replace">#0045</span></div>
+      <div data-pdf-field="invoice-date">Date: <span class="replace">04/02/2022</span></div>
+      <div data-pdf-field="invoice-due-date">Due Date: <span class="replace">04/17/2022</span></div>
+      <div data-pdf-field="invoice-balance-due">Balance Due: <span class="replace">$880.00</span></div>
     </div>
 
     <div class="company">
@@ -106,8 +106,8 @@ th, td {
         </tr>
       </thead>
 
-      <tbody>
-        <tr class="line-item-1">
+      <tbody class="line-items">
+        <tr id="line-item-1" class="line-item">
           <td class="line-item-date">04/2022</td>
           <td class="line-item-description">Web Design</td>
           <td class="line-item-rate">$880/unit</td>
@@ -122,11 +122,11 @@ th, td {
           <td></td>
           <td></td>
         </tr>
-        <tr>
+        <tr data-pdf-field="invoice-balance-due">
           <td></td>
           <td></td>
           <td class="balance-due"><b>Balance Due</b></td>
-          <td class="balance-amount">$880.00</td>
+          <td class="balance-amount"><span class="replace">$880.00</span></td>
         </tr>
       </tfoot>
     </table>
@@ -142,7 +142,28 @@ th, td {
 
 <br/><br/>
 
-<button onclick="generatePDF()">Generate PDF</button>
+<div>
+  <form id="pdf-form">
+    Invoice number: <input type="text" name="invoice-number" /><br><br>
+    Invoice date: <input type="text" name="invoice-date" /><br><br>
+    Invoice due date: <input type="text" name="invoice-due-date" /><br><br>
+    Invoice balance due: <input type="text" name="invoice-balance-due" /><br><br>
+
+    <br>
+
+    Line item:<br>
+    Date: <input type="text" data-line-item-id="1" name="date" /><br>
+    Description: <input type="text" data-line-item-id="1" name="description" /><br>
+    Rate: <input type="text" data-line-item-id="1" name="rate" /><br>
+    Amount: <input type="text" data-line-item-id="1" name="amount" /><br>
+
+    <button type="submit">Update PDF</button>
+  </form>
+  <button onclick="generatePDF()">Print PDF</button>
+  <button onclick="fillForm()">Fill Form</button>
+</div>
+
+
 <script>
   function generatePDF() {
     const { jsPDF } = window.jspdf;
@@ -160,5 +181,48 @@ th, td {
       }
     });
   }
+
+  function fillForm() {
+    const inputs = document.getElementsByTagName('input');
+    for (let input of inputs) {
+      input.value = 'text';
+    }
+  }
+
+  const pdfForm = document.getElementById('pdf-form');
+
+  function updatePDF(e) {
+    e.preventDefault();
+
+    const inputs = document.querySelectorAll('#pdf-form input');
+    const lineItemsById = {}
+    inputs.forEach((input) => {
+      if (input.dataset.lineItemId) {
+        const lineItemId = input.dataset.lineItemId;
+        const name = input.name;
+        const value = input.value;
+
+        lineItemsById[lineItemId] = lineItemsById[lineItemId] || {};
+        lineItemsById[input.dataset.lineItemId][input.name] = input.value;
+        return;
+      };
+
+      const replacements = document.querySelectorAll(`[data-pdf-field=${input.name}] .replace`);
+      replacements.forEach((replace) => {
+        replace.innerHTML = input.value;
+      });
+    });
+
+    console.log(lineItemsById)
+
+    // <tr id="line-item-1" class="line-item">
+    //   <td class="line-item-date">04/2022</td>
+    //   <td class="line-item-description">Web Design</td>
+    //   <td class="line-item-rate">$880/unit</td>
+    //   <td class="line-item-amount">$880.00</td>
+    // </tr>
+  }
+
+  pdfForm.addEventListener('submit', updatePDF);
 </script>
 {% endblock %}

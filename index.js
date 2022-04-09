@@ -43,6 +43,10 @@ app.get('/generate-pdf', function(request, response) {
   response.render('generate-pdf');
 });
 
+app.get('/invoice-creator', function(request, response) {
+  response.render('invoice-creator');
+});
+
 // Socketry
 io.on('connection', function(socket) {
   console.log('a user connected');
