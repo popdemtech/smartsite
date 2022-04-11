@@ -445,6 +445,25 @@ Alter `index.liquid` to show a Logout or Login button depending on whether there
 
 Run the Express and Caddy servers (`npm run start` and `npm run dev-proxy` respectively). Open a browser to `localhost:3000`, and navigate through the authentication flow: Login -> Authenticate with Auth0 -> Redirect back to `/` -> Logout.
 
+### Authentication in Deployed Environment
+To get authentication accessible to an internet audience, we will have to get this new feature live in a deployed environment. We'll push these changes to Heroku with minor changes.
+
+The application, both within the code and within the Auth0 interface, is currently configured to use `localhost` addresses for callbacks and redirects. The URL in the deployed state will be different -- `[SOMETHING].herokuapp.com` if you are following this walkthrough. The value for the callbacks will use the same domain a user navigates to in the browser.
+
+The Easy Way: Use the Same Auth0 Application
+This method requires some changes in the Auth0 interface, but no changes to the application code.
+
+1. In the Auth0 application settings, add `https://[YOUR_APP].herokuapp.com` alongside the `https://localhost` entries.
+The "Allowed Callback URLs" and "Allowed Logout URLs" fields accept comma-separated values. Be sure to use `https` as you type these. Heroku serves web traffic over `https`. Save changes.
+
+2. Deploy the application to Heroku.
+`git add` and `commit` all changes.
+```
+$ git add .
+$ git commit -m 'Add authentication'
+$ git push heroku master
+```
+
 ### Resources
 Auth0: https://auth0.com/docs/
 Auth0 Express: https://auth0.com/docs/quickstart/webapp/express
