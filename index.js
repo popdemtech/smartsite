@@ -1,10 +1,11 @@
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var io =  require('socket.io')(http);
-var { Liquid } = require('liquidjs');
-var engine = new Liquid();
-var port = process.env.PORT || 3000;
+const express = require('express');
+const app = express();
+const { auth } = require('express-openid-connect');
+const http = require('http').Server(app);
+const io =  require('socket.io')(http);
+const { Liquid } = require('liquidjs');
+const engine = new Liquid();
+const port = process.env.PORT || 3000;
 
 // Views
 app.engine('liquid', engine.express());
@@ -14,9 +15,26 @@ app.set('view engine', 'liquid');
 // Static files
 app.use(express.static('public'));
 
+// Auth0
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'a long, randomly-generated string stored in env',
+  baseURL: 'https://localhost:3000',
+  clientID: 'BdsyUqLCLcMDv21lT9VzCRuo8fP2xvZl',
+  issuerBaseURL: 'https://dev-r6lb7q89.us.auth0.com',
+  routes: {
+    callback: '/auth0/callback'
+  }
+};
+
+app.use(auth(config));
+
 // Routes
 app.get('/', function(request, response) {
-  response.render('index');
+  response.render('index', {
+    loggedIn: request.oidc.isAuthenticated()
+  });
 });
 
 app.get('/chat', function(request, response) {

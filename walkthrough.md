@@ -356,6 +356,18 @@ Data attributes: [https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_
 
 ---
 
+## Add Authentication with Auth0
+1. Auth0 account
+2. Configure in Auth0 Dashboard
+3. Add code to NodeJS application
+4. Configure for deploy
+
+### Resources
+Auth0: https://auth0.com/docs/
+Auth0 Express: https://auth0.com/docs/quickstart/webapp/express
+
+---
+
 ## Deciding on Database Software
 Databases are used for persisting data long-term, and I'll be approaching
 this term in such a general sense. Data storage can be handled in many ways.

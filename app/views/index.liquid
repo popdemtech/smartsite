@@ -12,5 +12,12 @@
   <li><a href="/hello-dog">hello-dog</a></li>
   <li><a href="/generate-pdf">generate-pdf</a></li>
   <li><a href="/invoice-creator">Invoice Creator</a></li>
+  <li>
+    {% if loggedIn %}
+    <a href="/logout">Logout</a>
+    {% else %}
+    <a href="/login">Login</a>
+    {% endif %}
+  </li>
 </ul>
 {% endblock %}
