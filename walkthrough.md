@@ -385,14 +385,16 @@ const config = {
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
+```
 
+This snippet requires the `auth` middleware from `express-openid-connect`, and configures this auth client with variables provided by Auth0.
+
+```
 // req.isAuthenticated is provided from the auth router
 app.get('/', (req, res) => {
   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
 ```
-
-This snippet requires the `auth` middleware from `express-openid-connect`, and configures this auth client with variables provided by Auth0.
 
 This snippet includes an example route using the `isAuthenticated` helper provided by the `auth` middleware. `pd-service` already has a `/` route, so if you intend to keep the example route, rename it.
 
