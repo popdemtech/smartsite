@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npx nodemon index.js",
+    "dev-proxy": "npx @leafac/caddy reverse-proxy --from localhost:3001 --to localhost:3000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "popdemtech",
@@ -19,6 +20,7 @@
     "node": "16.x"
   },
   "devDependencies": {
+    "@leafac/caddy": "^1.0.4",
     "nodemon": "^2.0.15"
   }
 }

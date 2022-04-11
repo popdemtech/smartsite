@@ -357,14 +357,99 @@ Data attributes: [https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_
 ---
 
 ## Add Authentication with Auth0
-1. Auth0 account
-2. Configure in Auth0 Dashboard
-3. Add code to NodeJS application
-4. Configure for deploy
+1. Sign up for Auth0 and follow the NodeJS walkthrough
+* Sign up for Auth0. They provide a free tier.
+* Navigate to the Applications Dashboard
+* "Create Application". Set name. Select "Regular Web Application".
+* Use the Quick Start for NodeJS application and "Integrate now"
+* Set the "Allowed Callback URL"
+  * More about the callback URL is covered in the "Caddy reverse proxy" section.
+  * For local development, set this value to `https://localhost:3001/callback`.
+* Set "Allowed Logout URLs"
+  * Set this value to `https://localhost:3001`
+*  Install the `express-openid-connect` authentication middleware.
+```
+npm install express-openid-connect --save
+```
+* Copy the configuration code provided by Auth0.
+  * The NodeJS Quick Start wizard provides a snippet.
+```
+const { auth } = require('express-openid-connect');
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'a long, randomly-generated string stored in env',
+  baseURL: 'https://localhost:3001',
+  clientID: '[UNIQUE CLIENT ID]',
+  issuerBaseURL: 'https://[UNIQUE ID].us.auth0.com'
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+```
+
+This snippet requires the `auth` middleware from `express-openid-connect`, and configures this auth client with variables provided by Auth0.
+
+This snippet includes an example route using the `isAuthenticated` helper provided by the `auth` middleware. `pd-service` already has a `/` route, so if you intend to keep the example route, rename it.
+
+3. Set up Caddy reverse proxy
+Notice that the `baseURL` Auth0 is aware of is `https://localhost:3001`. This is different in two ways from the currently written Express server in `index.js`: 1. It is served over `https` protocol. 2. It's port address is 3001.
+
+In this step, we'll set up a webserver to traffic (proxy) https web traffic at port 3001 to the Express server running at port 3000. When the proxy server is running, the application available at both `http://localhost:3000` and `https://localhost:3001`.
+
+Note: This solution is for local development. A different Auth0 "Application" with different credentials will be created for the production environment. This is walked through in the "Auth0 on Production" section.
+
+Install the `@leafac/caddy` npm library as a dev dependency.
+```
+npm i -D @leafac/caddy
+```
+
+Add a script, `dev-proxy`, to `package.json`:
+```
+"scripts": {
+  ...,
+  "dev-proxy": "npx @leafac/caddy reverse-proxy --from localhost:3001 --to localhost:3000"
+}
+```
+
+The caddy library defaults to interpreting the `--from` parameter as `https` and the `to` parameter as `http` -- exactly what's needed in this case.
+
+We can now run `npm run dev-proxy` and the proxy server will initialize and forward traffic https traffic at port 3001 to port 3000. You will have to open seperate terminal windows to run `npm run start` and `npm run dev-proxy` concurrently. Alternatively, look into an npm library like [`npm-run-all`](https://www.npmjs.com/package/npm-run-all) for a tool to run both commands from one terminal window.
+
+4. Test locally
+Within `index.js`, alter `/` route to pass the `isAuthenticated()` boolean to the front end.
+```javascript
+app.get('/', function(request, response) {
+  response.render('index', {
+    loggedIn: request.oidc.isAuthenticated()
+  });
+});
+```
+
+Alter `index.liquid` to show a Logout or Login button depending on whether there is a currently logged in user. Within the list of links:
+```html
+<li>
+  {% if loggedIn %}
+  <a href="/logout">Logout</a>
+  {% else %}
+  <a href="/login">Login</a>
+  {% endif %}
+</li>
+``` 
+
+Run the Express and Caddy servers (`npm run start` and `npm run dev-proxy` respectively). Open a browser to `localhost:3000`, and navigate through the authentication flow: Login -> Authenticate with Auth0 -> Redirect back to `/` -> Logout.
 
 ### Resources
 Auth0: https://auth0.com/docs/
 Auth0 Express: https://auth0.com/docs/quickstart/webapp/express
+HTTPS in Development: https://auth0.com/docs/libraries/secure-local-development
+Run Node Commands Simultaneously: https://itnext.io/4-solutions-to-run-multiple-node-js-or-npm-commands-simultaneously-9edaa6215a93
 
 ---
 

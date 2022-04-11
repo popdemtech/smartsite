@@ -20,7 +20,7 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: 'a long, randomly-generated string stored in env',
-  baseURL: 'https://localhost:3000',
+  baseURL: 'https://localhost:3001',
   clientID: 'BdsyUqLCLcMDv21lT9VzCRuo8fP2xvZl',
   issuerBaseURL: 'https://dev-r6lb7q89.us.auth0.com',
   routes: {
