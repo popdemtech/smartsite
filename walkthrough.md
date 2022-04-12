@@ -451,12 +451,28 @@ To get authentication accessible to an internet audience, we will have to get th
 The application, both within the code and within the Auth0 interface, is currently configured to use `localhost` addresses for callbacks and redirects. The URL in the deployed state will be different -- `[SOMETHING].herokuapp.com` if you are following this walkthrough. The value for the callbacks will use the same domain a user navigates to in the browser.
 
 The Easy Way: Use the Same Auth0 Application
-This method requires some changes in the Auth0 interface, but no changes to the application code.
 
 1. In the Auth0 application settings, add `https://[YOUR_APP].herokuapp.com` alongside the `https://localhost` entries.
 The "Allowed Callback URLs" and "Allowed Logout URLs" fields accept comma-separated values. Be sure to use `https` as you type these. Heroku serves web traffic over `https`. Save changes.
 
-2. Deploy the application to Heroku.
+2. Modify the Auth0 configuration within `index.js` to conditionally use the deployed URL for `baseURL`.
+Theis conditional added in step 2 evaluates to true if the `NODE_ENV` environment variable is set to `'production'`. If the env variable is not set or is set to a different value, the conditional will evaluate to false.
+```javascript
+// Auth0
+const config = {
+  baseURL:
+    process.env.NODE_ENV == 'production' ? 'https://pd-service.herokuapp.com' : 'https://localhost:3001',
+  ...
+};
+```
+
+3. Alter the Procfile to use the environment variable `NODE_ENV`.
+Remember `Procfile` contains the process that starts the web server. A common method of providing environment variables to a process is to define them immediately before the process command. Define `NODE_ENV` at the start of the `web` process
+```
+web: NODE_ENV=production npm run start
+```
+
+4. Deploy the application to Heroku.
 `git add` and `commit` all changes.
 ```
 $ git add .

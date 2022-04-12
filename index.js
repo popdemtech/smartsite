@@ -20,7 +20,8 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: 'a long, randomly-generated string stored in env',
-  baseURL: 'https://localhost:3001',
+  baseURL:
+    process.env.NODE_ENV == 'production' ? 'https://pd-service.herokuapp.com' : 'https://localhost:3001',
   clientID: 'BdsyUqLCLcMDv21lT9VzCRuo8fP2xvZl',
   issuerBaseURL: 'https://dev-r6lb7q89.us.auth0.com',
   routes: {
