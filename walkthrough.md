@@ -505,4 +505,100 @@ A relational database is a fine choice for representing the domain models of pd-
 
 ---
 
-### Adding Heroku Postgress to NodeJS App
+## Install PostgreSQL on Mac with Homebrew
+
+Homebrew is a popular package manager for MacOS. A package manager provides the ability to quickly install packages, their dependency packages, and keep the packages up to date. "Packages" are software libraries and executables generally runnable from a command-line interface.
+
+1. Install Homebrew
+While we will use Homebrew to install PostgreSQL and its dependencies, we first need to install the Homebrew package itself. If you do not already have Homebrew installed, run the following from a MacOS commandline:
+```bash
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+2. Install PostgreSQL
+```bash
+$ brew update
+$ brew install postgresql
+$ postgres --v
+```
+
+3. Create a database cluster
+A database storage area on disk must be initialized before. A database cluster is a collection of databases that is managed by a single instance of a running database server. In file system terms, it is a single directory in which all data will be stored. There is no default location for this to be stored; we will set the location to be `/usr/local/var/postgres`:
+```bash
+$ initdb /usr/local/var/postgres
+```
+
+You may see the error message: `initdb: directory "/usr/local/var/postgres" exists but is not empty`. It means the folder you are attempting to create already exists. You are safe to move on to the next step.
+
+4. Start the database server
+Use the command [`pg_ctl`](https://www.postgresql.org/docs/current/app-pg-ctl.html) to control PostgreSQL database servers. The parameter to the `-D` flag indicates the data directory. Use the data directory created in the previous step via `initdb`.
+```bash
+$ pg_ctl -D /usr/local/var/postgres start
+```
+This will log the initialization processes, output `server started`, and return function of the CLI to the user. This command started the database process in the background. To stop the database process, run
+```bash
+$ pg_ctl -D /usr/local/var/postgres stop
+```
+
+5. Create a database
+Within the database cluster, the `initdb` command created a database named `postgres`. Make an additional database named by your MacOS username with the following command:
+```bash
+$ createdb $USER
+```
+
+6. Connect to the database
+The command `psql` allows the developer to enter into a PostgreSQL command line environment for executing SQL and other tasks involving the data in the database.
+
+To enter into the postgres shell, use the command `psql` and indicate the database. If `psql` is used with no arguments, a database of the current user's name is assumed.
+```
+$ psql postgres
+```
+
+In this mode, the command line is prefixed by `[DATABASE NAME]=#`. Use `exit` to exit the process for the `postgres` database, and enter into a session with the database named by your username.
+```
+postgres=# exit
+
+$ psql # Run this command with no arguments
+
+# List databases
+popdemtech=# \l
+
+# List users
+popdemtech=# \du
+```
+
+See the Reference of this section for more utilities available within the `psql` environment.
+
+7. Get database connection info
+As part of the NodeJS walkthrough, we will be creating application databases, tables, and queries within the NodeJS application using a JavaScript library specfically for interfacing with the PostgreSQL server.
+
+Like a web server, the PostgreSQL server is accessed via TCP -- that is to say, the web application opens a connection to the database server, requests for data, and receives a response. To successfully connect to the data server, and retrieve data, the web application needs to have record of:
+* The database server host location
+* The specific database's name
+* The user attempting access, and
+* The user's password
+
+The host for local development is `localhost`. The database name, user name, and password are known by the developer.
+
+To see connection information, enter the `psql` interface and use the `\conninfo` command. It will output the database, user, and port of the active `psql` session.
+```
+$ psql databasename
+databasename=# \conninfo
+You are connected to database "databasename" as user "popdemtech" via socket in "/tmp" at port "5432".
+```
+
+A separate database is recommended per web application, and, although user and password can be shared between applications, there are benefits to using unique users and passwords per application as well. This can be called the "Principle of Least Privilege," and revolves around database security.
+
+Most high-level languages (e.g. JavaScript) come with wrapper libraries that handle Postgres database creation. It will likely be necessary to create the `user` and `password` using `psql` or similar utilities.
+
+See the References for further on PostgreSQL user management and security.
+
+---
+
+## References
+
+PSQL utilities: [https://www.postgresguide.com/utilities/psql/](https://www.postgresguide.com/utilities/psql/)
+
+Managing Postgres users and privileges: [https://kb.objectrocket.com/postgresql/how-to-list-users-in-postgresql-782](https://kb.objectrocket.com/postgresql/how-to-list-users-in-postgresql-782)
+
+PostgreSQL Security Best Practices: [https://resources.2ndquadrant.com/hubfs/Whitepaper PDFs/PostgreSQL_Security_Best_Practices_Whitepaper.pdf](https://resources.2ndquadrant.com/hubfs/Whitepaper%20PDFs/PostgreSQL_Security_Best_Practices_Whitepaper.pdf)
