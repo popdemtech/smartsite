@@ -326,7 +326,6 @@ th, td {
 .balance-due, .balance-amount {
   padding: .1in;
 }
-
 </style>
 ```
 
@@ -369,9 +368,10 @@ Data attributes: [https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_
 ```
 npm install express-openid-connect --save
 ```
-* Copy the configuration code provided by Auth0.
-  * The NodeJS Quick Start wizard provides a snippet.
-```
+
+* Copy the configuration code provided by the Quick Start wizard.
+
+```javascript
 const { auth } = require('express-openid-connect');
 
 const config = {
@@ -450,7 +450,9 @@ To get authentication accessible to an internet audience, we will have to get th
 
 The application, both within the code and within the Auth0 interface, is currently configured to use `localhost` addresses for callbacks and redirects. The URL in the deployed state will be different -- `[SOMETHING].herokuapp.com` if you are following this walkthrough. The value for the callbacks will use the same domain a user navigates to in the browser.
 
-The Easy Way: Use the Same Auth0 Application
+The first approach to look at is using the same Auth0 application for local development and in the deployed environment. There are use cases for this method, but it is not the most robust solution.
+
+#### The Easy Way: Use the Same Auth0 Application
 
 1. In the Auth0 application settings, add `https://[YOUR_APP].herokuapp.com` alongside the `https://localhost` entries.
 The "Allowed Callback URLs" and "Allowed Logout URLs" fields accept comma-separated values. Be sure to use `https` as you type these. Heroku serves web traffic over `https`. Save changes.
@@ -461,7 +463,7 @@ Theis conditional added in step 2 evaluates to true if the `NODE_ENV` environmen
 // Auth0
 const config = {
   baseURL:
-    process.env.NODE_ENV == 'production' ? 'https://pd-service.herokuapp.com' : 'https://localhost:3001',
+    process.env.NODE_ENV == 'production' ? 'https://[YOUR_APP].herokuapp.com' : 'https://localhost:3001',
   ...
 };
 ```
