@@ -53,6 +53,7 @@ A relational database is a fine choice for representing the domain models of pd-
 ### Adding Heroku Postgress to NodeJS App
 
 When add customization to users table, 
+
 #### The robust way: Use separate authentication servers for development and production.
 A more robust solution uses different Auth0 applications for the local and deployed environments. This will allow for custom NodeJS application data management between the two environments, and will avoid potential database collisions.
 
