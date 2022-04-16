@@ -680,3 +680,30 @@ PSQL utilities: [https://www.postgresguide.com/utilities/psql/](https://www.post
 
 ---
 
+## Saving Data
+
+End-users of an application are more engaged if the web application is dynamic. As seen in the Invoice Creator project, this can be accomplished with front-end JavaScript alone. An improvement on the level of engagement the web app can provide is if data state can be saved and retrieved across user sessions.
+
+As an example, imagine a user logs in and creates a document with the Invoice Creator. The usefulness of the Invoice Creator app can be increased for the user if, the next time they log in, they see a list of previously created documents. A further increase in feature set -- such as the ability to edit previously saved documents -- is an increase of usability.
+
+A solution to saving and retrieving user data is to save this data in a persisted storage database such as PostgreSQL. This data stays in the application's database when the user is logged in or not, and can be retrieved by the user interacting with the web page or by a developer running analytics on the data.
+
+The general flow of saving data to a database is to
+1. Decide on the data model
+2. Provide a front-end interface for the user to enter data
+3. Accept the user data with a route defined within the webserver
+4. Save the user data to Postgres from the webserver
+5. Return a response to the user of whether the data save was successful or not
+
+### What we're building
+This new feature will allow logged in users to save a time log of their day's activities. After they have entered a day, time, and description, the activity is added to an on-screen list. On page load, this list is pre-populated with any of the logged in user's previously saved time logs.
+
+### 1. Decide the data model
+
+
+### 2. Create the user interface
+The user interace to trigger the data save can be *any* user interaction -- page load, button click, or form submit to name a few. We will create a form
+
+### Resources
+
+What is Web 2.0?: [https://www.znetlive.com/blog/web-2-0/](https://www.znetlive.com/blog/web-2-0/)

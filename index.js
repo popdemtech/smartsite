@@ -32,10 +32,9 @@ const config = {
 app.use(auth(config));
 
 // Routes
-app.get('/', function(request, response) {
-  response.render('index', {
-    loggedIn: request.oidc.isAuthenticated()
-  });
+app.get('/', async function(request, response) {
+  const loggedIn = request.oidc.isAuthenticated();
+  response.render('index', { loggedIn });
 });
 
 app.get('/chat', function(request, response) {
