@@ -680,6 +680,28 @@ PSQL utilities: [https://www.postgresguide.com/utilities/psql/](https://www.post
 
 ---
 
+## Setting up PostgreSQL in an NodeJS Application
+PostgreSQL is a separate server than the NodeJS web server. It provides a TCP interface to access and modify data in the database. The NodeJS application must be configured to connect to a PostgreSQL database server.
+
+Once the connection with PostgreSQL is configured, we will introduce a JavaScript library, Sequalize, to provide a developer-friendly interface for the data models and queries.
+
+1. Create the database
+With a PostreSQL database server running locally, use the `createdb` command to create a database for the NodeJS application.
+```
+$ createdb my-service
+```
+
+1. Install Sequelize and Postgres Libraries
+Use the package manager to add the sequeilze and postgres client libraries.
+```
+$ npm install --save sequelize sequelize-cli pg pg-hstore 
+```
+`sequelize` and `sequelize-cli` are the developer interface, and contain the functions and classes we will be using primarily. `pg` and `pg-hstore` are lower-level client drivers between Node and Postgres. These libraries are required for runtime in production, so use the `--save` flag to add them as dependencies in `package.json`.
+
+2. Configure Sequelize
+
+---
+
 ## Saving Data
 
 End-users of an application are more engaged if the web application is dynamic. As seen in the Invoice Creator project, this can be accomplished with front-end JavaScript alone. An improvement on the level of engagement the web app can provide is if data state can be saved and retrieved across user sessions.
@@ -695,15 +717,55 @@ The general flow of saving data to a database is to
 4. Save the user data to Postgres from the webserver
 5. Return a response to the user of whether the data save was successful or not
 
-### What we're building
-This new feature will allow logged in users to save a time log of their day's activities. After they have entered a day, time, and description, the activity is added to an on-screen list. On page load, this list is pre-populated with any of the logged in user's previously saved time logs.
+### What we're building: Click Tracker
+This feature will allow any user to click a button
+and counter will increment. This counter increments
+over time as users click the button. If you think about it, users from anywhere on the globe can log into this application, and click this button. Pretty cool.
+
+This feature will require:
+* a button
+* text displaying how many times the button has been clicked
 
 ### 1. Decide the data model
+This feature will require that we save the total number of times the button has been clicked in a persistent database.
 
+### 2. Create the web page route
+Within `index.js`, create a route, `button-click`. This route should render a page `button-click.liquid`.
 
-### 2. Create the user interface
-The user interace to trigger the data save can be *any* user interaction -- page load, button click, or form submit to name a few. We will create a form
+The number of times the button has been clicked in total will be saved in a database, and fetched at the initial user request. The liquid-HTML template will be rendered with this number. Hard-code the value to 10 for now.
+
+1. Create the route.
+```javascript
+app.get('/button-click', function (request, response) {
+  response.render('button-click', { timesClicked: 10 });
+});
+````
+
+2. Create the webpage.
+```html
+{% layout 'layouts/default-html.liquid' %}
+{% block content %}
+<h1>Button Click</h1>
+<button>Click Me!</button>
+<p>This button has been clicked {{ timesClicked }} times.</p>
+{% endblock %}
+```
+
+You should now be able to start the server, navigate to `https://localhost:3000/button-click`, and see the desired initial page.
+
+### ...pg should have been set up by now
+
+### Non-user interaction reasons to save to a database
+Consider a database that tracks every visit to a page to a database. This database would record IP, time of day, and what cookies the user has for each visit as well as any other desired meta data. In this case, the a database record is saved as soon as the user requests for a webpage, before the user's webpage even renders.
+
+It is accurate to say that a user requesting the page *is* user interaction. Remember that the full user request cycle is rife for capturing information, and can be used to enhance features.
 
 ### Resources
 
 What is Web 2.0?: [https://www.znetlive.com/blog/web-2-0/](https://www.znetlive.com/blog/web-2-0/)
+
+Saving Data
+https://github.com/PopularDemand/auth/tree/controllers/server
+
+Database drivers, Query Builders, and 
+https://blog.logrocket.com/why-you-should-avoid-orms-with-examples-in-node-js-e0baab73fa5/
