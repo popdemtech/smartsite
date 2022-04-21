@@ -685,20 +685,116 @@ PostgreSQL is a separate server than the NodeJS web server. It provides a TCP in
 
 Once the connection with PostgreSQL is configured, we will introduce a JavaScript library, Sequalize, to provide a developer-friendly interface for the data models and queries.
 
-1. Create the database
-With a PostreSQL database server running locally, use the `createdb` command to create a database for the NodeJS application.
-```
-$ createdb my-service
-```
-
-1. Install Sequelize and Postgres Libraries
+### 1. Install Sequelize and Postgres Libraries
 Use the package manager to add the sequeilze and postgres client libraries.
 ```
 $ npm install --save sequelize sequelize-cli pg pg-hstore 
 ```
 `sequelize` and `sequelize-cli` are the developer interface, and contain the functions and classes we will be using primarily. `pg` and `pg-hstore` are lower-level client drivers between Node and Postgres. These libraries are required for runtime in production, so use the `--save` flag to add them as dependencies in `package.json`.
 
-2. Configure Sequelize
+### 2. Initialize Sequelize
+1. Create a file in the root of the project named `.sequelizerc` with the following contents:
+```
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('config', 'sequelize.js'),
+  'models-path': path.resolve('app', 'models'),
+  'migrations-path': path.resolve('db', 'migrations'),
+  'seeders-path': path.resolve('db', 'seeds'),
+};
+```
+
+2. Run the `sequelize-cli init` command for the library to add the required boilerplate.
+```
+$ npx sequelize-cli init
+```
+
+Based on the configuration within `.sequelizerc`, the command creates following folders:
+* ./config/sequelize.js -- the Sequelize config file which tells CLI how to connect with database
+* ./app/models -- the directory for the data models for your project
+* ./db/migrations -- the directory for the database migration files
+* ./db/seeds -- the directory for the database seed files
+
+3. Configure database credentials
+For the Node.js application to connect to the Postgres server, it must be configured with the a) server's address, b) user name, and c) user password. The file `./config/sequelize.js`, contains the database connection configuration for three environments -- `development`, `test`, and `production`. set the username, password, database, and dialect.
+
+Change the username and password for the `development` connection to credentials of your Postgres user. Change the database to the name of the database your application should use. Sequelize will create the database if one by the name specified does not already exist. Change the dialect to `postgres`. 
+
+The `test` and `production` configurations will need to be corrected before running database transactions in those environment.
+```
+module.exports = {
+  "development": {
+    "username": "root",        // Change this
+    "password": null,          // Change this
+    "database": "my-service",  // Change this
+    "host": "127.0.0.1",
+    "dialect": "postgres"      // Change this
+  },
+  ...
+}
+```
+
+As shown in the code example, export the configuration object using `module.experts = ` at the beginning of the file.
+
+4. Create the database
+Create the application's database.
+```
+$ npx sequelize db:create
+```
+
+### 3. Create the model
+Sequelize is an ORM -- an Object Relational Mapping library. The benefit of an ORM is that it abstracts SQL query dialect into application language. It also converts the response of any query into application level data types such as arrays or custom objects. Sequelize and many other ORM libraries call these custom objects "models." 
+
+A database table is a collection of objects with specified data attributes. Viewed as a table, there is a row for each specific object and columns for attributes an object can have. A ficticious "posts" that contains a collection of resources with the attributes of title, content, and created_at.
+
+```
+postgres=# select * from posts;
+id | title               | content                         | publish_date 
+---+---------------------+---------------------------------+------------------------
+1  | My First Post       | Hello World!                    |  2022-04-03 12:00:00-06
+2  | How to JavaScript   | Objects and functions.          |  2022-04-04 12:00:00-06
+3  | SOLID Breakfast     | The principles of SOLID design. |  2022-04-05 12:00:00-06
+(3 rows)
+```
+
+In an ORM, this structure is made accessible in the programming language, such as JavaScript's class objects. These models are an abstraction that represents a table in the database.
+
+We can use `sequelize-cli` to generate both the database tables and JavaScript classes. 
+
+1. Generate a `posts` migration and JS classes using the `model:generate` command.
+```
+$ npx sequelize model:generate --name Post --attributes title:string,content:text,publishDate:date
+```
+This creates two files
+* app/models/post.js
+* db/migrations/[timestamp]-create-post.js
+
+2. Run the migration.
+Migration files are used to keep track of changes made to a database. Migrations are used to track creating tables, adding and removing columns to existing tables, and other operations. Migration files record how to transition the database to a new state, and how to rollback the changes to get back to the older state.
+
+Database migration files are like a version control system for the application database, and provide replayable changes that keep the variety of development databases, test databases, and production databases in sync.
+
+Looking at the migration file generated by `model:generate`, we can see that Sequelize added two attributes `createdAt` and `updatedAt`. This is convention, and the values will be set and kept up to date by the Sequelize engine.
+
+Run the migration command to create the `posts` table in the database.
+```
+$ npx sequelize db:migrate
+```
+
+This command executes the following steps:
+* Ensures a table called SequelizeMeta is in database. This table is used to record which migrations have run on the database.
+* Runs any migration files which haven't run yet. This is possible by checking SequelizeMeta table.
+
+In this case, the `create-post` migration file will be executed against the databaser resulting in .
+
+
+### Resources
+`sequlize-cli` documentation: [https://github.com/sequelize/cli](https://github.com/sequelize/cli)
+
+Sequelize model basics: [https://sequelize.org/docs/v6/core-concepts/model-basics](https://sequelize.org/docs/v6/core-concepts/model-basics)
+
+What is an ORM [https://stackoverflow.com/a/1279678/18752242](https://stackoverflow.com/a/1279678/18752242)
 
 ---
 
