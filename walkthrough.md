@@ -743,7 +743,14 @@ Create the application's database.
 $ npx sequelize db:create
 ```
 
-### 3. Create the model
+### Resources
+`sequlize-cli` documentation: [https://github.com/sequelize/cli](https://github.com/sequelize/cli)
+
+What is an ORM [https://stackoverflow.com/a/1279678/18752242](https://stackoverflow.com/a/1279678/18752242)
+
+---
+
+## Using Sequelize in a Node.js Application
 Sequelize is an ORM -- an Object Relational Mapping library. The benefit of an ORM is that it abstracts SQL query dialect into application language. It also converts the response of any query into application level data types such as arrays or custom objects. Sequelize and many other ORM libraries call these custom objects "models." 
 
 A database table is a collection of objects with specified data attributes. Viewed as a table, there is a row for each specific object and columns for attributes an object can have. A ficticious "posts" that contains a collection of resources with the attributes of title, content, and created_at.
@@ -762,7 +769,7 @@ In an ORM, this structure is made accessible in the programming language, such a
 
 We can use `sequelize-cli` to generate both the database tables and JavaScript classes. 
 
-1. Generate a `posts` migration and JS classes using the `model:generate` command.
+### 1. Generate a `posts` migration and JS classes using the `model:generate` command.
 ```
 $ npx sequelize model:generate --name Post --attributes title:string,content:text,publishDate:date
 ```
@@ -770,7 +777,7 @@ This creates two files
 * app/models/post.js
 * db/migrations/[timestamp]-create-post.js
 
-2. Run the migration.
+### 2. Run the migration.
 Migration files are used to keep track of changes made to a database. Migrations are used to track creating tables, adding and removing columns to existing tables, and other operations. Migration files record how to transition the database to a new state, and how to rollback the changes to get back to the older state.
 
 Database migration files are like a version control system for the application database, and provide replayable changes that keep the variety of development databases, test databases, and production databases in sync.
@@ -786,15 +793,161 @@ This command executes the following steps:
 * Ensures a table called SequelizeMeta is in database. This table is used to record which migrations have run on the database.
 * Runs any migration files which haven't run yet. This is possible by checking SequelizeMeta table.
 
-In this case, the `create-post` migration file will be executed against the databaser resulting in .
+In this case, the `create-post` migration file will be executed against the database resulting in a new `posts` table being created.
 
+### 3. Seed the database
+To "seed" the database is to programmatically insert values into the database -- no user interaction required. This is useful for transferring a known data set into the database or populating tables with dummy data for development.
+
+1. Track development seeds within database.
+Unlike migrations, database seeding events are not stored anywhere by default. This means every time the `db:seed:all` command is run, the database will be re-seeded with previously run seeds. To change from the default behavior, add the configuration `"seederStorage": "sequelize"` to the development object of `config/sequelize.js`.
+
+This will save to the database which seeds have been run, allowing for use of the developer friendly `db:seed:all`.
+```
+module.exports = {
+  "development": {
+    ...,
+    "seederStorage": "sequelize"
+  },
+  ...
+}
+```
+
+2. Generate a new seed file
+Use the `seed:generate` command provided by `sequelize-cli` to generate a seed file for the Post model.
+```
+$ npx sequelize seed:generate --name first-posts
+```
+
+This command creates a file, `db/seeds/[timestamp]-first-posts.js`. Like a migration, the seed file implements an `up/down` interface. The `up` command specifies what actions should be performed to seed the database. The `down` function should specify how to undo the actions.
+
+3. Define a few post objects in an array:
+```javascript
+const posts = [{
+  title: 'Hello World',
+  content: 'This is the first post!',
+  publishDate: new Date('2022-01-01'),
+  createdAt: new Date(),
+  updatedAt: new Date()
+}, {
+  title: 'Lorem Ipsum',
+  content: `
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+    Contrary to popular belief, Lorem Ipsum is not simply random text.
+    It has roots in a piece of Latin literature from 45 BC.
+  `,
+  publishDate: new Date('2022-01-02'),
+  createdAt: new Date(),
+  updatedAt: new Date()
+}];
+```
+
+4. Define the `up` and `down` methods
+In the `up` method, use the provided `queryInterface` class to bulk insert the posts into the database.
+```javascript
+async up (queryInterface, Sequelize) {
+  await queryInterface.bulkInsert('Posts', posts, {});
+},
+```
+
+In the `down` method, perform the reverse action of the `up` method by deleting the posts. To use Sequelize's `Op` (operator) library, import it at the top of the file.
+```javascript
+const { Op } = require("sequelize");
+
+const posts = [...];
+
+module.exports = {
+  ...
+
+  async down (queryInterface, Sequelize) {
+     await queryInterface.bulkDelete('Posts', {
+      title: {
+        [Op.in]: posts.map((post) => post.title)
+      }
+     }, {});
+  }
+}
+```
+
+This `bulkDelete` query generates the following SQL:
+```
+DELETE FROM "Posts" WHERE posts.title IN ["Hello World", "Lorem Ipsum"];
+```
+
+3. Seed the database
+```
+$ npx sequelize-cli db:seed:all
+```
+This command inserts the records into the database.
+
+### 4. Display database records
+The purpose of a database is to keep data organized. The purpose of keeping the data around is for human end-users to view and manipulate. To get the data viewable by the user, we will provide a webpage that lists the data. As part of handling the webpage request, we will query the database for the records, and supply the records as template variables.
+
+1. Create the route.
+Create a route `/posts` in `index.js`.
+```javascript
+app.get('/posts', (request, response) => {
+  response.render('posts', {
+    posts: []
+  });
+});
+```
+
+2. Create the template
+Create a new file, `app/views/posts.liquid` with the following code:
+```html
+{% layout 'layouts/default-html.liquid' %}
+{% block content %}
+<div>
+  <h1>Posts</h1>
+
+  {% for post in posts %}
+    <h2>{{ post.title }}</h2>
+    <p><i>{{ post['publishDate'] }}</i></p>
+    <p>{{ post['content'] }}</p>
+  {% else %}
+    <p><i>There are no posts to display.</i></p>
+  {% endfor %}
+</div>
+{% endblock %}
+```
+
+Navigate to `localhost:3000/posts`. Because the `posts` template variable is hard-coded to be an empty array, you should see a page that says "There are no posts to display."
+
+3. Query the database for posts
+Sequelize as an ORM provides JavaScript classes as abstraction over the SQL query language. The `Post` class found in `/app/models/post.js` is such a class. We will import the class into `index.js` and use the `.findAll()` method to populate the `posts` template variable.
+```
+const { Post } = require('./app/models');
+
+app.get('/posts', async function(request, response) {
+  response.render('posts', {
+    posts: await Post.findAll()
+  });
+});
+```
+
+With the addition of the asynchronous method `Post.findAll()`, we must also label the route handling function as `async`. Notice the addtion of the keyword `async` before the function defintion.
+
+Place the require statement at near the top of the file with the other `require` statements. Place the route near the other routes definitions.
+
+Refreshing the `/posts` web page now shows the two posts seeded in the database.
+
+4. Add a link to Posts on the homepage.
+Show off the database! Add a navigation link to the `app/views/index.liquid`.
+```
+<li><a href="/posts">Posts</a></li>
+```
 
 ### Resources
-`sequlize-cli` documentation: [https://github.com/sequelize/cli](https://github.com/sequelize/cli)
 
 Sequelize model basics: [https://sequelize.org/docs/v6/core-concepts/model-basics](https://sequelize.org/docs/v6/core-concepts/model-basics)
 
-What is an ORM [https://stackoverflow.com/a/1279678/18752242](https://stackoverflow.com/a/1279678/18752242)
+Sequelize Seeds: [https://sequelize.org/docs/v6/other-topics/migrations/#creating-the-first-seed](https://sequelize.org/docs/v6/other-topics/migrations/#creating-the-first-seed)
+
+Sequelize Query Interface: [https://sequelize.org/docs/v6/other-topics/query-interface/](https://sequelize.org/docs/v6/other-topics/query-interface/)
+
+Sequelize `QueryInterface` API : [https://sequelize.org/api/v6/class/src/dialects/abstract/query-interface.js~queryinterface](https://sequelize.org/api/v6/class/src/dialects/abstract/query-interface.js~queryinterface)
 
 ---
 

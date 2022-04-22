@@ -7,6 +7,8 @@ const { Liquid } = require('liquidjs');
 const engine = new Liquid();
 const port = process.env.PORT || 3000;
 
+const { Post } = require('./app/models');
+
 // Views
 app.engine('liquid', engine.express());
 app.set('views', './app/views');
@@ -63,6 +65,12 @@ app.get('/generate-pdf', function(request, response) {
 
 app.get('/invoice-creator', function(request, response) {
   response.render('invoice-creator');
+});
+
+app.get('/posts', async (request, response) => {
+  response.render('posts', {
+    posts: await Post.findAll()
+  });
 });
 
 // Socketry
