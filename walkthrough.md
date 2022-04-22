@@ -951,6 +951,15 @@ Sequelize `QueryInterface` API : [https://sequelize.org/api/v6/class/src/dialect
 
 ---
 
+## Database in the Deployed Environment
+Each environment -- development, test, production, etc -- will likely use a different PostgreSQL database server. This means the Node.js application will need to be configured with a database URL and user credentials at a per environment specification. Sequelize's `config` file provides the location to specify these differences.
+
+The platform we will be using to host the PostgreSQL server is Heroku Postgres, an add-on provided by Heroku. There is a free tier with paid plans available to increase data capacity and concurrency as the application storage and/or traffic grows. Heroku Postgres configures the server URL and user credentials, and provides these values via environment variables.
+
+This constraint of using environment variables in production is actually an enforcement of a security best practice -- Do not hard code credentials into the application! We will take this time to convert the development environment's credentials to environment variables as well.
+
+---
+
 ## Saving Data
 
 End-users of an application are more engaged if the web application is dynamic. As seen in the Invoice Creator project, this can be accomplished with front-end JavaScript alone. An improvement on the level of engagement the web app can provide is if data state can be saved and retrieved across user sessions.
