@@ -50,9 +50,78 @@ A relational database is a fine choice for representing the domain models of pd-
 
 ---
 
-### Adding Heroku Postgress to NodeJS App
+---
 
-When add customization to users table, 
+## Saving Data
+
+End-users of an application are more engaged if the web application is dynamic. As seen in the Invoice Creator project, this can be accomplished with front-end JavaScript alone. An improvement on the level of engagement the web app can provide is if data state can be saved and retrieved across user sessions.
+
+As an example, imagine a user logs in and creates a document with the Invoice Creator. The usefulness of the Invoice Creator app can be increased for the user if, the next time they log in, they see a list of previously created documents. A further increase in feature set -- such as the ability to edit previously saved documents -- is an increase of usability.
+
+A solution to saving and retrieving user data is to save this data in a persisted storage database such as PostgreSQL. This data stays in the application's database when the user is logged in or not, and can be retrieved by the user interacting with the web page or by a developer running analytics on the data.
+
+The general flow of saving data to a database is to
+1. Decide on the data model
+2. Provide a front-end interface for the user to enter data
+3. Accept the user data with a route defined within the webserver
+4. Save the user data to Postgres from the webserver
+5. Return a response to the user of whether the data save was successful or not
+
+### What we're building: Click Tracker
+This feature will allow any user to click a button
+and counter will increment. This counter increments
+over time as users click the button. If you think about it, users from anywhere on the globe can log into this application, and click this button. Pretty cool.
+
+This feature will require:
+* a button
+* text displaying how many times the button has been clicked
+
+### 1. Decide the data model
+This feature will require that we save the total number of times the button has been clicked in a persistent database.
+
+### 2. Create the web page route
+Within `index.js`, create a route, `button-click`. This route should render a page `button-click.liquid`.
+
+The number of times the button has been clicked in total will be saved in a database, and fetched at the initial user request. The liquid-HTML template will be rendered with this number. Hard-code the value to 10 for now.
+
+1. Create the route.
+```javascript
+app.get('/button-click', function (request, response) {
+  response.render('button-click', { timesClicked: 10 });
+});
+````
+
+2. Create the webpage.
+```html
+{% layout 'layouts/default-html.liquid' %}
+{% block content %}
+<h1>Button Click</h1>
+<button>Click Me!</button>
+<p>This button has been clicked {{ timesClicked }} times.</p>
+{% endblock %}
+```
+
+You should now be able to start the server, navigate to `https://localhost:3000/button-click`, and see the desired initial page.
+
+### ...pg should have been set up by now
+
+### Non-user interaction reasons to save to a database
+Consider a database that tracks every visit to a page to a database. This database would record IP, time of day, and what cookies the user has for each visit as well as any other desired meta data. In this case, the a database record is saved as soon as the user requests for a webpage, before the user's webpage even renders.
+
+It is accurate to say that a user requesting the page *is* user interaction. Remember that the full user request cycle is rife for capturing information, and can be used to enhance features.
+
+### Resources
+
+What is Web 2.0?: [https://www.znetlive.com/blog/web-2-0/](https://www.znetlive.com/blog/web-2-0/)
+
+Saving Data
+https://github.com/PopularDemand/auth/tree/controllers/server
+
+Database drivers, Query Builders, and 
+https://blog.logrocket.com/why-you-should-avoid-orms-with-examples-in-node-js-e0baab73fa5/
+
+---
+
 
 #### The robust way: Use separate authentication servers for development and production.
 A more robust solution uses different Auth0 applications for the local and deployed environments. This will allow for custom NodeJS application data management between the two environments, and will avoid potential database collisions.

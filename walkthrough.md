@@ -624,7 +624,6 @@ Managing Postgres users and privileges: [https://kb.objectrocket.com/postgresql/
 
 PostgreSQL Security Best Practices: [https://resources.2ndquadrant.com/hubfs/Whitepaper PDFs/PostgreSQL_Security_Best_Practices_Whitepaper.pdf](https://resources.2ndquadrant.com/hubfs/Whitepaper%20PDFs/PostgreSQL_Security_Best_Practices_Whitepaper.pdf)
 
-
 ---
 
 ## Using `psql`
@@ -958,72 +957,62 @@ The platform we will be using to host the PostgreSQL server is Heroku Postgres, 
 
 This constraint of using environment variables in production is actually an enforcement of a security best practice -- Do not hard code credentials into the application! We will take this time to convert the development environment's credentials to environment variables as well.
 
----
-
-## Saving Data
-
-End-users of an application are more engaged if the web application is dynamic. As seen in the Invoice Creator project, this can be accomplished with front-end JavaScript alone. An improvement on the level of engagement the web app can provide is if data state can be saved and retrieved across user sessions.
-
-As an example, imagine a user logs in and creates a document with the Invoice Creator. The usefulness of the Invoice Creator app can be increased for the user if, the next time they log in, they see a list of previously created documents. A further increase in feature set -- such as the ability to edit previously saved documents -- is an increase of usability.
-
-A solution to saving and retrieving user data is to save this data in a persisted storage database such as PostgreSQL. This data stays in the application's database when the user is logged in or not, and can be retrieved by the user interacting with the web page or by a developer running analytics on the data.
-
-The general flow of saving data to a database is to
-1. Decide on the data model
-2. Provide a front-end interface for the user to enter data
-3. Accept the user data with a route defined within the webserver
-4. Save the user data to Postgres from the webserver
-5. Return a response to the user of whether the data save was successful or not
-
-### What we're building: Click Tracker
-This feature will allow any user to click a button
-and counter will increment. This counter increments
-over time as users click the button. If you think about it, users from anywhere on the globe can log into this application, and click this button. Pretty cool.
-
-This feature will require:
-* a button
-* text displaying how many times the button has been clicked
-
-### 1. Decide the data model
-This feature will require that we save the total number of times the button has been clicked in a persistent database.
-
-### 2. Create the web page route
-Within `index.js`, create a route, `button-click`. This route should render a page `button-click.liquid`.
-
-The number of times the button has been clicked in total will be saved in a database, and fetched at the initial user request. The liquid-HTML template will be rendered with this number. Hard-code the value to 10 for now.
-
-1. Create the route.
-```javascript
-app.get('/button-click', function (request, response) {
-  response.render('button-click', { timesClicked: 10 });
-});
-````
-
-2. Create the webpage.
-```html
-{% layout 'layouts/default-html.liquid' %}
-{% block content %}
-<h1>Button Click</h1>
-<button>Click Me!</button>
-<p>This button has been clicked {{ timesClicked }} times.</p>
-{% endblock %}
+### 1. Add the Heroku Postgres add-on
+1. From the command-line interface, use the `heroku addons:create` command to add the Heoku Postgres add-on, hobby-dev tier.
+```
+$ heroku addons:create heroku-postgresql:hobby-dev
 ```
 
-You should now be able to start the server, navigate to `https://localhost:3000/button-click`, and see the desired initial page.
+2. Use the `DATABASE_URL` environment variable in production
+Within `./config/sequelize.js` **production** environment, set the key `use_environment_variable` and `ssl.rejectUnauthorized`. Remove the unneeded piecewise credentials; `DATABASE_URL` contains user and database location information.
+```
+"production": {
+  "use_env_variable": "DATABASE_URL",
+  "dialect": "postgres",
+  "dialectOptions": {
+    "ssl": {
+      "rejectUnauthorized": false
+    }
+  }
+}
+```
 
-### ...pg should have been set up by now
+3. Ensure the NODE_ENV environment variable is set on Heroku server.
+```
+$ heroku config:set NODE_ENV=production
+```
 
-### Non-user interaction reasons to save to a database
-Consider a database that tracks every visit to a page to a database. This database would record IP, time of day, and what cookies the user has for each visit as well as any other desired meta data. In this case, the a database record is saved as soon as the user requests for a webpage, before the user's webpage even renders.
+### 2. Run the application
+1. Commit and push the new changes to Heroku
+```
+$ git add .
+$ git commit -m 'Use Heroku Postgres'
+$ git push heroku HEAD
+```
 
-It is accurate to say that a user requesting the page *is* user interaction. Remember that the full user request cycle is rife for capturing information, and can be used to enhance features.
+2. Run the database migration on Heroku
+Use the `heroku run` command to execute a command in Heroku's server environment.
+```
+$ heroku run npx sequelize db:migrate --env production
+```
+
+3. Seed the database
+```
+$ heroku run npx sequelize db:seed:all
+```
+
+4. View the app
+Issue the command `heroku open` to open the deployed application. Navigate to the `/posts` route to see the seeded posts.
+```
+$ heroku open
+```
+
+That's a deployed database! This simple tool is the backbone of the internet. Now that we have a database live on the interconnected web, we are able to provide our users with experiences on our web apps that can be customized on a per user basis.
+
+We will be looking at saving user generated information in upcoming sections.
 
 ### Resources
 
-What is Web 2.0?: [https://www.znetlive.com/blog/web-2-0/](https://www.znetlive.com/blog/web-2-0/)
+Heroku Postgres: [https://devcenter.heroku.com/articles/heroku-postgresql](https://devcenter.heroku.com/articles/heroku-postgresql)
 
-Saving Data
-https://github.com/PopularDemand/auth/tree/controllers/server
-
-Database drivers, Query Builders, and 
-https://blog.logrocket.com/why-you-should-avoid-orms-with-examples-in-node-js-e0baab73fa5/
+Sequelize Heroku Postgres Settings: [https://github.com/sequelize/sequelize/issues/956](https://github.com/sequelize/sequelize/issues/956#issuecomment-778149933)
