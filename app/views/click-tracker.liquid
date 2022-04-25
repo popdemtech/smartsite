@@ -1,0 +1,43 @@
+{% layout 'layouts/default-html.liquid' %}
+{% block content %}
+<h1>Click Tracker</h1>
+<button id="click-me">Click Me!</button>
+<span id="error" class="hidden">Oops, something happened.</span>
+<p>This button has been clicked <span id="times-clicked">{{ timesClicked }}</span> times.</p>
+
+<script>
+	const button = document.getElementById('click-me');
+	button.addEventListener('click', function(event) {
+		hideError();
+		fetch('/api/clicks', { method: 'POST' })
+		.then((response) => {
+			response.ok ? incrementCount() : showError();
+		});
+	});
+
+	function incrementCount() {
+		const timesClicked = document.getElementById('times-clicked');
+		const oldCount = parseInt(timesClicked.innerHTML);
+		timesClicked.innerHTML = oldCount + 1;
+	}
+
+	function showError() {
+		const error = document.getElementById('error');
+		error.classList.remove('hidden');
+	}
+
+	function hideError() {
+		const error = document.getElementById('error');
+		error.classList.add('hidden');
+	}
+</script>
+<style>
+	.hidden {
+		display: none;
+	}
+
+	#error {
+		color: red;
+	}
+</style>
+{% endblock %}

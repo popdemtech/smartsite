@@ -916,7 +916,7 @@ Navigate to `localhost:3000/posts`. Because the `posts` template variable is har
 
 3. Query the database for posts
 Sequelize as an ORM provides JavaScript classes as abstraction over the SQL query language. The `Post` class found in `/app/models/post.js` is such a class. We will import the class into `index.js` and use the `.findAll()` method to populate the `posts` template variable.
-```
+```javascript
 const { Post } = require('./app/models');
 
 app.get('/posts', async function(request, response) {
@@ -953,9 +953,7 @@ Sequelize `QueryInterface` API : [https://sequelize.org/api/v6/class/src/dialect
 ## Database in the Deployed Environment
 Each environment -- development, test, production, etc -- will likely use a different PostgreSQL database server. This means the Node.js application will need to be configured with a database URL and user credentials at a per environment specification. Sequelize's `config` file provides the location to specify these differences.
 
-The platform we will be using to host the PostgreSQL server is Heroku Postgres, an add-on provided by Heroku. There is a free tier with paid plans available to increase data capacity and concurrency as the application storage and/or traffic grows. Heroku Postgres configures the server URL and user credentials, and provides these values via environment variables.
-
-This constraint of using environment variables in production is actually an enforcement of a security best practice -- Do not hard code credentials into the application! We will take this time to convert the development environment's credentials to environment variables as well.
+The platform we will be using to host the PostgreSQL server is Heroku Postgres, an add-on provided by Heroku. There is a free tier with paid plans available to increase data capacity and concurrency as the application storage and/or traffic grows. Heroku Postgres configures the server URL and user credentials, and provides these values via an environment variable, `DATABASE_URL`.
 
 ### 1. Add the Heroku Postgres add-on
 1. From the command-line interface, use the `heroku addons:create` command to add the Heoku Postgres add-on, hobby-dev tier.
@@ -1016,3 +1014,89 @@ We will be looking at saving user generated information in upcoming sections.
 Heroku Postgres: [https://devcenter.heroku.com/articles/heroku-postgresql](https://devcenter.heroku.com/articles/heroku-postgresql)
 
 Sequelize Heroku Postgres Settings: [https://github.com/sequelize/sequelize/issues/956](https://github.com/sequelize/sequelize/issues/956#issuecomment-778149933)
+
+Deploy Sequelize to Heroku: [https://anjelicaa.medium.com](https://anjelicaa.medium.com/deploying-a-node-js-postgres-sequelize-app-to-heroku-da3dc9de07cd)
+
+---
+
+## Capturing User Information
+The strength of a database comes into play when the developer uses it to capture user interaction within the web application.
+
+### Click Tracker Application
+This feature will allow any user to click a button and counter will increment. This counter increments over time as users click the button. If you think about it, users from anywhere on the globe can log into this application, and click this button. Pretty cool.
+
+This feature will require:
+* a button
+* text displaying how many times the button has been clicked
+
+### 1. Decide the data model
+This feature will require that we persist the total number of times a button has been clicked in a database. To accomplish this, we will create a database table, `Clicks`.
+```
+Clicks
+-----------+-------------+
+user       | VARCHAR
+createdAt  | DATE
+updatedAt  | DATE
+```
+
+To find how many times the button has been clicked, a SQL `COUNT(*)` command can be used. This data model has the additional benefit of saving user information with the click event. This will be aided by the authentication system, and allows for a follow-up feature of displaying how many times a particular user has clicked the button.
+
+Generate a model and migration using Sequelize's `model:generate` command, and migrate the database with `db:migrate`.
+```
+$ npx sequelize model:generate --name Click --attributes user:string
+$ npx sequelize db:migrate
+```
+
+### 2. Create the web page route
+Within `index.js`, create a route, `/click-tracker`. This route should render a page `click-tracker.liquid`.
+
+The number of times the button has been clicked in total will be saved in a database, and fetched at the initial user request. The liquid-HTML template will be rendered with this number. Hard-code the value to 10 for now.
+
+1. Import the `Click` class from Sequelize's model directory.
+```javascript
+const { Post, Click } = require('./app/models');
+```
+
+2. Create the route.
+The route handler must be labeled async to be able to use the asynchronous `await Click.count()`. Send the result of `Click.count()` to the view as the template variable `timesClicked`.
+```javascript
+app.get('/click-tracker', async function (request, response) {
+  response.render('click-tracker', {
+    timesClicked: await Click.count()
+  });
+});
+```
+
+3. Create the webpage.
+```html
+{% layout 'layouts/default-html.liquid' %}
+{% block content %}
+<h1>Click Tracker</h1>
+<button>Click Me!</button>
+<p>This button has been clicked {{ timesClicked }} times.</p>
+{% endblock %}
+```
+
+You should now be able to start the server, navigate to `https://localhost:3000/click-tracker`, and see the desired initial page.
+
+### 3. Handle user interaction
+At this point, nothing happens if a user clicks the on-screen button. 
+
+### Non-user interaction reasons to save to a database
+Consider a database that tracks every visit to a page to a database. This database would record IP, time of day, and what cookies the user has for each visit as well as any other desired meta data. In this case, the a database record is saved as soon as the user requests for a webpage, before the user's webpage even renders.
+
+It is accurate to say that a user requesting the page *is* user interaction. Remember that the full user request cycle is rife for capturing information, and can be used to enhance features.
+
+### Resources
+
+What is Web 2.0?: [https://www.znetlive.com/blog/web-2-0/](https://www.znetlive.com/blog/web-2-0/)
+
+Using the Fetch API: [https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
+
+Express Error Handling: [http://expressjs.com/en/guide/error-handling.html](http://expressjs.com/en/guide/error-handling.html)
+
+Saving Data
+https://github.com/PopularDemand/auth/tree/controllers/server
+
+Database drivers, Query Builders, and ORMs
+https://blog.logrocket.com/why-you-should-avoid-orms-with-examples-in-node-js-e0baab73fa5/

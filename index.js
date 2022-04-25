@@ -7,7 +7,8 @@ const { Liquid } = require('liquidjs');
 const engine = new Liquid();
 const port = process.env.PORT || 3000;
 
-const { Post } = require('./app/models');
+// Models
+const { Post, Click } = require('./app/models');
 
 // Views
 app.engine('liquid', engine.express());
@@ -71,6 +72,32 @@ app.get('/posts', async (request, response) => {
   response.render('posts', {
     posts: await Post.findAll()
   });
+});
+
+app.get('/click-tracker', async function (request, response) {
+  response.render('click-tracker', {
+    timesClicked: await Click.count()
+  });
+});
+
+app.post('/api/clicks', async function(request, response, next) {
+  const user = request.oidc.user ? request.oidc.user.email : null;
+  try {
+    await Click.create({ user: user });
+    response.json({ saved: true });
+  } catch (e) {
+    e.apiError = true;
+    e.statusCode = 422;
+    next(e);
+  }
+});
+
+app.use(function (error, req, res, next) {
+  if (!error.apiError) {
+    return next(error);
+  }
+  res.status(error.statusCode);
+  res.json({ message: error.message });
 });
 
 // Socketry

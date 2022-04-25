@@ -1,7 +1,7 @@
 module.exports = {
   "development": {
-    "username": "root",
-    "password": null,
+    "username": "Alexa",
+    "password": "postgres",
     "database": "pd-service",
     "host": "127.0.0.1",
     "dialect": "postgres",
