@@ -84,7 +84,7 @@ app.post('/api/clicks', async function(request, response, next) {
   const user = request.oidc.user ? request.oidc.user.email : null;
   try {
     await Click.create({ user: user });
-    response.json({ saved: true });
+    response.json({ timesClicked: await Click.count() });
   } catch (e) {
     e.apiError = true;
     e.statusCode = 422;

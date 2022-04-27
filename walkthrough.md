@@ -756,7 +756,7 @@ A database table is a collection of objects with specified data attributes. View
 
 ```
 postgres=# select * from posts;
-id | title               | content                         | publish_date 
+id | title               | content                         | publishDate 
 ---+---------------------+---------------------------------+------------------------
 1  | My First Post       | Hello World!                    |  2022-04-03 12:00:00-06
 2  | How to JavaScript   | Objects and functions.          |  2022-04-04 12:00:00-06
@@ -942,11 +942,11 @@ Show off the database! Add a navigation link to the `app/views/index.liquid`.
 
 Sequelize model basics: [https://sequelize.org/docs/v6/core-concepts/model-basics](https://sequelize.org/docs/v6/core-concepts/model-basics)
 
-Sequelize Seeds: [https://sequelize.org/docs/v6/other-topics/migrations/#creating-the-first-seed](https://sequelize.org/docs/v6/other-topics/migrations/#creating-the-first-seed)
+Sequelize Seeds: [https://sequelize.org/docs/v6/other-topics/migrations](https://sequelize.org/docs/v6/other-topics/migrations/#creating-the-first-seed)
 
 Sequelize Query Interface: [https://sequelize.org/docs/v6/other-topics/query-interface/](https://sequelize.org/docs/v6/other-topics/query-interface/)
 
-Sequelize `QueryInterface` API : [https://sequelize.org/api/v6/class/src/dialects/abstract/query-interface.js~queryinterface](https://sequelize.org/api/v6/class/src/dialects/abstract/query-interface.js~queryinterface)
+Sequelize `QueryInterface` API : [https://sequelize.org/api/v6/class/src/dialects/abstract/query-interface.js](https://sequelize.org/api/v6/class/src/dialects/abstract/query-interface.js~queryinterface)
 
 ---
 
@@ -1072,20 +1072,240 @@ app.get('/click-tracker', async function (request, response) {
 {% layout 'layouts/default-html.liquid' %}
 {% block content %}
 <h1>Click Tracker</h1>
-<button>Click Me!</button>
-<p>This button has been clicked {{ timesClicked }} times.</p>
+<button id="click-me">Click Me!</button>
+<p>This button has been clicked <span id="times-clicked">{{ timesClicked }}</span> times.</p>
 {% endblock %}
 ```
 
 You should now be able to start the server, navigate to `https://localhost:3000/click-tracker`, and see the desired initial page.
 
 ### 3. Handle user interaction
-At this point, nothing happens if a user clicks the on-screen button. 
+At this point, nothing happens if a user clicks the on-screen button. Let's change this by adding a JavaScript click event listener on the button. Add a `<script>` tag within the `content` block.
+```html
+<script>
+  const button = document.getElementById('click-me');
+  button.addEventListener('click', function(event) {
+    console.log('Button clicked!');
+  });
+</script>
+```
 
-### Non-user interaction reasons to save to a database
-Consider a database that tracks every visit to a page to a database. This database would record IP, time of day, and what cookies the user has for each visit as well as any other desired meta data. In this case, the a database record is saved as soon as the user requests for a webpage, before the user's webpage even renders.
+### 4. Make API request on click
+For the moment, the click handling function only prints out `'Button clicked!'`. The desired functionality is for the button click to initiate a request to the webserver. The webserver will receive the request and add a `Click` database record.
 
-It is accurate to say that a user requesting the page *is* user interaction. Remember that the full user request cycle is rife for capturing information, and can be used to enhance features.
+From the front-end, we will use the Fetch API to make and handle the network request. The Fetch API provides a JavaScript interface for fetching resources and interacting with the HTTP pipeline. Within a browser (e.g. Chrome), a global  `fetch()` method provides an easy-to-use way to fetch resources asynchronously across the network.
+
+The `fetch()` method returns a Promise. A JavaScript Pro
+
+Replace the `console.log` within the click handler with a `fetch` call.
+```html
+<script>
+  const button = document.getElementById('click-me');
+  button.addEventListener('click', function(event) {
+    fetch('/api/clicks', { method: 'POST' })
+    .then((response) => {
+      response.ok ? console.log('Click Added') : console.log('Error Occured');
+    });
+  });
+</script>
+```
+The `response.ok` is a utility property on the `Response` object returned by `fetch`. A response with an HTTP status code 200-299 has and `ok` value of `true`.
+
+### 5. Create the API route
+In line with RESTful standards, we will make a route that accepts a `POST` request to `/clicks` to create a click resource. The the `POST` request is successful, we will return to the user the new total number of clicks in the database.
+
+1. Create the POST `/clicks` route
+```javascript
+app.post('/api/clicks', async function(request, response) {
+  const user = request.oidc.user ? request.oidc.user.email : null;
+  await Click.create({ user: user });
+  response.json({ timesClicked: await Click.count() });
+});
+```
+
+### 6. Handle an error using Express middleware
+Due to validations and user input errors, creating database records is a process that is expectedly error prone. Click Tracker deals with a relatively small model with no truly custom user input, yet it is good practice to handle where known errors may arise and deliver useful information to the front-end application and user.
+
+The Express way to handle errors is to use its middleware framework. We have already used Express' middleware in implementing the `auth()` functionality. The middleware framework is a pipeline of functions that have access to the `request` and `response` objects. A given middleware can execute any code and make changes to the `request` and `response` objects. When it is done with its computation, it must end the request/response cycle or call the `next` middleware function in the pipeline.
+
+In this way, every route that is defined -- e.g. `GET /hello-world` -- is part of the middleware pipeline. The routes created thus far end the request/response cycle by not calling a `next` middleware. In fact, because `next` has not been needed, I have left this variable out of the route handler definitions. An Express route handler has the following signature:
+```javascript
+const routeHandler = function(request, response, next) { ... };
+app.get('/path', routeHandler);
+```
+
+A middleware handler has the similar signature:
+```javascript
+const middleware = function(request, response, next) { ... };
+app.use(middlewareHandler);
+```
+
+Error handling middleware has a slightly differing signature; the first parameter is a JavaScript error object.
+```javascript
+const errorHandlingMiddleware = function(error, request, response, next) { ... };
+app.use(errorHandlingMiddleware);
+```
+The application knows to use the error handling middleware if `next` is invoked with an error object.
+
+1. Create the error handling middleware.
+As will all middleware, Express will invoke the functions in the order they are applied to the application with `app.use()`, top to bottom. As such, `app.use` this middleware below the route definitions within `index.js`.
+```javascript
+app.use(function (error, request, response, next) {
+  if (!error.apiError) {
+    return next(error, request, response, next);
+  }
+  response.status(error.statusCode);
+  response.json({ message: error.message });
+});
+
+```
+This code checks for the existance of the a property `apiError` on the `error` parameter. If it is not present, the function passes the error to the next error handling middleware. If the property is present, the status of the response is set to the statusCode of the error, and a JSON response is returned with the error's message.
+
+An important aspect of this code is that it returns a JSON response. Express' default error handler returns an HTML response. For `pd-service`, we will standardize this behavior and return JSON in case of error.
+
+2. Invoke the error handler in case of application error.
+With the error handler is in place, the route handler must be changed to pass any errors to the error handling middleware. The third parameter, `next`, should be added to the handler's function definition. It has always been passed in at runtime, but because it was unnecessary, it hasn't been added to the code until now.
+
+`Click.create` will throw an error if the create is unsuccessful. Wrap this function call in a `try/catch` block. If an error is caught, set the properties on it the custom error handling middleware is expecting -- `apiError` and `statusCode` -- and invoke the `next` middleware the error.
+
+```javascript
+app.post('/api/clicks', async function(request, response, next) {
+  const user = request.oidc.user ? request.oidc.user.email : null;
+  try {
+    await Click.create({ user: user });
+    response.json({ timesClicked: await Click.count() });
+  } catch (e) {
+    e.apiError = true;
+    e.statusCode = 422;
+    next(e);
+  }
+});
+```
+
+With the last line -- `next(e)` -- the request/response cycle is moved to the error handling middleware pipeline.
+
+### 7. Handle the API response
+The sequence of events currently programmed is the following:
+* User clicks the button
+* A `fetch` request is made to the `/clicks` route
+* The route processes the request and returns a JSON response
+
+A response handler must be written within the front-end JavaScript to process the response.
+
+The `fetch` call resolves to a `Response` interface that represents the response to a request. The `json()` method on this interface returns a promise of the result of parsing the response body into JSON. We'll want to access the `timesClicked` property we set on the response body.
+
+```html
+<script>
+  const button = document.getElementById('click-me');
+  button.addEventListener('click', function(event) {
+    fetch('/api/clicks', { method: 'POST' })
+    .then((response) => {
+      if (!response.ok) return;
+      response.json()
+      .then((data) => {
+        document.getElementById('times-clicked').innerHTML = data.timesClicked;
+      });
+    });
+  });
+</script>
+```
+The script makes use of a preset `<span id="times-clicked">`, and replaces the value that present there with the more recent count of clicks.
+
+You should now be able to click the button multiple times and see the number on screen increment by one each time. If you refresh the page, the number will remain at the last seen value.
+
+### 8. Handle the API error response
+It is good practice to inform the user of an application error. It's wise to consider whther the user can be helped by the error. For example, it's prudent to show the user if the error is due to an input validation error; the user can change their input and correct the problem. If the error is due to an obscure error the user cannot correct, such as invalid database credentials failing authentication, it is more appropriate to show the user a generic error or none at all.
+
+The case of the Click Tracker application coming into an error state is more of the latter. The plan is to place an error message within the HTML. It will be hidden by default, but when an error response is received, it will be displayed. Whenever a new request is initalized -- when the user re-clicks the button -- the error message will be re-hidden while the new `fetch` request is sent and allowed to return successfully or not.
+
+1. Add the HTML/CSS for error handling.
+For this, we will need to add the error message element, and set it to be hidden by default. Add the new element after the `click-me` button. Add the style tags within the `content` block,the `head` block, or an external CSS file with `<link>` tag.
+```html
+<span id="error" class="hidden">Oops, something happened.</span>
+
+<style>
+  .hidden {
+    display: none;
+  }
+
+  #error {
+    color: red;
+  }
+</style>
+```
+
+2. Add error handling JavaScript
+When an error response is encountered, remove the `hidden` class on the `#error` element to remove the `display: none` attribute. In the case of resubmitting the button click, hide the element again by re-adding the `hidden` class.
+```html
+<script>
+  const button = document.getElementById('click-me');
+  button.addEventListener('click', function(event) {
+    document.getElementById('error').classList.add('hidden');
+
+    fetch('/api/clicks', { method: 'POST' })
+    .then((response) => {
+      if (!response.ok) {
+        document.getElementById('error').classList.remove('hidden');
+        return;
+      };
+
+      response.json()
+      .then((data) => {
+        document.getElementById('times-clicked').innerHTML = data.timesClicked;
+      });
+    });
+  });
+</script>
+```
+
+To test the error handling, you can force the API to return an error response.
+```javascript
+app.post('/api/clicks', async function(request, response, next) {
+  // const user = request.oidc.user ? request.oidc.user.email : null;
+  // try {
+  //   await Click.create({ user: user });
+  //   response.json({ timesClicked: await Click.count() });
+  // } catch (e) {
+  //   e.apiError = true;
+  //   e.statusCode = 422;
+  //   next(e);
+  // }
+
+  const e = new Error();
+  e.apiError = true;
+  e.statusCode = 500;
+  next(e);
+});
+
+```
+
+Be sure to revert this intermediate step for the application to function as planned long-term.
+
+### 9. Add a homepage link
+Add the Click Tracker app to the list of pages on the homepage.
+```html
+<li><a href="/click-tracker">Click Tracker</a></li>
+```
+
+### 10. Commit and deploy
+1. Commit the repository
+Git commit the new changes and deploy to Heroku to see the results in a doeployed environment.
+```
+$ git add .
+$ git commit -m 'Add Click Tracker'
+$ git push heroku HEAD
+```
+
+2. Migrate the production database
+There is now a new table the application expects to be in the database. A database migration must be run on the Heroku Postgres instance to create this table.
+```
+$ heroku run sequelize db:migrate
+```
+
+3. Run the Click Tracker Application
+```
+$ heroku open
+```
 
 ### Resources
 
@@ -1095,8 +1315,7 @@ Using the Fetch API: [https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
 
 Express Error Handling: [http://expressjs.com/en/guide/error-handling.html](http://expressjs.com/en/guide/error-handling.html)
 
-Saving Data
-https://github.com/PopularDemand/auth/tree/controllers/server
+JavaScript Promises: [https://nodejs.dev/learn/understanding-javascript-promises](https://nodejs.dev/learn/understanding-javascript-promises#chaining-promises)
 
-Database drivers, Query Builders, and ORMs
-https://blog.logrocket.com/why-you-should-avoid-orms-with-examples-in-node-js-e0baab73fa5/
+---
+

@@ -67,6 +67,12 @@ The general flow of saving data to a database is to
 4. Save the user data to Postgres from the webserver
 5. Return a response to the user of whether the data save was successful or not
 
+---
+
+### Non-user interaction reasons to save to a database
+Consider a database that tracks every visit to a page to a database. This database would record IP, time of day, and what cookies the user has for each visit as well as any other desired meta data. In this case, the a database record is saved as soon as the user requests for a webpage, before the user's webpage even renders.
+
+It is accurate to say that a user requesting the page *is* user interaction. Remember that the full user request cycle is rife for capturing information, and can be used to enhance features.
 
 ---
 

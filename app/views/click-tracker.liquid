@@ -6,30 +6,23 @@
 <p>This button has been clicked <span id="times-clicked">{{ timesClicked }}</span> times.</p>
 
 <script>
-	const button = document.getElementById('click-me');
-	button.addEventListener('click', function(event) {
-		hideError();
-		fetch('/api/clicks', { method: 'POST' })
-		.then((response) => {
-			response.ok ? incrementCount() : showError();
-		});
-	});
+  const button = document.getElementById('click-me');
+  button.addEventListener('click', function(event) {
+    document.getElementById('error').classList.add('hidden');
 
-	function incrementCount() {
-		const timesClicked = document.getElementById('times-clicked');
-		const oldCount = parseInt(timesClicked.innerHTML);
-		timesClicked.innerHTML = oldCount + 1;
-	}
+    fetch('/api/clicks', { method: 'POST' })
+    .then((response) => {
+      if (!response.ok) {
+        document.getElementById('error').classList.remove('hidden');
+        return;
+      };
 
-	function showError() {
-		const error = document.getElementById('error');
-		error.classList.remove('hidden');
-	}
-
-	function hideError() {
-		const error = document.getElementById('error');
-		error.classList.add('hidden');
-	}
+      response.json()
+      .then((data) => {
+        document.getElementById('times-clicked').innerHTML = data.timesClicked;
+      });
+    });
+  });
 </script>
 <style>
 	.hidden {
