@@ -1,6 +1,456 @@
-## Setting up filesystem watcher for development
+## Install Node.js
 
-### 1. Install nodemon
+This walkthrough will cover building a web server application using Node.js. While JavaScript was initially developed for and still maintains its scripting dominance in a browser environment, Node.js is a JS runtime for use outside of a browser.
+
+Windows users see [Installing Node.js on Windows].
+
+MacOS users, check out [Installing Node.js on MacOS] for installation instructions.
+
+Linux users, search a trusted search engine with the phrase "install node js linux" to find what you need.
+
+### 1. Navigate to nodejs.org
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_0.png" style="width:50%;min-width:320px;" />
+</p>
+
+Navigate to [nodejs.org](https://nodejs.org) and select the version of node you want to download. Even number versions have Long-Term Support (LTS).
+
+Long-term support "typically guarantees that critical bugs will be fixed for a total of 30 months." Production applications should use LTS versions. Use a more recent odd number version to test out latest features.
+
+Read more about node's release schedule in the Resources.
+
+<div class="spacer"></div>
+
+### 2. Setup Wizard
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_1.png" style="width:50%;min-width:320px;" />
+</p>
+
+Once the installer finishes downloading, open the downloaded file to open the installation wizard.
+
+<div class="spacer"></div>
+
+### 3. Accept Terms
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_2.png" style="width:50%;min-width:320px;" />
+</p>
+
+Accept the terms of the License Agreement if you agree.
+
+<div class="spacer"></div>
+
+### 4. Select the Installation Directory
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_3.png" style="width:50%;min-width:320px;" />
+</p>
+
+The default location, `C:\Program Files\nodejs\`, is fine. If you install in a non-default location, ensure the directory is located within your command-line's `$PATH` variable.
+
+<div class="spacer"></div>
+
+### 5. Customize Features
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_4.png" style="width:50%;min-width:320px;" />
+</p>
+
+Click next unless you are certain you want something different. I have never customized this step.
+
+<div class="spacer"></div>
+
+### 6. Install Tools for Native Modules
+
+You will need a few software tools to be installed in addition to NodeJS in order to compile certain JavaScript/C++ npm modules. NPM modules are 3rd party libraries that can be used to extend the functionality of your application.
+
+If you decide not to install the tools, they can be installed later.
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_5.png" style="width:50%;min-width:320px;" />
+</p>
+
+I checked the box because I know I want the tools.
+
+<div class="spacer"></div>
+
+### 7. Install
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_6.png" style="width:50%;min-width:320px;" />
+</p>
+
+Install.
+
+<div class="spacer"></div>
+
+### 8. Watch the Progress Bar
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_7.png" style="width:50%;min-width:320px;" />
+</p>
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/installing_node_js.gif" style="width:50%;min-width:320px;" />
+</p>
+
+Or not. The installation took me \~3 minutes total.
+
+<div class="spacer"></div>
+
+### 9. Allow Node.js to make changes to the device
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_8.png" style="width:50%;min-width:320px;" />
+</p>
+
+<div class="spacer"></div>
+
+### 10. After installation, Install Native Module Tools
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_9.png" style="width:50%;min-width:320px;" />
+</p>
+
+If you selected "Automatically install the necessary tools" in **Step 6**, after the node's install is finished, a window will appear with some information about the libraries that are about to be installed. Continue through the prompts.
+
+<div class="spacer"></div>
+
+### 11. Finish Tools' Install in Powershell 
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_10.png" style="width:50%;min-width:320px;" />
+</p>
+
+The process will open a Powershell window with Administrator rights, and finish the installation in Powershell. Allow Powershell to make changes to the device.
+
+<div class="spacer"></div>
+
+### 12. Wait for and Debug Tools Install
+
+The install process takes longer than the NodeJS install. The installer recommends closing *all* programs other than the installer during the install process.
+
+I did not do that, and did not find the performance of my PC affected during install. However, the install did fail the first time...
+
+<div class="spacer"></div>
+
+### 12a. Repair Native Modules Install
+
+The install failed for me near the end, but luckily the fix is easy.
+
+The fix that worked for me was this: Reactivate the NodeJS installer download, and select the 'Repair' option. See Repair Node Installation in the Resources for details. See the resource as well if you have an installation failure not fixed by this solution:
+
+Find the downloaded file from **Step 1**, and select it.
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_11.png" style="width:50%;min-width:320px;" />
+</p>
+
+Select next, then select 'Repair.'
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_12.png" style="width:50%;min-width:320px;" />
+</p>
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_13.png" style="width:50%;min-width:320px;" />
+</p>
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_14.png" style="width:50%;min-width:320px;" />
+</p>
+
+<p style="text-align:center">
+  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_15.png" style="width:50%;min-width:320px;" />
+</p>
+
+<div class="spacer"></div>
+
+### 13. Check Installation
+
+You should now have Node and NPM install. If you installed the native modules, you will have those as well. From Windows Terminal (or similar), run the following commands and check the output:
+
+```
+> node -v
+v16.13.2
+
+> npm -v
+v8.2.1
+```
+
+`node -v` checks the version of node, `npm -v` checks the version of npm, node package manager.
+
+If you installed native modules, run the following to check the version of the installed libraries:
+
+```
+> choco list -lo
+
+Chocolatey v0.10.15
+chocolatey 0.10.15
+...long list...
+visualstudio-installer 2.0.2
+visualstudio2019-workload-vctools 1.0.1
+visualstudio2019buildtools 16.11.9.0
+21 packages installed.
+```
+
+In particular, check for the existance of visualstudio-installer, visualstudio2019-workload-vctools, and visualstudio2019buildtools libraries.
+
+<div class="spacer"></div>
+
+### Resources
+
+Node JS Release Schedule and Information - [nodejs.org/en/about/releases](https://nodejs.org/en/about/releases/)
+
+Manage PATH System Variable on Windows - [docs.oracle.com](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html#GUID-DD6F9982-60D5-48F6-8270-A27EC53807D0)
+
+Install Tools for Native Modules - [github.com/nodejs/node-gyp#on-windows](https://github.com/nodejs/node-gyp#on-windows)
+
+Repair Node Installation - [stackoverflow.com/a/68912225](https://stackoverflow.com/a/68912225)
+
+---
+
+## Installing Node.js on MacOS
+
+Node.js is an open source development platform for executing JavaScript code server-side. While JavaScript runs natively in a browser (i.e. client-side), Node.js provides developers the platform with which to build applications for a controlled environment that runs on a host computer, separate from the JavaScript that is delivered to the client's browser. In this way, a Node.js application is comparable to PHP, Java, and Ruby, and other application environments that handle web-traffic requests, but are not delivered to the client.
+
+To develop a Node.js application on MacOS, the Node binaries must be installed.
+
+<!--more-->
+
+### 1. Create a user with admin access.
+Chances are you are already a user with admin access. If you are aware that you are not a user with admin access, follow [these steps](https://osxdaily.com/2017/07/17/how-create-new-admin-account-mac/) (osxdaily.com) to create such a user. You will need a user *with* admin access to create this new user.
+
+<div class="spacer"></div>
+
+### 2. Install Homebrew
+```
+$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+$ brew -v
+```
+
+<div class="spacer"></div>
+
+### 3. Remove existing node versions
+```
+$ brew uninstall --force node
+```
+
+<div class="spacer"></div>
+
+### 4. Install NVM
+```
+$ brew update
+$ brew install nvm
+```
+
+<div class="spacer"></div>
+
+### 5. Follow the instructions output by the nvm installer
+```
+You should create NVM's working directory if it doesn't exist:
+
+  mkdir ~/.nvm
+
+Add the following to ~/.zshrc or your desired shell
+configuration file:
+
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+You can set $NVM_DIR to any location, but leaving it unchanged from
+/usr/local/opt/nvm will destroy any nvm-installed Node installations
+upon upgrade/reinstall.
+
+Type `nvm help` for further information.
+```
+
+Practically, issue the following commands
+```
+$ mkdir ~/.nvm
+$ nano ~/.zshrc
+```
+
+Copy and paste the script from the output within `.zshrc`, and use the command `source` to load the new configuration into the active terminal.
+
+```
+$ source ~/.zshrc
+```
+
+<div class="spacer"></div>
+
+### 6. Install the latest long-term support version of Node.js.
+```
+$ nvm install --lts
+$ nvm current
+```
+
+`nvm current` displays the currently active node version. It should be the version that was installed with `nvm install --lts`.
+
+<div class="spacer"></div>
+
+### 7. Check the installations
+You should now have nvm and Node.js installed. Check the installation. Here are the commands with example output.
+```
+$ nvm -v
+0.39.1
+$ node -v
+v16.14.2
+```
+
+Now that Node is installed, get to building out your application. Check out the sample web-server [provided by the Node.js team](https://nodejs.org/en/docs/guides/getting-started-guide/). But listen! Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, and developer libraries (things that can be `npm install`ed).
+
+<div class="spacer"></div>
+
+## Resources
+
+Similar walkthrough: https://tecadmin.net/install-nvm-macos-with-homebrew/
+
+---
+
+## Initialize the repository
+Time to create the first files of the web application. 
+
+### Initialize
+The `npm init` command will start a setup wizard for the Node application. Ensure the terminal's current working directory is the application directory, and run `npm init`.
+```bash
+$ cd path/to/my-app
+$ npm init
+```
+
+For `entry point:`, use `index.js`; it is the default option, and required for parity with the walkthroughs. The default options for the rest of the selections is fine. Feel free to investigate each, and customize the values as desired. Selection made here can be changed.
+
+Example `npm init`:
+```
+$ npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (my-app) 
+version: (1.0.0) 
+description: my-app Web Application Guide
+entry point: (index.js) 
+test command: 
+git repository: (https://github.com/popdemtech/my-app.git) 
+keywords: 
+author: Popular Demand
+license: (ISC) 
+About to write to /Users/popdemtech/popdemtech/my-app/package.json:
+
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "my-app Web Application Guide",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/popdemtech/my-app.git"
+  },
+  "author": "Popular Demand",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/popdemtech/my-app/issues"
+  },
+  "homepage": "https://github.com/popdemtech/my-app#readme"
+}
+
+
+Is this OK? (yes)
+``` 
+
+The `my-app` directory should now have a file name `package.json`. This file is used for configuration of Node.js applications, and will be revisited throughout the development process.
+
+### Start the application
+An application is a software script that is executed on a computer. To "start" this application, just like every application, application code must be written and a command that starts the application must be defined. For this, first create a file, `index.js`, which will define the code that will be the application.
+
+1. Create `index.js`
+In the root of the project, create a file titled `index.js`. Any valid JavaScript can go in this file -- a `console.log` statement is shown in the example.
+```javascript
+// index.js
+
+console.log('Welcome to my-app!');
+```
+
+2. Create the start script
+A Node.js application's `package.json` is the place to define commonly used commands such as `start` and `test` commands. A top-level property `"scripts"` is used to map developer-selected command names to executable scripts.
+
+`package.json` already contains a `test` script. Add a script called `start` that executes the `node` executable with `index.js`, and save the file.
+```js
+// package.json
+
+{
+  ...,
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  ...
+}
+```
+
+A script defined in `"scripts"` can be invoked from the command line with `npm run [name]`.
+
+3. Run start script
+```
+$ npm run start
+```
+
+You should see the output `Welcome to my-app!` in the console.
+
+### 3. Create .gitignore file
+A `.gitignore` file is used to define which files and folders should not be saved to version control. Common elements not saved to version control are in-project dependency folders, such as `node_modules`, files containing sensitive information (such as private keys), and certain files used only by the developer's local operating system, such as Apple's `.DS_Store` file.
+
+Create a file named `.gitignore` in the root directory like the following:
+```
+/node_modules
+npm-debug.log
+.DS_Store
+/*.env
+```
+
+---
+
+
+## Create the web server
+Node libraries can and frequently are built for a programmatic interface. As it stands, `my-app` is a functioning Node.js application, but it doesn't do much. Our interest is building an application that serves web traffic. That means users can navigate to the application on the internet and browse useful onsite content.
+
+For this, the application will need a web server library. There are many such libraries in the Node.js ecosystem from which to choose. The ideal library for our purposes provides a developer friendly abstraction over the gritty details of TCP and HTTP communication protocols. A large network of developers also using the library is a strong bonus as well.
+
+### Express
+
+Express is a web framework that checks all of the boxes.. Express provides an abstraction over low-level HTTP handling by using sensible defaults for HTTP configuration, while still allowing for low-level configuation as the needs of the application are discovered. For the developer, Express provides a straight-forward, route declaration approach for serving web requests.
+
+Express has been a mainstay library for since the early days of Node.js, and beginner to advanced online resources can be found with ease.
+
+### 1. Install Express
+
+1. Use `npm` to install Express
+Within `my-app`'s root directory, run the following:
+```
+$ npm install express
+```
+
+This command adds Express as a dependency to the application, and installs the library into the `node_modules` folder. Since Express is the first external library added to the application, the `node_modules` folder will be created in the root directory.
+
+### 2. Create the Express server
+With Express now installed, 
+
+### 3. Setting up filesystem watcher for development
+
+1. Install nodemon
 Because nodemon is a library that is used to initialize a process from the local operating system, it's not considered an application dependency. You can install it globally, but consider including nodemon as a development dependency so any future developers download the library with `npm install`. Since the `npm start` script uses nodemon, it is a required for development.
 ```bash
 $ npm install -g nodemon
@@ -8,7 +458,7 @@ $ npm install -g nodemon
 $ npm install --save-dev nodemon
 ```
 
-### 2. Use nodemon
+2. Use nodemon
 Change the start script within `package.json` to use `nodemon` instead of `node` to start the server process.
 ```javascript
 // package.json
@@ -23,6 +473,10 @@ Change the start script within `package.json` to use `nodemon` instead of `node`
 ```
 
 Modify the start script for your use case.
+
+### Resources
+
+Express: [expressjs.com](https://expressjs.com)
 
 ---
 
