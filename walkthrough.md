@@ -20,8 +20,6 @@ Long-term support "typically guarantees that critical bugs will be fixed for a t
 
 Read more about node's release schedule in the Resources.
 
-<div class="spacer"></div>
-
 ### 2. Setup Wizard
 
 <p style="text-align:center">
@@ -29,8 +27,6 @@ Read more about node's release schedule in the Resources.
 </p>
 
 Once the installer finishes downloading, open the downloaded file to open the installation wizard.
-
-<div class="spacer"></div>
 
 ### 3. Accept Terms
 
@@ -40,8 +36,6 @@ Once the installer finishes downloading, open the downloaded file to open the in
 
 Accept the terms of the License Agreement if you agree.
 
-<div class="spacer"></div>
-
 ### 4. Select the Installation Directory
 
 <p style="text-align:center">
@@ -50,8 +44,6 @@ Accept the terms of the License Agreement if you agree.
 
 The default location, `C:\Program Files\nodejs\`, is fine. If you install in a non-default location, ensure the directory is located within your command-line's `$PATH` variable.
 
-<div class="spacer"></div>
-
 ### 5. Customize Features
 
 <p style="text-align:center">
@@ -59,8 +51,6 @@ The default location, `C:\Program Files\nodejs\`, is fine. If you install in a n
 </p>
 
 Click next unless you are certain you want something different. I have never customized this step.
-
-<div class="spacer"></div>
 
 ### 6. Install Tools for Native Modules
 
@@ -74,8 +64,6 @@ If you decide not to install the tools, they can be installed later.
 
 I checked the box because I know I want the tools.
 
-<div class="spacer"></div>
-
 ### 7. Install
 
 <p style="text-align:center">
@@ -83,8 +71,6 @@ I checked the box because I know I want the tools.
 </p>
 
 Install.
-
-<div class="spacer"></div>
 
 ### 8. Watch the Progress Bar
 
@@ -98,15 +84,11 @@ Install.
 
 Or not. The installation took me \~3 minutes total.
 
-<div class="spacer"></div>
-
 ### 9. Allow Node.js to make changes to the device
 
 <p style="text-align:center">
   <img src="/assets/img/posts/install-nodejs-windows/walkthrough_8.png" style="width:50%;min-width:320px;" />
 </p>
-
-<div class="spacer"></div>
 
 ### 10. After installation, Install Native Module Tools
 
@@ -116,8 +98,6 @@ Or not. The installation took me \~3 minutes total.
 
 If you selected "Automatically install the necessary tools" in **Step 6**, after the node's install is finished, a window will appear with some information about the libraries that are about to be installed. Continue through the prompts.
 
-<div class="spacer"></div>
-
 ### 11. Finish Tools' Install in Powershell 
 
 <p style="text-align:center">
@@ -126,15 +106,11 @@ If you selected "Automatically install the necessary tools" in **Step 6**, after
 
 The process will open a Powershell window with Administrator rights, and finish the installation in Powershell. Allow Powershell to make changes to the device.
 
-<div class="spacer"></div>
-
 ### 12. Wait for and Debug Tools Install
 
 The install process takes longer than the NodeJS install. The installer recommends closing *all* programs other than the installer during the install process.
 
 I did not do that, and did not find the performance of my PC affected during install. However, the install did fail the first time...
-
-<div class="spacer"></div>
 
 ### 12a. Repair Native Modules Install
 
@@ -166,11 +142,11 @@ Select next, then select 'Repair.'
   <img src="/assets/img/posts/install-nodejs-windows/walkthrough_15.png" style="width:50%;min-width:320px;" />
 </p>
 
-<div class="spacer"></div>
-
 ### 13. Check Installation
 
 You should now have Node and NPM install. If you installed the native modules, you will have those as well. From Windows Terminal (or similar), run the following commands and check the output:
+
+<div class="filename">command line</div>
 
 ```
 > node -v
@@ -183,6 +159,8 @@ v8.2.1
 `node -v` checks the version of node, `npm -v` checks the version of npm, node package manager.
 
 If you installed native modules, run the following to check the version of the installed libraries:
+
+<div class="filename">command line</div>
 
 ```
 > choco list -lo
@@ -197,8 +175,6 @@ visualstudio2019buildtools 16.11.9.0
 ```
 
 In particular, check for the existance of visualstudio-installer, visualstudio2019-workload-vctools, and visualstudio2019buildtools libraries.
-
-<div class="spacer"></div>
 
 ### Resources
 
@@ -223,32 +199,35 @@ To develop a Node.js application on MacOS, the Node binaries must be installed.
 ### 1. Create a user with admin access.
 Chances are you are already a user with admin access. If you are aware that you are not a user with admin access, follow [these steps](https://osxdaily.com/2017/07/17/how-create-new-admin-account-mac/) (osxdaily.com) to create such a user. You will need a user *with* admin access to create this new user.
 
-<div class="spacer"></div>
-
 ### 2. Install Homebrew
+
+<div class="filename">command line</div>
+
 ```
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 $ brew -v
 ```
 
-<div class="spacer"></div>
-
 ### 3. Remove existing node versions
+
+<div class="filename">command line</div>
+
 ```
 $ brew uninstall --force node
 ```
 
-<div class="spacer"></div>
-
 ### 4. Install NVM
+
+<div class="filename">command line</div>
+
 ```
 $ brew update
 $ brew install nvm
 ```
 
-<div class="spacer"></div>
-
 ### 5. Follow the instructions output by the nvm installer
+<div class="filename">command line output</div>
+
 ```
 You should create NVM's working directory if it doesn't exist:
 
@@ -268,7 +247,10 @@ upon upgrade/reinstall.
 Type `nvm help` for further information.
 ```
 
-Practically, issue the following commands
+Practically, issue the following commands:
+
+<div class="filename">command line</div>
+
 ```
 $ mkdir ~/.nvm
 $ nano ~/.zshrc
@@ -276,13 +258,15 @@ $ nano ~/.zshrc
 
 Copy and paste the script from the output within `.zshrc`, and use the command `source` to load the new configuration into the active terminal.
 
+<div class="filename">command line</div>
+
 ```
 $ source ~/.zshrc
 ```
 
-<div class="spacer"></div>
-
 ### 6. Install the latest long-term support version of Node.js.
+<div class="filename">command line</div>
+
 ```
 $ nvm install --lts
 $ nvm current
@@ -290,10 +274,11 @@ $ nvm current
 
 `nvm current` displays the currently active node version. It should be the version that was installed with `nvm install --lts`.
 
-<div class="spacer"></div>
-
 ### 7. Check the installations
 You should now have nvm and Node.js installed. Check the installation. Here are the commands with example output.
+
+<div class="filename">command line</div>
+
 ```
 $ nvm -v
 0.39.1
@@ -302,8 +287,6 @@ v16.14.2
 ```
 
 Now that Node is installed, get to building out your application. Check out the sample web-server [provided by the Node.js team](https://nodejs.org/en/docs/guides/getting-started-guide/). But listen! Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, and developer libraries (things that can be `npm install`ed).
-
-<div class="spacer"></div>
 
 ## Resources
 
@@ -316,6 +299,9 @@ Time to create the first files of the web application.
 
 ### Initialize
 The `npm init` command will start a setup wizard for the Node application. Ensure the terminal's current working directory is the application directory, and run `npm init`.
+
+<div class="filename">command line</div>
+
 ```bash
 $ cd path/to/my-app
 $ npm init
@@ -324,6 +310,9 @@ $ npm init
 For `entry point:`, use `index.js`; it is the default option, and required for parity with the walkthroughs. The default options for the rest of the selections is fine. Feel free to investigate each, and customize the values as desired. Selection made here can be changed.
 
 Example `npm init`:
+
+<div class="filename">command line</div>
+
 ```
 $ npm init
 This utility will walk you through creating a package.json file.
@@ -382,9 +371,10 @@ To run the application, first create a file, `index.js` for the application code
 
 1. Create `index.js`
 In the root of the project, create a file titled `index.js`. Any valid JavaScript can go in this file -- a `console.log` statement is shown in the example.
-```javascript
-// index.js
 
+<div class="filename">index.js</div>
+
+```javascript
 console.log('Welcome to My App!');
 ```
 
@@ -394,9 +384,10 @@ At this point, the application can be run with `node index.js`.
 A Node.js application's `package.json` is the place to define commonly used commands such as `start` and `test`. A top-level property `"scripts"` is used to map developer-selected command names to executable scripts. `package.json` already contains a `test` script.
 
 Add a script called `start` that executes the `node` executable with `index.js`, and save the file.
-```js
-// package.json
 
+<div class="filename">package.json</div>
+
+```js
 {
   ...,
   "scripts": {
@@ -410,6 +401,9 @@ Add a script called `start` that executes the `node` executable with `index.js`,
 A script defined in `"scripts"` can be invoked from the command line with `npm run [script]`.
 
 3. Run start script
+
+<div class="filename">command line</div>
+
 ```
 $ npm run start
 ```
@@ -431,9 +425,10 @@ Git is also required for Heroku, the deployed environment used in this walkthoug
 A `.gitignore` file is used to define which files and folders should not be saved to version control. Common elements not saved to version control are in-project dependency folders, such as `node_modules`, files containing sensitive information (such as private keys), and certain files used only by the developer's local operating system, such as Apple's `.DS_Store` file.
 
 Create a file named `.gitignore` in the root directory with the following:
-```
-# .gitignore
 
+<div class="filename">.gitignore</div>
+
+```
 /node_modules
 npm-debug.log
 .DS_Store
@@ -448,6 +443,8 @@ The command to stage changes is `git add`. The command to finalize the changes i
 1. `git add`
 Git's `add` command takes a list of files and directories that should be staged as a parameter.
 
+<div class="filename">command line</div>
+
 ```
 $ git add .
 ```
@@ -456,6 +453,9 @@ The `.` symbol is shorthand for "the current working directory." Calling `git ad
 
 2. `git commit`
 Git enforces that every commit have a commit message describing why the commit was made. A repository's commit messages should be a human-readable log of the changes over time. Use the `-m` flag with `git commit` to add a commit message inline. If the `-m` flag is not used, the terminal will open the default text editor for the developer to enter the commit message.
+
+<div class="filename">command line</div>
+
 ```
 $ git commit -m 'Initialize my app'
 ```
@@ -479,6 +479,9 @@ Express has been a mainstay library for since the early days of Node.js, and beg
 
 1. Use `npm` to install Express
 Within `my-app`'s root directory, run the following:
+
+<div class="filename">command line</div>
+
 ```
 $ npm install express
 ```
@@ -492,16 +495,19 @@ Express provides JavaScript classes and functions that, when used within a Node.
 
 1. Install nodemon
 Because nodemon is a library that is used to initialize a process from the local operating system, it's not considered an application dependency. You can install it globally, but consider including nodemon as a development dependency so any future developers download the library with `npm install`. Since the `npm start` script uses nodemon, it is a required for development.
+
+<div class="filename">command line</div>
+
 ```bash
-$ npm install -g nodemon
-# and/or
 $ npm install --save-dev nodemon
 ```
 
 2. Use nodemon
 Change the start script within `package.json` to use `nodemon` instead of `node` to start the server process.
+
+<div class="filename">package.json</div>
+
 ```javascript
-// package.json
 {
 	...,
 	"scripts": {
@@ -526,10 +532,16 @@ Creating a web app from the pd-node-heroku boilerplate means it is easy to deplo
 
 ### 1. `heroku create`
 Run the heroku create command. Use the optional `[appName]` parameter to create a user friendly slug.
+
+<div class="filename">command line</div>
+
 ```bash
 $ heroku create [appName]
 ```
 Replace `[appName]` with your choice of app name. The output of the command will list the remote URL where the app will be accessed once deployed.
+
+<div class="filename">command line</div>
+
 ```bash
 $ heroku create pd-service
 Creating ⬢ pd-service... done
@@ -538,6 +550,9 @@ https://pd-service.herokuapp.com/ | https://git.heroku.com/pd-service.git
 
 ### 2. Ensure all desired changes to the repository are commited.
 The most recent git commit is what will go live on Heroku.
+
+<div class="filename">command line</div>
+
 ```
 $ git status
 $ git add .
@@ -546,6 +561,9 @@ $ git commit -m 'Create commit'
 
 ### 3. Push to Heroku
 The `heroku create` command added a remote git repository on Heroku's servers. See this new remote by running the command `$ git remote -v`. Push the code to this remote.
+
+<div class="filename">command line</div>
+
 ```
 $ git push heroku [branchName]
 ```
@@ -554,6 +572,9 @@ You can watch the build logs output in the terminal. When the deploy succeeds or
 
 ### 4. Access the application.
 The deployed application can be accessed by navigating in the browser to the URL output by Step 1. You can also open the deployed appllication with the command `heroku open`.
+
+<div class="filename">command line</div>
+
 ```bash
 $ heroku open
 ```
