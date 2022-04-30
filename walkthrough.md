@@ -374,7 +374,11 @@ Is this OK? (yes)
 The `my-app` directory should now have a `package.json` file. `package.json` is used for configuration of Node.js applications, and will be revisited throughout the development process.
 
 ### Start the application
-An application is a software script that is executed on a computer. To "start" this application, just like every application, application code must be written and a command that starts the application must be defined. For this, first create a file, `index.js`, which will define the code that will be the application.
+An application is a software script that is executed on a computer. To "start" this application, like every software, application code must be written and a command that starts the application must be defined.
+
+Node.js scripts are run by passing its filename to the `node` executable. The `node` program reads the file, interprets the Javascript, and runs the functionality specified by the application.
+
+To run the application, first create a file, `index.js` for the application code.
 
 1. Create `index.js`
 In the root of the project, create a file titled `index.js`. Any valid JavaScript can go in this file -- a `console.log` statement is shown in the example.
@@ -383,6 +387,8 @@ In the root of the project, create a file titled `index.js`. Any valid JavaScrip
 
 console.log('Welcome to My App!');
 ```
+
+At this point, the application can be run with `node index.js`.
 
 2. Create the start script
 A Node.js application's `package.json` is the place to define commonly used commands such as `start` and `test`. A top-level property `"scripts"` is used to map developer-selected command names to executable scripts. `package.json` already contains a `test` script.
@@ -401,7 +407,7 @@ Add a script called `start` that executes the `node` executable with `index.js`,
 }
 ```
 
-A script defined in `"scripts"` can be invoked from the command line with `npm run [name]`.
+A script defined in `"scripts"` can be invoked from the command line with `npm run [script]`.
 
 3. Run start script
 ```
@@ -417,9 +423,11 @@ Git is the industry-leading version control management tool. It provides charact
 
 A useful advantage are the branching and merge strategies provided by Git which allow for multiple developers to work within the same codebase while keeping in sync with other developers' changes. For a solo developer, these strategies are useful in organizing product development and capturing each incremental change in a visualizable format.
 
-Git is also used by Heroku, the platform we will be using for the deployed environment. Heroku will receive the incrementally changed repository, and deploy only the code which has been committed. Due to the nature of capturing and recording each incremental save to the repository, Git also features the ability to "revert" changes and "rollback" environments. Both of these essentially mean return the codebase to a previous state.
+Due to the nature of capturing and recording each incremental save to the repository, Git also features the ability to "revert" changes and "rollback" environments. Both of these essentially mean return the codebase to a previous state.
 
-### 3. Create .gitignore file
+Git is also required for Heroku, the deployed environment used in this walkthough. This will keep the files we develop locally in sync with the public server's filesystem.
+
+### 1. Create .gitignore file
 A `.gitignore` file is used to define which files and folders should not be saved to version control. Common elements not saved to version control are in-project dependency folders, such as `node_modules`, files containing sensitive information (such as private keys), and certain files used only by the developer's local operating system, such as Apple's `.DS_Store` file.
 
 Create a file named `.gitignore` in the root directory with the following:
@@ -432,16 +440,27 @@ npm-debug.log
 /*.env
 ```
 
-### 4. Save changes with `git`
-As changes are made during local development, Git is only keeping track of the changes locally. To have Git to save the files to the version control, run `git add` to add the desired changes to the index. Items added to the index can be saved to version controlled repository with `git commit`.
+### 2. Save changes with `git`
+As changes are made in local development, Git keeps track of them, but does not automatically save the changes to version control. Saving to version control is a two step process. First the changes must be "staged". This is essentially a holding area for changes that the developer can review before finalizing the changes. The second step is to finalize, or "commit", the changes.
+
+The command to stage changes is `git add`. The command to finalize the changes into version control is `git commit`.
+
+1. `git add`
+Git's `add` command takes a list of files and directories that should be staged as a parameter.
+
 ```
 $ git add .
-$ git commit -m 'Initialize my app'
 ```
 
 The `.` symbol is shorthand for "the current working directory." Calling `git add` with this parameter signals to Git to save all changes in the current directory. The command can also be run with a list file and directory names as parameters -- e.g. `git add index.js package.json`.
 
-Git enforces that every commit have a commit message desribing why the commit was made. Use the `-m` flag with `git commit` to add a commit message in one command. If the `-m` flag is not used, the terminal will open the default text editor for the developer to enter the commit message.
+2. `git commit`
+Git enforces that every commit have a commit message describing why the commit was made. A repository's commit messages should be a human-readable log of the changes over time. Use the `-m` flag with `git commit` to add a commit message inline. If the `-m` flag is not used, the terminal will open the default text editor for the developer to enter the commit message.
+```
+$ git commit -m 'Initialize my app'
+```
+
+Git provides an immense catalog of functionality for repository management. `my-app` will only need the humble `git add` and `git commit`, but as a developer's needs grow, an expanded Git repetoire is a must. A next step to learning Git I recommend is this [Simple Guide to Git](http://rogerdudler.github.io/git-guide/)(http://rogerdudler.github.io/git-guide/).
 
 ---
 
@@ -452,7 +471,7 @@ For this, the application will need a web server library. There are many such li
 
 ### Express
 
-Express is a web framework that checks all of the boxes.. Express provides an abstraction over low-level HTTP handling by using sensible defaults for HTTP configuration, while still allowing for low-level configuation as the needs of the application are discovered. For the developer, Express provides a straight-forward, route declaration approach for serving web requests.
+Express is a web framework that checks all of the boxes. Express provides an abstraction over low-level HTTP handling by using sensible defaults for HTTP configuration, while still allowing for low-level configuation as the needs of the application are discovered. For the developer, Express provides a straight-forward, route declaration approach for serving web requests.
 
 Express has been a mainstay library for since the early days of Node.js, and beginner to advanced online resources can be found with ease.
 
@@ -467,7 +486,7 @@ $ npm install express
 This command adds Express as a dependency to the application, and installs the library into the `node_modules` folder. Since Express is the first external library added to the application, the `node_modules` folder will be created in the root directory.
 
 ### 2. Create the Express server
-With Express now installed, 
+Express provides JavaScript classes and functions that, when used within a Node.js script, start a webserver process. The script is written in JavaScript. The script is run by passing the filename as a parameter to the `node` process.
 
 ### 3. Setting up filesystem watcher for development
 
