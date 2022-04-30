@@ -1,4 +1,4 @@
-## Install Node.js
+## Install Node.js on Windows
 
 This walkthrough will cover building a web server application using Node.js. While JavaScript was initially developed for and still maintains its scripting dominance in a browser environment, Node.js is a JS runtime for use outside of a browser.
 
@@ -371,7 +371,7 @@ About to write to /Users/popdemtech/popdemtech/my-app/package.json:
 Is this OK? (yes)
 ``` 
 
-The `my-app` directory should now have a file name `package.json`. This file is used for configuration of Node.js applications, and will be revisited throughout the development process.
+The `my-app` directory should now have a `package.json` file. `package.json` is used for configuration of Node.js applications, and will be revisited throughout the development process.
 
 ### Start the application
 An application is a software script that is executed on a computer. To "start" this application, just like every application, application code must be written and a command that starts the application must be defined. For this, first create a file, `index.js`, which will define the code that will be the application.
@@ -381,20 +381,20 @@ In the root of the project, create a file titled `index.js`. Any valid JavaScrip
 ```javascript
 // index.js
 
-console.log('Welcome to my-app!');
+console.log('Welcome to My App!');
 ```
 
 2. Create the start script
-A Node.js application's `package.json` is the place to define commonly used commands such as `start` and `test` commands. A top-level property `"scripts"` is used to map developer-selected command names to executable scripts.
+A Node.js application's `package.json` is the place to define commonly used commands such as `start` and `test`. A top-level property `"scripts"` is used to map developer-selected command names to executable scripts. `package.json` already contains a `test` script.
 
-`package.json` already contains a `test` script. Add a script called `start` that executes the `node` executable with `index.js`, and save the file.
+Add a script called `start` that executes the `node` executable with `index.js`, and save the file.
 ```js
 // package.json
 
 {
   ...,
   "scripts": {
-    "start": "node .",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   ...
@@ -408,21 +408,42 @@ A script defined in `"scripts"` can be invoked from the command line with `npm r
 $ npm run start
 ```
 
-You should see the output `Welcome to my-app!` in the console.
+You should see the output `Welcome to My App!` in the console. Just like that we have a simple yet functional Node.js application.
+
+---
+
+## Git
+Git is the industry-leading version control management tool. It provides character by change tracking and syncing of changes between local and shared environment. Git commands and algorithms warrant a deep dive of their own. This walkthrough provides the simplest possible `git` workflow for a solo developer.
+
+A useful advantage are the branching and merge strategies provided by Git which allow for multiple developers to work within the same codebase while keeping in sync with other developers' changes. For a solo developer, these strategies are useful in organizing product development and capturing each incremental change in a visualizable format.
+
+Git is also used by Heroku, the platform we will be using for the deployed environment. Heroku will receive the incrementally changed repository, and deploy only the code which has been committed. Due to the nature of capturing and recording each incremental save to the repository, Git also features the ability to "revert" changes and "rollback" environments. Both of these essentially mean return the codebase to a previous state.
 
 ### 3. Create .gitignore file
 A `.gitignore` file is used to define which files and folders should not be saved to version control. Common elements not saved to version control are in-project dependency folders, such as `node_modules`, files containing sensitive information (such as private keys), and certain files used only by the developer's local operating system, such as Apple's `.DS_Store` file.
 
-Create a file named `.gitignore` in the root directory like the following:
+Create a file named `.gitignore` in the root directory with the following:
 ```
+# .gitignore
+
 /node_modules
 npm-debug.log
 .DS_Store
 /*.env
 ```
 
----
+### 4. Save changes with `git`
+As changes are made during local development, Git is only keeping track of the changes locally. To have Git to save the files to the version control, run `git add` to add the desired changes to the index. Items added to the index can be saved to version controlled repository with `git commit`.
+```
+$ git add .
+$ git commit -m 'Initialize my app'
+```
 
+The `.` symbol is shorthand for "the current working directory." Calling `git add` with this parameter signals to Git to save all changes in the current directory. The command can also be run with a list file and directory names as parameters -- e.g. `git add index.js package.json`.
+
+Git enforces that every commit have a commit message desribing why the commit was made. Use the `-m` flag with `git commit` to add a commit message in one command. If the `-m` flag is not used, the terminal will open the default text editor for the developer to enter the commit message.
+
+---
 
 ## Create the web server
 Node libraries can and frequently are built for a programmatic interface. As it stands, `my-app` is a functioning Node.js application, but it doesn't do much. Our interest is building an application that serves web traffic. That means users can navigate to the application on the internet and browse useful onsite content.
