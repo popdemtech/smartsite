@@ -1,12 +1,16 @@
-## Install Node.js on Windows
+## Install Node.js
 
 This walkthrough will cover building a web server application using Node.js. While JavaScript was initially developed for and still maintains its scripting dominance in a browser environment, Node.js is a JS runtime for use outside of a browser.
 
-Windows users see [Installing Node.js on Windows].
+Node.js is an open source development platform for executing JavaScript code server-side. While JavaScript runs natively in a browser (i.e. client-side), Node.js provides developers the platform with which to build applications for a controlled environment that runs on a host computer (server-side), separate from the JavaScript that is delivered to the client's browser. In this way, a Node.js application is comparable to PHP, Java, and Ruby, and other application environments that handle web-traffic requests, but are not delivered to the client.
 
-MacOS users, check out [Installing Node.js on MacOS] for installation instructions.
+Windows users see [Install Node.js on Windows].
+
+MacOS users, check out [Install Node.js on MacOS] for installation instructions.
 
 Linux users, search a trusted search engine with the phrase "install node js linux" to find what you need.
+
+## Install Node.js on Windows
 
 ### 1. Navigate to nodejs.org
 
@@ -82,7 +86,7 @@ Install.
   <img src="/assets/img/posts/install-nodejs-windows/installing_node_js.gif" style="width:50%;min-width:320px;" />
 </p>
 
-Or not. The installation took me \~3 minutes total.
+The installation took me \~3 minutes total.
 
 ### 9. Allow Node.js to make changes to the device
 
@@ -96,7 +100,7 @@ Or not. The installation took me \~3 minutes total.
   <img src="/assets/img/posts/install-nodejs-windows/walkthrough_9.png" style="width:50%;min-width:320px;" />
 </p>
 
-If you selected "Automatically install the necessary tools" in **Step 6**, after the node's install is finished, a window will appear with some information about the libraries that are about to be installed. Continue through the prompts.
+If you selected "Automatically install the necessary tools" in **Step 6**, a window will appear with some information about the libraries that are about to be installed. Continue through the prompts.
 
 ### 11. Finish Tools' Install in Powershell 
 
@@ -108,15 +112,13 @@ The process will open a Powershell window with Administrator rights, and finish 
 
 ### 12. Wait for and Debug Tools Install
 
-The install process takes longer than the NodeJS install. The installer recommends closing *all* programs other than the installer during the install process.
+This installation process takes longer than the Node.js install. The installer recommends closing *all* programs other than the installer during the install process.
 
-I did not do that, and did not find the performance of my PC affected during install. However, the install did fail the first time...
+I did not do that, and did not find the performance of my PC affected during install. However, I did experience an installation failure the first time...
 
 ### 12a. Repair Native Modules Install
 
-The install failed for me near the end, but luckily the fix is easy.
-
-The fix that worked for me was this: Reactivate the NodeJS installer download, and select the 'Repair' option. See Repair Node Installation in the Resources for details. See the resource as well if you have an installation failure not fixed by this solution:
+It is common for the native modules installation to "fail" the first time. It's so common the installation wizard comes with a Repair button. If the native modules installation fails the first time, reactivate the Node.js installer download, and select the 'Repair' option. See "Repair Node Installation" in the Resources for details. See the Resourcse as well if you have an installation failure not fixed by this solution:
 
 Find the downloaded file from **Step 1**, and select it.
 
@@ -144,7 +146,7 @@ Select next, then select 'Repair.'
 
 ### 13. Check Installation
 
-You should now have Node and NPM install. If you installed the native modules, you will have those as well. From Windows Terminal (or similar), run the following commands and check the output:
+Node and NPM should now be installed. If you installed the native modules, you will have those as well. From Windows Terminal (or similar), run the following commands and check the output:
 
 <div class="filename">command line</div>
 
@@ -156,9 +158,9 @@ v16.13.2
 v8.2.1
 ```
 
-`node -v` checks the version of node, `npm -v` checks the version of npm, node package manager.
+`node -v` checks the version of node, and `npm -v` checks the version of npm, node package manager.
 
-If you installed native modules, run the following to check the version of the installed libraries:
+If native modules were installed, run the following to check the version of the installed libraries:
 
 <div class="filename">command line</div>
 
@@ -174,32 +176,31 @@ visualstudio2019buildtools 16.11.9.0
 21 packages installed.
 ```
 
-In particular, check for the existance of visualstudio-installer, visualstudio2019-workload-vctools, and visualstudio2019buildtools libraries.
+In particular, check for the existance of visualstudio-installer, visualstudio2019-workload-vctools, and visualstudio2019buildtools libraries. (Note: The exact version and name of the Visual Studio tool may have progressed to higher versions than in the example output.)
+
+Now that Node is installed, we'll get to building out `my-app`. Keep the following in mind: Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, developer libraries (things that can be `npm install`ed), and more. The Node.js ecosystem is ripe for software creation.
 
 ### Resources
 
-Node JS Release Schedule and Information - [nodejs.org/en/about/releases](https://nodejs.org/en/about/releases/)
+Node JS Release Schedule and Information: [nodejs.org/en/about/releases](https://nodejs.org/en/about/releases/)
 
-Manage PATH System Variable on Windows - [docs.oracle.com](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html#GUID-DD6F9982-60D5-48F6-8270-A27EC53807D0)
+Manage PATH System Variable on Windows: [docs.oracle.com](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html#GUID-DD6F9982-60D5-48F6-8270-A27EC53807D0)
 
-Install Tools for Native Modules - [github.com/nodejs/node-gyp#on-windows](https://github.com/nodejs/node-gyp#on-windows)
+Install Tools for Native Modules: [github.com/nodejs/node-gyp#on-windows](https://github.com/nodejs/node-gyp#on-windows)
 
-Repair Node Installation - [stackoverflow.com/a/68912225](https://stackoverflow.com/a/68912225)
+Repair Node Installation: [stackoverflow.com/a/68912225](https://stackoverflow.com/a/68912225)
 
 ---
 
-## Installing Node.js on MacOS
+## Install Node.js on MacOS
 
-Node.js is an open source development platform for executing JavaScript code server-side. While JavaScript runs natively in a browser (i.e. client-side), Node.js provides developers the platform with which to build applications for a controlled environment that runs on a host computer, separate from the JavaScript that is delivered to the client's browser. In this way, a Node.js application is comparable to PHP, Java, and Ruby, and other application environments that handle web-traffic requests, but are not delivered to the client.
-
-To develop a Node.js application on MacOS, the Node binaries must be installed.
-
-<!--more-->
+To develop a Node.js application on MacOS, the Node binaries must be installed. This guide walks through installing Homebrew, Node.js, and Node Version Manager (nvm).
 
 ### 1. Create a user with admin access.
-Chances are you are already a user with admin access. If you are aware that you are not a user with admin access, follow [these steps](https://osxdaily.com/2017/07/17/how-create-new-admin-account-mac/) (osxdaily.com) to create such a user. You will need a user *with* admin access to create this new user.
+Chances are you are already a user with admin access. If you are aware that you are not a user with admin access, follow [these steps](https://osxdaily.com/2017/07/17/how-create-new-admin-account-mac/) (osxdaily.com) to create such a user. You will need a user *with* admin access to create this new user, so contact an admin if necessary.
 
 ### 2. Install Homebrew
+Homebrew is a package manager for MacOS. An OS package manager is used for downloading programs and libraries. Homebrew is used for installing and managing versions of CLI tools and other packages.
 
 <div class="filename">command line</div>
 
@@ -209,6 +210,7 @@ $ brew -v
 ```
 
 ### 3. Remove existing node versions
+In case there is already a Node installation on the Mac, remove it. We will be using nvm to manage Node versions, and a pre-existing installation will hijack any invocations of the `node` executable.
 
 <div class="filename">command line</div>
 
@@ -217,6 +219,7 @@ $ brew uninstall --force node
 ```
 
 ### 4. Install NVM
+Node Version Manager allows the developer to install and manage different versions of Node both a global and project-by-project basis.
 
 <div class="filename">command line</div>
 
@@ -247,20 +250,20 @@ upon upgrade/reinstall.
 Type `nvm help` for further information.
 ```
 
-Practically, issue the following commands:
+Practically, issue the following command:
 
 <div class="filename">command line</div>
 
 ```
 $ mkdir ~/.nvm
-$ nano ~/.zshrc
 ```
 
-Copy and paste the script from the output within `.zshrc`, and use the command `source` to load the new configuration into the active terminal.
+Copy the indicated output and paste it into `.zshrc`, and use the command `source` to load the new configuration into the active terminal.
 
 <div class="filename">command line</div>
 
 ```
+$ nano ~/.zshrc
 $ source ~/.zshrc
 ```
 
@@ -286,7 +289,7 @@ $ node -v
 v16.14.2
 ```
 
-Now that Node is installed, get to building out your application. Check out the sample web-server [provided by the Node.js team](https://nodejs.org/en/docs/guides/getting-started-guide/). But listen! Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, and developer libraries (things that can be `npm install`ed).
+Now that Node is installed, we'll get to building out `my-app`. Keep the following in mind: Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, developer libraries (things that can be `npm install`ed), and more. The Node.js ecosystem is ripe for software creation.
 
 ## Resources
 
@@ -295,10 +298,10 @@ Similar walkthrough: https://tecadmin.net/install-nvm-macos-with-homebrew/
 ---
 
 ## Initialize the repository
-Time to create the first files of the web application. 
+It's time to create the first files of the web application. 
 
 ### Initialize
-The `npm init` command will start a setup wizard for the Node application. Ensure the terminal's current working directory is the application directory, and run `npm init`.
+The `npm init` command will start a setup wizard for the Node application. In Terminal, navigate to the application directory, and run `npm init`.
 
 <div class="filename">command line</div>
 
@@ -307,9 +310,9 @@ $ cd path/to/my-app
 $ npm init
 ```
 
-For `entry point:`, use `index.js`; it is the default option, and required for parity with the walkthroughs. The default options for the rest of the selections is fine. Feel free to investigate each, and customize the values as desired. Selection made here can be changed.
+For `entry point:`, use `index.js`; it is the default option, and required for parity with the walkthroughs. The default options for the rest of the selections is fine. Feel free to investigate the meaning of each, and customize the values as desired. Selection made in this wizard can be changed.
 
-Example `npm init`:
+Here is example output from `npm init`:
 
 <div class="filename">command line</div>
 
@@ -360,7 +363,7 @@ About to write to /Users/popdemtech/popdemtech/my-app/package.json:
 Is this OK? (yes)
 ``` 
 
-The `my-app` directory should now have a `package.json` file. `package.json` is used for configuration of Node.js applications, and will be revisited throughout the development process.
+This command generates a `package.json` file in the directory in which it is run. `package.json` is used for configuration of Node.js applications, and will be revisited throughout the development process.
 
 ### Start the application
 An application is a software script that is executed on a computer. To "start" this application, like every software, application code must be written and a command that starts the application must be defined.
@@ -413,7 +416,7 @@ You should see the output `Welcome to My App!` in the console. Just like that we
 ---
 
 ## Git
-Git is the industry-leading version control management tool. It provides character by change tracking and syncing of changes between local and shared environment. Git commands and algorithms warrant a deep dive of their own. This walkthrough provides the simplest possible `git` workflow for a solo developer.
+Git is the industry-leading version control management tool. It provides character by character change tracking and syncing of changes between local and shared environment. Git commands and algorithms warrant a deep dive of their own. This walkthrough provides the simplest possible `git` workflow for a solo developer.
 
 A useful advantage are the branching and merge strategies provided by Git which allow for multiple developers to work within the same codebase while keeping in sync with other developers' changes. For a solo developer, these strategies are useful in organizing product development and capturing each incremental change in a visualizable format.
 
@@ -465,13 +468,15 @@ Git provides an immense catalog of functionality for repository management. `my-
 ---
 
 ## Create the web server
-Node libraries can and frequently are built for a programmatic interface. As it stands, `my-app` is a functioning Node.js application, but it doesn't do much. Our interest is building an application that serves web traffic. That means users can navigate to the application on the internet and browse useful onsite content.
+As it stands, `my-app` is a functioning Node.js application, but it doesn't do much. It prints a message in the terminal. We're here to build an application that serves web traffic. This means a user can navigate to our web pages and functionality from an internet browser.
 
-For this, the application will need a web server library. There are many such libraries in the Node.js ecosystem from which to choose. The ideal library for our purposes provides a developer friendly abstraction over the gritty details of TCP and HTTP communication protocols. A large network of developers also using the library is a strong bonus as well.
+For the purposes of this guide, the term "web server" should be taken to mean an application that serves web traffic. The term "web server" can (and often does) apply to any physical or digital component that makes up the OSI model. These components funtionally operate different levels of abstraction, and in the most general sense, constitute a pipeline of request handling. Node.js web servers operate at the "Application Layer" of the model.
+
+A web server library written for the JavaScript ecosystem will be included into application scripts. There are many such libraries in the Node.js ecosystem from which to choose. The ideal library for our purposes provides a developer friendly abstraction over the gritty details of TCP and HTTP communication protocols. A large network of developers using the library is a strong bonus as well. Express [https://expressjs.com](https://expressjs.com) is a web framework that checks all of the boxes.
 
 ### Express
 
-Express is a web framework that checks all of the boxes. Express provides an abstraction over low-level HTTP handling by using sensible defaults for HTTP configuration, while still allowing for low-level configuation as the needs of the application are discovered. For the developer, Express provides a straight-forward, route declaration approach for serving web requests.
+Express provides an abstraction over low-level HTTP handling by using sensible defaults for HTTP configuration, while still allowing for low-level configuation as the needs of the application are discovered. For the developer, Express provides a straight-forward, route declaration approach for serving web requests.
 
 Express has been a mainstay library for since the early days of Node.js, and beginner to advanced online resources can be found with ease.
 
@@ -489,12 +494,42 @@ $ npm install express
 This command adds Express as a dependency to the application, and installs the library into the `node_modules` folder. Since Express is the first external library added to the application, the `node_modules` folder will be created in the root directory.
 
 ### 2. Create the Express server
-Express provides JavaScript classes and functions that, when used within a Node.js script, start a webserver process. The script is written in JavaScript. The script is run by passing the filename as a parameter to the `node` process.
+Express provides JavaScript classes and functions that, when used within a Node.js script, start a webserver process. To do so, we'll need to `require` the Express library, then instantiate an instance of Express.
 
-### 3. Setting up filesystem watcher for development
+An instance of Express is conventionally called `app`. The instance provides methods for routing HTTP requests, rendering HTML views, registering a template engine, and configuring middleware. `my-app` will utilize all of these methods.
+
+First, modify `index.js` to import in the `express` library and instantiate an `app`. Register a `GET` route to the root route, `/`.
+
+<div class="filename">index.js</div>
+
+```javascript
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+app.get('/', function(request, response) {
+  response.send('<h1>Welcome to My App!</h1>');
+});
+
+app.listen(PORT, () => {
+  console.log(`My App listening on port ${PORT}`);
+});
+```
+
+### 3. Run the Application
+Starting the application with `npm run start` will begin the Express server. Based on the code above, this web server can be accessed by navigating to `http://localhost:3000` in a web browser.
+
+Open a web browser and navigate to `localhost:3000`. You should see a large heading with the words "Welcome to My App!".
+
+[image welcome to my app]
+
+### 4. Setting up filesystem watcher for development
+At this point, if you were to change the sent response from "Welcome to My App" to "Hello World" and refresh the browser, you would see no change in the response. This is because when the application is run with `node index.js`, all application files are cached in the state they were in when the command was called. To see the changed response, stop the currently running server with `CMD+C` or `CTRL+C` depending on your operating system, and restart it with `npm run start`. Navigating to the browser now will display the updated text.
+
+Restartiing the server after every change will get annoying pretty quick. Luckily, there are programs that will handle automatically restarting the server after every change. These programs are called "filesystem watchers." The filesystem watcher `my-app` will use is nodemon (pronounced "node-mon").
 
 1. Install nodemon
-Because nodemon is a library that is used to initialize a process from the local operating system, it's not considered an application dependency. You can install it globally, but consider including nodemon as a development dependency so any future developers download the library with `npm install`. Since the `npm start` script uses nodemon, it is a required for development.
+Because nodemon is a library that is used to initialize a process from the local operating system, it's not considered an application dependency. It is a development dependency. Install the library as a development dependency.
 
 <div class="filename">command line</div>
 
@@ -503,35 +538,90 @@ $ npm install --save-dev nodemon
 ```
 
 2. Use nodemon
-Change the start script within `package.json` to use `nodemon` instead of `node` to start the server process.
+nodemon wraps the `node` process with an additional file-checking functionality. Change the start script within `package.json` to use `nodemon` instead of `node` to start the server process.
 
 <div class="filename">package.json</div>
 
 ```javascript
 {
-	...,
-	"scripts": {
-		"start": "npx nodemon .",
-		...
-	},
-	...
+  ...,
+  "scripts": {
+    "start": "npx nodemon .",
+    ...
+  },
+  ...
 }
 ```
 
-Modify the start script for your use case.
+3. Restart the server
+Running `npm run start` will now invoke `nodemon`. `nodemon` will start the application as usual and restart the server process as code within the directory is changed. Restart the server.
+
+<div class="filename">command line</div>
+
+```
+$ npm run start
+```
+
+### 5. Send an HTML file
+Currently, the application is configured to send an HTML string when the root route, `/`, is requested. While this is valid, it is more valuable to pull the HTML into its own document, and configure the route handler to serve the HTML file. The separation of concerns between web application and view is standard practice. It allows the developer to utilize the benefits of the full HTML specification without filling `index.js` with pages of HTML.
+
+1. Create a file named `index.html` in the root directory.
+
+<div class="filename">index.html</div>
+
+```html
+<!DOCTYPE html>
+<head>
+  <title>My App</title>
+</head>
+<html>
+  <body>
+    <h1>Welcome to My App!</h1>
+  </body>
+</html>
+```
+
+2. Send the `index.html` as the response from `/`.
+Modify the route handler of `/` to use `sendFile` instead of `send`.
+
+<div class="filename">index.js</div>
+
+```javascript
+app.get('/', function(request, response) {
+  response.sendFile(__dirname + '/index.html');
+});
+```
+
+`__dirname` is a Node.js variable containing the directory name of the currently executing file. Because we know the location of `index.html` to be in the same directory as `index.js`, simply appending the HTML's filename to `__dirname` yields the correct location for the file.
 
 ### Resources
 
 Express: [expressjs.com](https://expressjs.com)
+Nodemon: [npmjs.com/package/nodemon](https://www.npmjs.com/package/nodemon)
 
 ---
 
 ## Deploying to Heroku
 
-Creating a web app from the pd-node-heroku boilerplate means it is easy to deploy to Heroku. You will need a free [Heroku](https://heroku.com) account and the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+So far, `my-app` has only been live on the local development server. To open the application for public web traffic, the application has to have a public IP address, the proper configutation with OSI layer-7 programs allowing public web traffic. Chances are you do not want to open your personal computer to public traffic. As well, learning how to provision a operating system level server is a walkthrough in its own. Luckily, there are Platforms-as-a-Service that provide fully-provisioned server space for launching public web applications with ease. One such platform is Heroku.
+
+Heroku provides server-space in the form of what they calls "dynos." Heroku's free-tier includes unlimited dynos and 550 dyno hours per month. Verifying the account with a credit card will increase the number of free dyno hours to 1100. Dynos on the free tier will sleep after 30 minutes of inactivity. Visiting the web address of a sleeping dyno will take longer than usual to render the first request as the dyno is activated from the sleeping state.
+
+When an application is ready for production-level availability, simply upgrade the dyno to a paid tier to have the application accessible 24/7. At the time of this writing, paid tiers start at $7 per month per dyno.
+
+In addition to upgrading application availability, Heroku has an Add-ons marketplace which provides database, cache, and application monitoring services to name a few. These services include industry standard tools specially configured with plug-and-play interfacing with the Heroku platform. Each add-on has it's own tiered pricing system, and there are many with a free tier which match Heroku's free tier on being perfectly suited for learning and prototyping.
+
+### 1. Heroku prerequisites
+
+1. Create a Heroku account
+To get started with Heroku, you will need a Heroku account. Navigate to [heroku.com](https://heroku.com) and create an account if you do not yet have one.
+
+2. Install the Heroku CLI
+Heroku provides a command-line interface so that creating, configuring, and maintaining Heroku applications and add-ons is as easy as a terminal command. This is very powerful functionality, that ultimately could be done via Heroku's web interface. The Heroku commands are much more concise approach to accomplishing these tasks for the 
+[Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
 
 ### 1. `heroku create`
-Run the heroku create command. Use the optional `[appName]` parameter to create a user friendly slug.
+Run the `heroku create` command. Use the optional `[appName]` parameter to create a user friendly slug.
 
 <div class="filename">command line</div>
 
