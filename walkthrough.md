@@ -1,3 +1,57 @@
+# Setup
+
+## Git `my-app`
+Git the only developer tool required before beginning this walkthrough. It's required for you to run the first command, `git clone`, and sync the starting directory to your local computer.
+
+### What is Git?
+
+Imagine every time you made a change to a project, you had to make a brand new directory, copy your existing work into it, make changes in this totally new directory, then _somehow_ totally replace the old work with the new work both locally and in production when the changes are finished. In the early days of the internet, this was solved with creative use of file transport protocol (FTP). The Git program both solves the tedious workflow and improves on full-file, FTP syncing.
+
+Git is a version control management system that maintains what the software looked like in the past and what it looks like now. It keeps track of each incremental change to the codebase which allows for efficient filesystem syncing between local and remote environments by only applying the changeset at the time of sync.
+
+A collection of files that is being tracked by Git is called a repository. The files on hard disk are called the Working Directory.
+
+A repository is a virtual collection, the working directory is the filesystem a developer is modifying. As changes in the working directory are accepted to be code complete, they are added via command to the Git repository. The repository can then be synced between local environments and remote environments.
+
+The Git development workflow also provides the ability to split-off (or "branch") new development work from a pre-established "master" branch. This allows the developer to build new features on top of the currently sanctified codebase, only adding the a new changeset. Once the new changes are approved, finalizing the changes into the existing project takes one command. If the new changes end up not making the cut, they can be reverted, discarded and/or saved for a later date.
+
+In essence, Git takes snapshots of application files over time and allows developers to manage each snapshot independent of one another. There may be a revision on the developer's local computer, a different revision being visited by live traffic in production, and an entirely different revision up for development team review on a shared repository management system like Github.
+
+### 1. Install Git
+
+To get Git, use the [official installation guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
+
+
+You're done with Git installation when you can run `git --version` and be presented with your installed Git gersion.
+
+<div class="filename">command line</div>
+
+```
+$ git --version
+```
+
+### 2. Clone `my-app`
+The `git clone` command downloads a git repository from the internet to a local working directory. Within the terminal, navigate to the directory you'd like to save `my-app` and run `git clone`.
+
+<div class="filename">command line</div>
+
+```
+$ cd path/to/parent_directory
+$ git clone https://github.com/popdemtech/my-app.git
+$ cd my-app
+```
+
+This series of commands downloads `my-app` and places the terminal in the `my-app` directory.
+
+The starting `my-app` directory is just this walkthrough. Following the steps provided, you will build out a Node.js web server, and the nearly empty directory will blossom into an internet application of whatever you wish it to be.
+
+We just gotta create the application now. Let's get to it.
+
+### Resources
+A Simple Guide to Git: [http://rogerdudler.github.io/git-guide/](http://rogerdudler.github.io/git-guide/)
+
+---
+
 ## Install Node.js
 
 This walkthrough will cover building a web server application using Node.js. While JavaScript was initially developed for and still maintains its scripting dominance in a browser environment, Node.js is a JS runtime for use outside of a browser.
@@ -182,7 +236,7 @@ Now that Node is installed, we'll get to building out `my-app`. Keep the followi
 
 ### Resources
 
-Node JS Release Schedule and Information: [nodejs.org/en/about/releases](https://nodejs.org/en/about/releases/)
+Node.js Release Schedule and Information: [nodejs.org/en/about/releases](https://nodejs.org/en/about/releases/)
 
 Manage PATH System Variable on Windows: [docs.oracle.com](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html#GUID-DD6F9982-60D5-48F6-8270-A27EC53807D0)
 
@@ -297,7 +351,7 @@ Similar walkthrough: https://tecadmin.net/install-nvm-macos-with-homebrew/
 
 ---
 
-## Initialize the repository
+## Initialize Node
 It's time to create the first files of the web application. 
 
 ### Initialize
@@ -415,59 +469,9 @@ You should see the output `Welcome to My App!` in the console. Just like that we
 
 ---
 
-## Git
-Git is the industry-leading version control management tool. It provides character by character change tracking and syncing of changes between local and shared environment. Git commands and algorithms warrant a deep dive of their own. This walkthrough provides the simplest possible `git` workflow for a solo developer.
+# Basics
 
-A useful advantage are the branching and merge strategies provided by Git which allow for multiple developers to work within the same codebase while keeping in sync with other developers' changes. For a solo developer, these strategies are useful in organizing product development and capturing each incremental change in a visualizable format.
-
-Due to the nature of capturing and recording each incremental save to the repository, Git also features the ability to "revert" changes and "rollback" environments. Both of these essentially mean return the codebase to a previous state.
-
-Git is also required for Heroku, the deployed environment used in this walkthough. This will keep the files we develop locally in sync with the public server's filesystem.
-
-### 1. Create .gitignore file
-A `.gitignore` file is used to define which files and folders should not be saved to version control. Common elements not saved to version control are in-project dependency folders, such as `node_modules`, files containing sensitive information (such as private keys), and certain files used only by the developer's local operating system, such as Apple's `.DS_Store` file.
-
-Create a file named `.gitignore` in the root directory with the following:
-
-<div class="filename">.gitignore</div>
-
-```
-/node_modules
-npm-debug.log
-.DS_Store
-/*.env
-```
-
-### 2. Save changes with `git`
-As changes are made in local development, Git keeps track of them, but does not automatically save the changes to version control. Saving to version control is a two step process. First the changes must be "staged". This is essentially a holding area for changes that the developer can review before finalizing the changes. The second step is to finalize, or "commit", the changes.
-
-The command to stage changes is `git add`. The command to finalize the changes into version control is `git commit`.
-
-1. `git add`
-Git's `add` command takes a list of files and directories that should be staged as a parameter.
-
-<div class="filename">command line</div>
-
-```
-$ git add .
-```
-
-The `.` symbol is shorthand for "the current working directory." Calling `git add` with this parameter signals to Git to save all changes in the current directory. The command can also be run with a list file and directory names as parameters -- e.g. `git add index.js package.json`.
-
-2. `git commit`
-Git enforces that every commit have a commit message describing why the commit was made. A repository's commit messages should be a human-readable log of the changes over time. Use the `-m` flag with `git commit` to add a commit message inline. If the `-m` flag is not used, the terminal will open the default text editor for the developer to enter the commit message.
-
-<div class="filename">command line</div>
-
-```
-$ git commit -m 'Initialize my app'
-```
-
-Git provides an immense catalog of functionality for repository management. `my-app` will only need the humble `git add` and `git commit`, but as a developer's needs grow, an expanded Git repetoire is a must. A next step to learning Git I recommend is this [Simple Guide to Git](http://rogerdudler.github.io/git-guide/)(http://rogerdudler.github.io/git-guide/).
-
----
-
-## Create the web server
+## Create the Web Server
 As it stands, `my-app` is a functioning Node.js application, but it doesn't do much. It prints a message in the terminal. We're here to build an application that serves web traffic. This means a user can navigate to our web pages and functionality from an internet browser.
 
 For the purposes of this guide, the term "web server" should be taken to mean an application that serves web traffic. The term "web server" can (and often does) apply to any physical or digital component that makes up the OSI model. These components funtionally operate different levels of abstraction, and in the most general sense, constitute a pipeline of request handling. Node.js web servers operate at the "Application Layer" of the model.
@@ -553,6 +557,8 @@ nodemon wraps the `node` process with an additional file-checking functionality.
 }
 ```
 
+The `npx` command can be thought of as "**n**ode **p**ackage e**x**ecute." This signals to use the executable provided by a program found within the local `node_modules` directory -- in this case `nodemon`.
+
 3. Restart the server
 Running `npm run start` will now invoke `nodemon`. `nodemon` will start the application as usual and restart the server process as code within the directory is changed. Restart the server.
 
@@ -601,45 +607,99 @@ Nodemon: [npmjs.com/package/nodemon](https://www.npmjs.com/package/nodemon)
 
 ---
 
+## Git Usage
+Git is the industry-leading version control management tool. It provides character by character change tracking and syncing of changes between local and shared environment. Git commands and algorithms warrant a deep dive of their own. This walkthrough provides the simplest possible `git` workflow for a solo developer.
+
+A useful advantage are the branching and merge strategies provided by Git which allow for multiple developers to work within the same codebase while keeping in sync with other developers' changes. For a solo developer, these strategies are useful in organizing product development and capturing each incremental change in a visualizable format.
+
+Git is also required for Heroku, the deployed environment used in this walkthough. This will keep the files we develop locally in sync with the public server's filesystem.
+
+### 1. Create .gitignore file
+A `.gitignore` file is used to define which files and folders should not be saved to version control. Common elements not saved to version control are in-project dependency folders, such as `node_modules`, files containing sensitive information (such as private keys), and certain files used only by the developer's local operating system, such as Apple's `.DS_Store` file.
+
+Create a file named `.gitignore` in the root directory with the following:
+
+<div class="filename">.gitignore</div>
+
+```
+/node_modules
+npm-debug.log
+.DS_Store
+/*.env
+```
+
+### 2. Save changes with `git`
+As changes are made in local development, Git keeps track of them, but does not automatically save the changes to version control. Saving to version control is a two step process. First the changes must be "staged". This is essentially a holding area for changes that the developer can review before finalizing the changes. The second step is to finalize, or "commit", the changes.
+
+The command to stage changes is `git add`. The command to finalize the changes into version control is `git commit`.
+
+1. `git add`
+Git's `add` command takes a list of files and directories that should be staged as a parameter.
+
+<div class="filename">command line</div>
+
+```
+$ git add .
+```
+
+The `.` symbol is shorthand for "the current working directory." Calling `git add` with this parameter signals to Git to save all changes in the current directory. The command can also be run with a list file and directory names as parameters -- e.g. `git add index.js package.json`.
+
+2. `git commit`
+Git enforces that every commit have a commit message describing why the commit was made. A repository's commit messages should be a human-readable log of the changes over time. Use the `-m` flag with `git commit` to add a commit message inline. If the `-m` flag is not used, the terminal will open the default text editor for the developer to enter the commit message.
+
+<div class="filename">command line</div>
+
+```
+$ git commit -m 'Initialize my app'
+```
+
+Git provides an immense catalog of functionality for repository management. As a developer's needs grow more complex, an expanded Git repetoire is a must. I recommend is this [Simple Guide to Git](http://rogerdudler.github.io/git-guide/)(http://rogerdudler.github.io/git-guide/) for next steps in building Git proficiency.
+
+---
+
 ## Deploying to Heroku
 
-So far, `my-app` has only been live on the local development server. To open the application for public web traffic, the application has to have a public IP address, the proper configutation with OSI layer-7 programs allowing public web traffic. Chances are you do not want to open your personal computer to public traffic. As well, learning how to provision a operating system level server is a walkthrough in its own. Luckily, there are Platforms-as-a-Service that provide fully-provisioned server space for launching public web applications with ease. One such platform is Heroku.
+So far, `my-app` has only been served from a local development server. To open the application for public web traffic, the application has to have a public IP address, the proper configuration with OSI layer-7 programs allowing public web traffic. Chances are you do not want to open your personal computer to public traffic. As well, learning how to provision a operating system level server is a walkthrough in its own. Luckily, there are Platforms-as-a-Service that provide fully-provisioned server space for launching public web applications with ease. One such platform is Heroku.
 
-Heroku provides server-space in the form of what they calls "dynos." Heroku's free-tier includes unlimited dynos and 550 dyno hours per month. Verifying the account with a credit card will increase the number of free dyno hours to 1100. Dynos on the free tier will sleep after 30 minutes of inactivity. Visiting the web address of a sleeping dyno will take longer than usual to render the first request as the dyno is activated from the sleeping state.
+Heroku provides server-space in the form of what they call "dynos." Heroku's free-tier includes unlimited dynos and 550 dyno hours per month. Verifying the account with a credit card will increase the number of free dyno hours to 1100. Dynos on the free tier will sleep after 30 minutes of inactivity. Visiting the web address of a sleeping dyno will take longer than usual to render the first request as the dyno is activated from the sleeping state.
 
 When an application is ready for production-level availability, simply upgrade the dyno to a paid tier to have the application accessible 24/7. At the time of this writing, paid tiers start at $7 per month per dyno.
 
-In addition to upgrading application availability, Heroku has an Add-ons marketplace which provides database, cache, and application monitoring services to name a few. These services include industry standard tools specially configured with plug-and-play interfacing with the Heroku platform. Each add-on has it's own tiered pricing system, and there are many with a free tier which match Heroku's free tier on being perfectly suited for learning and prototyping.
+In addition to upgrading application availability, Heroku has an Add-ons marketplace which provides database, cache, and application monitoring services to name a few. These services include industry standard tools specially configured for plug-and-play interfacing with the Heroku platform. Each add-on has it's own tiered pricing system, and there are many with a free tier which match Heroku's free tier on being perfectly suited for learning and prototyping.
 
-### 1. Heroku prerequisites
+### 1. Heroku Prerequisites
+Heroku manages application deployments with Git. A Git application repository is Prerequisite 0, and necessary for Heroku deployment. A `my-app` Git repository was initialized in a previous section, but keep this requirement in mind for any future new build.
 
 1. Create a Heroku account
-To get started with Heroku, you will need a Heroku account. Navigate to [heroku.com](https://heroku.com) and create an account if you do not yet have one.
+To get started with Heroku, you will need a Heroku account. If you do not yet have a Heroku account, navigate to [heroku.com](https://heroku.com) and create one.
 
 2. Install the Heroku CLI
-Heroku provides a command-line interface so that creating, configuring, and maintaining Heroku applications and add-ons is as easy as a terminal command. This is very powerful functionality, that ultimately could be done via Heroku's web interface. The Heroku commands are much more concise approach to accomplishing these tasks for the 
-[Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+Heroku provides a command-line interface so that creating, configuring, and maintaining Heroku applications and add-ons is as easy as a terminal command. This is very powerful functionality that ultimately could be done via Heroku's web interface, yet the Heroku terminal commands are much more concise approach to accomplishing these tasks. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) (https://devcenter.heroku.com/articles/heroku-cli).
 
 ### 1. `heroku create`
-Run the `heroku create` command. Use the optional `[appName]` parameter to create a user friendly slug.
+Run the `heroku create` command. Use the optional `<appName>` parameter to create a user friendly slug.
 
 <div class="filename">command line</div>
 
 ```bash
-$ heroku create [appName]
+$ heroku create <appName>
 ```
-Replace `[appName]` with your choice of app name. The output of the command will list the remote URL where the app will be accessed once deployed.
+Replace `<appName>` with your choice of app name. This affects the application's URL. For example, `heroku create my-app` will be accessible from the URL `my-app.herokuapp.com`. The output of the command will list the remote application's URL.
 
 <div class="filename">command line</div>
 
 ```bash
-$ heroku create pd-service
-Creating ⬢ pd-service... done
-https://pd-service.herokuapp.com/ | https://git.heroku.com/pd-service.git
+$ heroku create my-app
+Creating ⬢ my-app... done
+https://my-app.herokuapp.com/ | https://git.heroku.com/my-app.git
 ````
 
-### 2. Ensure all desired changes to the repository are commited.
-The most recent git commit is what will go live on Heroku.
+Heroku subdomains must be unique. If the `<appName>` selected is already in use, you will need to re-run the command with a new name. If no `<appName>` is provided, creates the app with a random slug. For example `heroku create` with no name specified will create the URL with a random subdomain such as `sleepy-meadow-81798.herokuapp.com`.
+
+Notice as well that the output of the `create` command also lists the URL for the application's Heroku Git repository. This is Heroku's copy of the filesystem to which `git commit`ed changesets will be applied.
+
+### 2. `git commit`
+The most recent git commit is what will go live on Heroku. If there are local changes to the working directory that are not committed, they will not be made live on Heroku. Keep this in mind, and use it when appropriate. For now, we will save all local changes to the local git repository and sync the changes to Heroku.
 
 <div class="filename">command line</div>
 
@@ -658,10 +718,10 @@ The `heroku create` command added a remote git repository on Heroku's servers. S
 $ git push heroku [branchName]
 ```
 
-You can watch the build logs output in the terminal. When the deploy succeeds or not is displayed in the terminal as well.
+You can watch the build logs output in the terminal. Whether the deployment is successful or not is displayed in the terminal at the end of the logs.
 
 ### 4. Access the application.
-The deployed application can be accessed by navigating in the browser to the URL output by Step 1. You can also open the deployed appllication with the command `heroku open`.
+The deployed application can be accessed by navigating in the browser to the URL output by Step 1. You can also open the deployed application with the command `heroku open`.
 
 <div class="filename">command line</div>
 
