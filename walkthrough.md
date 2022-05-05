@@ -1020,22 +1020,52 @@ Data attributes: [https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_
 ---
 
 ## Add Authentication with Auth0
-1. Sign up for Auth0 and follow the NodeJS walkthrough
-* Sign up for Auth0. They provide a free tier.
-* Navigate to the Applications Dashboard
-* "Create Application". Set name. Select "Regular Web Application".
-* Use the Quick Start for NodeJS application and "Integrate now"
-* Set the "Allowed Callback URL"
-  * More about the callback URL is covered in the "Caddy reverse proxy" section.
-  * For local development, set this value to `https://localhost:3001/callback`.
+A web **application** is different than a web **site**. A web application is configured to offer dynamic content based on a user's "session." This ability to provide user-based content is greatly enhanced by giving users the ability to authenticate themselves with the application. In layman's terms, this is the ability to register a user account with the app, and sign in and out on request.
+
+Once a user logs in, the application can display content based on user preferences and saved data. Consider the FaceBook profile page. Every user of FaceBook can navigate to `facebook.com/profile`, and be presented with a profile page. Despite receiving the same webpage template, the page is customized to display the feed and information of the currently logged in user
+
+Further, if a user *is not* a logged in user of FaceBook, the page does not display and instead redirects to registration form. The ability to gate features is an additional benefit of adding an authentication component to a web application.
+
+`my-app` will utilize the Auth0 service for authentication. Auth0 is a drop-in solution to add authentication and authorization services to an application. Notably, it comes with single-sign on which will allow users of `my-app` to sign up with the social provider (e.g. Google, Apple) of their choice. In addition to the fundamental authentication flow featured in `my-app` Basics, Auth0 offers further authentication features such as multi-factor authentication, custom two-factor authentication, and multi-domain applications.
+
+### 1. Sign up for Auth0
+Auth0 provides a user interface for configuring applications' authentication settings. Setting up an application in the interface is a step-by-step walkthrough process.
+
+1. Sign up for Auth0's free tier
+2. Navigate to the Applications Dashboard
+3. "Create Application". Set name and select "Regular Web Application"
+4. Select Node.js from the list of supported frameworks and "Integrate now"
+5. Set the "Allowed Callback URL"
+  * Set this value to `https://localhost:3001/callback`.
+  * More the callback URL is covered in the "Caddy reverse proxy" section.
 * Set "Allowed Logout URLs"
   * Set this value to `https://localhost:3001`
-*  Install the `express-openid-connect` authentication middleware.
+
+### 2. Add Auth0 to `my-app`
+Now that the third-party service is configured to accept requests, we must now add code within `my-app` that makes calls to Auth0's application interface (API). While using raw HTTP calls to accomplish this is possible, `my-app` will utilize Auth0 provided API wrapping library, `express-openid-connect`. This package abstracts the HTTP routing and configuration to JavaScript functions and classes with developer-friendly interfaces.
+
+1. Install the `express-openid-connect` authentication middleware.
+
+<div class="filename">command line</div>
+
 ```
-npm install express-openid-connect --save
+$ npm install express-openid-connect
 ```
 
-* Copy the configuration code provided by the Quick Start wizard.
+2. Copy the configuration code provided by Auth0's Quick Start wizard.
+
+The Express OpenID library provides a router that defines authentication routes -- `/login`, `/logout`, and `/callback` -- for the application. Under the hood, the package is using the familiar syntax for defining a route for an Express app.
+
+```javascript
+app.get('/login', handleLogin);
+app.get('/logout', handleLogout);
+```
+
+Instead of the end using developer having to define this logic or handling functions, `express-openid-connect` exposes a configuration object interface. The developer simply initializes the router with application specific configuration, and all authentication routing is forwarded to Auth0 as necessary.
+
+Better yet, Auth0 provides the configuration object and JavaScript snippet within their Quick Start interface. The snippet goes in `index.js`. It requires the `auth` router from `express-openid-connect`, and configures the `auth` router with variables provided by Auth0.
+
+<div class="filename">index.js</div>
 
 ```javascript
 const { auth } = require('express-openid-connect');
@@ -1053,16 +1083,16 @@ const config = {
 app.use(auth(config));
 ```
 
-This snippet requires the `auth` middleware from `express-openid-connect`, and configures this auth client with variables provided by Auth0.
+Next, the snippet provides an example route that utilizes the `isAuthenticated` helper method provided by the `auth` middleware. `my-app` already has a `/` route, so if you intend to keep the example route, rename it's path to avoid pathname conflicts.
 
-```
+<div class="filename">index.js</div>
+
+```javascript
 // req.isAuthenticated is provided from the auth router
-app.get('/', (req, res) => {
+app.get('/auth', (req, res) => {
   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
 ```
-
-This snippet includes an example route using the `isAuthenticated` helper provided by the `auth` middleware. `pd-service` already has a `/` route, so if you intend to keep the example route, rename it.
 
 3. Set up Caddy reverse proxy
 Notice that the `baseURL` Auth0 is aware of is `https://localhost:3001`. This is different in two ways from the currently written Express server in `index.js`: 1. It is served over `https` protocol. 2. It's port address is 3001.
@@ -1150,6 +1180,7 @@ $ git push heroku master
 
 ### Resources
 Auth0: https://auth0.com/docs/
+Auth0 Explainer Video: https://auth0.com/resources/videos/auth0-explainer-video
 Auth0 Express: https://auth0.com/docs/quickstart/webapp/express
 HTTPS in Development: https://auth0.com/docs/libraries/secure-local-development
 Run Node Commands Simultaneously: https://itnext.io/4-solutions-to-run-multiple-node-js-or-npm-commands-simultaneously-9edaa6215a93
