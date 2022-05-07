@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const { auth } = require('express-openid-connect');
+require('dotenv').config();
 const http = require('http').Server(app);
 const io =  require('socket.io')(http);
 const { Liquid } = require('liquidjs');
@@ -22,13 +23,12 @@ app.use(express.static('public'));
 const config = {
   authRequired: false,
   auth0Logout: true,
-  secret: 'a long, randomly-generated string stored in env',
-  baseURL:
-    process.env.NODE_ENV == 'production' ? 'https://pd-service.herokuapp.com' : 'https://localhost:3001',
-  clientID: 'BdsyUqLCLcMDv21lT9VzCRuo8fP2xvZl',
-  issuerBaseURL: 'https://dev-r6lb7q89.us.auth0.com',
+  secret: process.env.AUTH0_SECRET,
+  baseURL: process.env.AUTH0_BASE_URL,
+  clientID: process.env.AUTH0_CLIENT_ID,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
   routes: {
-    callback: '/auth0/callback'
+    callback: process.env.AUTH0_CALLBACK_ROUTE
   }
 };
 
