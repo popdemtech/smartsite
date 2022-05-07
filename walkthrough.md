@@ -1551,7 +1551,7 @@ $ npm run start
 
 The authentication flow should perform as usual.
 
-### 6. Distribute `.env`
+### 6. Distribute Environment Variables
 Environmnet variables should be kept out of version control. If you used the `.gitignore` provided by this walkthough, `.env` is already included to be ignored.
 
 Despite keeping the sensitive information out of the version control, developers will need a way to share a list of what environment variables are required to configure the application. The standard solution to this is to distribute a `.env.dist` file with source control which contains the environment variable names, but not the sensitive values.
@@ -1614,6 +1614,67 @@ Click "Reveal Config Vars" button to show all variables and reveal input fields 
 Feel free to use the graphic interface to set environment variables. The `my-app` walkthrough details using Heroku's CLI to accomplish this task.
 
 ### Heroku Config Vars: Command-Line Interface
+The Heroku CLI allows developers to manage Heroku apps directly from the terminal. An app's config vars are accessible via the subcommand `config`. Issuing the command `heroku config --help` displays options for the subcommand.
+
+<div class="filename">command line</div>
+
+```
+$ heroku config --help
+display the config vars for an app
+
+USAGE
+  $ heroku config
+
+OPTIONS
+  -a, --app=app        (required) app to run command against
+  -j, --json           output config vars in json format
+  -r, --remote=remote  git remote of app to use
+  -s, --shell          output config vars in shell format
+
+COMMANDS
+  config:edit   interactively edit config vars
+  config:get    display a single config value for an app
+  config:set    set one or more config vars
+  config:unset  unset one or more config vars
+```
+
+### 1. Set a Config Var
+Issue the command `heroku config:set` to set the `NODE_ENV` configuration variable to `production`.
+
+**Note:** Remember what Heroku calls "config vars" are more provided to the running application as environment variables.
+
+<div class="filename">command line</div>
+
+```
+$ heroku config:set NODE_ENV=production
+```
+
+Check that the variable is set by issuing the command `heroku config` with no options.
+
+### 2. Set Auth0 Configuration
+Use the sme process to set a config var for each of the Auth0 environment variables. The one variable which must be different from local configuration is `AUTH0_BASE_URL`. The example commands cover two methods of setting the variables: one at a time and many at once.
+
+<div class="filename">command line</div>
+
+```
+$ heroku config:set AUTH0_BASE_URL=https://<your-app>.herokuapp.com
+$ heroku config:set AUTH0_CALLBACK_ROUTE=/auth0/callback
+$ heroku config:set AUTH0_CLIENT_ID=<your-client-id> AUTH0_ISSUER_BASE_URL=<your-issuer-url> AUTH0_SECRET=<your-secret>
+```
+
+Check that the variables are set by issuing the command `heroku config` with no options.
+
+### 3. Deploy to Heroku
+Now that the Heroku is aware of the environment variables the Node.js application requires, it is safe to deploy to Heroku without causing an application crash.
+
+<div class="filename">command line</div>
+
+```
+$ git push heroku master
+$ heroku open
+```
+
+After the deployment process, run `heroku open` to open the Heroku app. Test that all changes are successful by traversing the authentication flow.
 
 ### Resources
 Heroku config CLI: [https://devcenter.heroku.com/articles/config-vars](https://devcenter.heroku.com/articles/config-vars)
