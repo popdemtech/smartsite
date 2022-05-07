@@ -1083,43 +1083,62 @@ const config = {
 app.use(auth(config));
 ```
 
-Next, the snippet provides an example route that utilizes the `isAuthenticated` helper method provided by the `auth` middleware. `my-app` already has a `/` route, so if you intend to keep the example route, rename it's path to avoid pathname conflicts.
+Next, the snippet provides an example route that utilizes the `isAuthenticated` helper method provided by the `auth` middleware. `my-app` already has a `/` route, so if you intend to keep the example route, rename its path to avoid pathname conflicts.
 
 <div class="filename">index.js</div>
 
 ```javascript
-// req.isAuthenticated is provided from the auth router
-app.get('/auth', (req, res) => {
+// req.oidc is provided from the auth router
+// isAuthenticated is a method on the req.oidc object
+app.get('/auth-check', (req, res) => {
   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
 ```
 
-3. Set up Caddy reverse proxy
-Notice that the `baseURL` Auth0 is aware of is `https://localhost:3001`. This is different in two ways from the currently written Express server in `index.js`: 1. It is served over `https` protocol. 2. It's port address is 3001.
+### 3. Set up an HTTPS proxy
+Notice that the `baseURL` Auth0 is aware of is `https://localhost:3001`. Auth0 requires authentication traffic be delivered via the HTTP**Secure** protocol. HTTPS is an extension to the HTTP protocol, but includes layers of security via encryption and certificate checking to ensure the identity of web servers.
 
-In this step, we'll set up a webserver to traffic (proxy) https web traffic at port 3001 to the Express server running at port 3000. When the proxy server is running, the application available at both `http://localhost:3000` and `https://localhost:3001`.
+The Auth0 configuration is different in two ways from the Express server in `index.js`:
 
-Note: This solution is for local development. A different Auth0 "Application" with different credentials will be created for the production environment. This is walked through in the "Auth0 on Production" section.
+<ol>
+  <li>It is served over the <pre>HTTPS</pre> protocol.</li>
+  <li>Its port address is 3001.</li>
+</ol>
+
+In this step, we'll set up a webserver to traffic (i.e. proxy) HTTPS web traffic at port 3001 to the Express server listening at port 3000. When the proxy server is running, the application available at both `http://localhost:3000` and `https://localhost:3001`.
+
+Note: This solution is for local development. The proxy server will not need to be run in production because Heroku defaults to serving all web traffic over HTTPS.
 
 Install the `@leafac/caddy` npm library as a dev dependency.
+
+<div class="filename">command line</div>
+
 ```
-npm i -D @leafac/caddy
+$ npm i --save-dev @leafac/caddy
 ```
 
-Add a script, `dev-proxy`, to `package.json`:
-```
+### 4. Create a start script for the proxy server
+
+Add a script, `https-proxy`, to `package.json`:
+
+<div class="filename">package.json</div>
+
+```javascript
 "scripts": {
   ...,
-  "dev-proxy": "npx @leafac/caddy reverse-proxy --from localhost:3001 --to localhost:3000"
+  "https-proxy": "npx @leafac/caddy reverse-proxy --from localhost:3001 --to localhost:3000"
 }
 ```
 
-The caddy library defaults to interpreting the `--from` parameter as `https` and the `to` parameter as `http` -- exactly what's needed in this case.
+The caddy library defaults to interpreting the `--from` parameter as `https` and the `to` parameter as `http` -- exactly what is needed in this case.
 
-We can now run `npm run dev-proxy` and the proxy server will initialize and forward traffic https traffic at port 3001 to port 3000. You will have to open seperate terminal windows to run `npm run start` and `npm run dev-proxy` concurrently. Alternatively, look into an npm library like [`npm-run-all`](https://www.npmjs.com/package/npm-run-all) for a tool to run both commands from one terminal window.
+We can now run `npm run https-proxy` and the proxy server will initialize and forward traffic HTTPS traffic at port 3001 to port 3000. You will have to open seperate terminal windows to run `npm run start` and `npm run https-proxy` concurrently. Alternatively, look into an npm library like [`npm-run-all`](https://www.npmjs.com/package/npm-run-all) for a tool to run both commands from one terminal window.
 
-4. Test locally
-Within `index.js`, alter `/` route to pass the `isAuthenticated()` boolean to the front end.
+### 5. Test locally
+1. Within `index.js`, alter `/` route to pass the `isAuthenticated()` boolean to the front end.
+
+<div class="filename">index.js</div>
+
 ```javascript
 app.get('/', function(request, response) {
   response.render('index', {
@@ -1128,7 +1147,10 @@ app.get('/', function(request, response) {
 });
 ```
 
-Alter `index.liquid` to show a Logout or Login button depending on whether there is a currently logged in user. Within the list of links:
+2. Alter `index.liquid` to show a Logout or Login button depending on whether there is a currently logged in user. Within the list of links:
+
+<div class="filename">index.liquid</div>
+
 ```html
 <li>
   {% if loggedIn %}
@@ -1139,22 +1161,58 @@ Alter `index.liquid` to show a Logout or Login button depending on whether there
 </li>
 ``` 
 
-Run the Express and Caddy servers (`npm run start` and `npm run dev-proxy` respectively). Open a browser to `localhost:3000`, and navigate through the authentication flow: Login -> Authenticate with Auth0 -> Redirect back to `/` -> Logout.
+3. To see the full changes, first run the Express and Caddy servers (`npm run start` and `npm run dev-proxy` respectively.) Next, open a browser to `localhost:3001`, and navigate through the authentication flow.
 
-### Authentication in Deployed Environment
-To get authentication accessible to an internet audience, we will have to get this new feature live in a deployed environment. We'll push these changes to Heroku with minor changes.
+<ol>
+  <li>Click Login</li>
+  <li>Authenticate with Auth0</li>
+  <li>Be redirected back to the base URL, <pre>localhost:3001</pre>.</li>
+  <li>Click Logout</li>
+</ol>
 
-The application, both within the code and within the Auth0 interface, is currently configured to use `localhost` addresses for callbacks and redirects. The URL in the deployed state will be different -- `[SOMETHING].herokuapp.com` if you are following this walkthrough. The value for the callbacks will use the same domain a user navigates to in the browser.
+### 6. Git commit the changes
+This was a significant unit of development. The server now has the ability to authenticate users, albeit only for the local environment. We will look at authentication for the deployed environment in the next section. For now, `git commit`!
+
+<div class="filename">command line</div>
+
+```
+$ git add .
+$ git commit -m 'Add auth in development'
+```
+
+### Resources
+Auth0: https://auth0.com/docs/
+Auth0 Explainer Video: https://auth0.com/resources/videos/auth0-explainer-video
+Auth0 Express: https://auth0.com/docs/quickstart/webapp/express
+HTTPS in Development: https://auth0.com/docs/libraries/secure-local-development
+Run Node Commands Simultaneously: https://itnext.io/4-solutions-to-run-multiple-node-js-or-npm-commands-simultaneously-9edaa6215a93
+
+
+---
+
+## Authentication in the Deployed Environment
+To get authentication accessible to an internet audience, we will have to get the feature live in a deployed environment. After some minor changes to the Auth0 configuration and application code, the application will be ready for deploy to Heroku.
+
+The application, both within the code and within the Auth0 interface, is currently configured to use `localhost` addresses for callbacks and redirects. The base URL in the deployed state will be different -- `<your_app_slug>.herokuapp.com` if you are following this walkthrough.
 
 The first approach to look at is using the same Auth0 application for local development and in the deployed environment. There are use cases for this method, but it is not the most robust solution.
 
-#### The Easy Way: Use the Same Auth0 Application
+### Authentication Using the Same Auth0 Application
+Within the Auth0 interface, the application will need to be configured to listen for traffic coming from both the development server *and* the live deployment server. Notably, these servers have different root URLs. 
 
-1. In the Auth0 application settings, add `https://[YOUR_APP].herokuapp.com` alongside the `https://localhost` entries.
-The "Allowed Callback URLs" and "Allowed Logout URLs" fields accept comma-separated values. Be sure to use `https` as you type these. Heroku serves web traffic over `https`. Save changes.
+### 1. Modify the Auth0 configuration
 
-2. Modify the Auth0 configuration within `index.js` to conditionally use the deployed URL for `baseURL`.
-Theis conditional added in step 2 evaluates to true if the `NODE_ENV` environment variable is set to `'production'`. If the env variable is not set or is set to a different value, the conditional will evaluate to false.
+Add `https://[YOUR_APP].herokuapp.com` alongside the `https://localhost` entries.
+
+[image callback_urls.png]
+
+The "Allowed Callback URLs" and "Allowed Logout URLs" fields accept comma-separated values. Be sure to use `https` as you type these values. Save changes.
+
+### 2. Modify the Express server
+Within `index.js`, alter the Auth0 configuration to conditionally use the Heroku URL as the application's `baseURL`.
+
+<div class="filename">index.js</div>
+
 ```javascript
 // Auth0
 const config = {
@@ -1164,26 +1222,193 @@ const config = {
 };
 ```
 
-3. Alter the Procfile to use the environment variable `NODE_ENV`.
-Remember `Procfile` contains the process that starts the web server. A common method of providing environment variables to a process is to define them immediately before the process command. Define `NODE_ENV` at the start of the `web` process
+### 3. Modify the Procfile
+The conditional added in step 2 evaluates to true if the `NODE_ENV` environment variable is set to `'production'`. If the env variable is not set or is set to a different value, the conditional will evaluate to false. We will force the environment variable to be set to `'production'` when Heroku starts the server process.
+
+A common method of providing environment variables to a process is to define them immediately before the process command. The `Procfile` contains the command Heroku uses to start the web server. Define `NODE_ENV` at the start of the `web` process.
+
+<div class="filename">Procfile</div>
+
 ```
 web: NODE_ENV=production npm run start
 ```
 
 4. Deploy the application to Heroku.
-`git add` and `commit` all changes.
+`git add` and `commit` all changes, then push the Git repository to Heroku.
+
+<div class="filename">command line</div>
+
 ```
 $ git add .
-$ git commit -m 'Add authentication'
+$ git commit -m 'Add auth for Heroku'
 $ git push heroku master
 ```
 
+When the deploy is finished and if all is configured properly, the application will be available at its deployed URL with the authentication feature. Use the `heroku open` utility to open the app in a web browser.
+
+<div class="filename">command line</div>
+
+```
+$ heroku open
+```
+
 ### Resources
-Auth0: https://auth0.com/docs/
-Auth0 Explainer Video: https://auth0.com/resources/videos/auth0-explainer-video
-Auth0 Express: https://auth0.com/docs/quickstart/webapp/express
-HTTPS in Development: https://auth0.com/docs/libraries/secure-local-development
-Run Node Commands Simultaneously: https://itnext.io/4-solutions-to-run-multiple-node-js-or-npm-commands-simultaneously-9edaa6215a93
+Environment Variables in Node.js: [https://www.twilio.com/blog/working-with-environment-variables-in-node-js-html](https://www.twilio.com/blog/working-with-environment-variables-in-node-js-html)
+
+---
+
+## Environment Variables
+The need for environment specific configuration is inherent in developing a web application. Environment variables are variables that describe the environment in which the application or script is being invoked. `my-app` is currently configured to run in two environments: a developer's local system and Heroku for production. As we encountered in the last section, a web application will likely be required to have different configuration for the different environments.
+
+Specifically, the application needed to be aware of which environment it was running in to know with what `baseUrl` to configure the Auth0 middleware.
+
+<div class="filename">index.js</div>
+
+```javascript
+const config = {
+  baseURL:
+    process.env.NODE_ENV == 'production' ? 'https://[YOUR_APP].herokuapp.com' : 'https://localhost:3001',
+  ...
+};
+```
+
+Environment variables are the solution for the differing configuration variables, yet the implementation varies. Currently, `my-app` uses an inline ternary operator to determine a selection between two publically available datum. This solution a) does not scale, and b) will not work for datasets we would not like to be publically exposed.
+
+To get a good grasp on the issues of scalability and security, let's look at the example of adding a new application configuration that will need to be different per environment. For illustration, we'll consider adding database credentials. A database connection requires the Node.js application to be configured with a username, password, and host URL to authenticate with the database server. These values will be different between environments.
+
+As a look ahead, the foundations covered here will be implemented in the **Database** section.
+
+### Scalability
+Because `my-app` runs in only two environments, checking if an environment variable is one of the possible values is able to be accomplished in one line. But what if there were more than two environments? To use the example of adding database credentials, the application will need to be configured for development, production and *test* environment -- this would require a check for one of three values.
+
+<div class="filename">pseudocode</div>
+
+```
+const dbHost = process.env.NODE_ENV == 'production' ? 'production.database' : process.env.NODE_ENV == 'test' ? 'test.database' : 'development.database';
+```
+
+This process is barely legible using ternary operators, and a `switch` statement is likely more suited:
+
+<div class="filename">pseudocode</div>
+
+```javascript
+let dbHost;
+switch(process.env.NODE_ENV) {
+  case 'production':
+    dbHost = 'production.database'
+  case 'test':
+    dbHost = 'test.database'
+  default:
+    dbHost = 'development.database'
+}
+```
+
+This is barely more readable. Developers must now contend with minimum 9-line `switch` statements for each database configuration variable. If this pattern continues into future development, each new database, third-party integration or *<reason>* to use environment variables will come with the same burden of clutter.
+
+A solution for scalability looks like keeping configuration variables stored in environment-specific objects. When the application boots up, select the appropriate configuration object based on `NODE_ENV`.
+
+<div class="filename">pseudocode</div>
+
+```javascript
+// index.js
+const environments = {
+  "development": {
+    "dbUser": "popdemtech",
+    "dbPassword": "popdemtech123",
+    "dbName": "my-app",
+    "dbHost": "localhost:5432"
+  },
+  "production": {
+    "dbUser": "my-app",
+    "dbPassword": "myappXYZ123",
+    "dbName": "my-app",
+    "dbHost": 'heroku-postgres://my-app',
+  },
+  "test": {
+    "dbUser": "popdemtech",
+    "dbPassword": "popdemtech123",
+    "dbName": "my-app-test",
+    "dbHost": "localhost:5432"
+  }
+};
+
+const config = environments[process.env.NODE_ENV] || environments['development'];
+```
+
+By collecting variables into environment specific objects, using environment variables within application scripts is as simple as accessing the appropriate property on the environment specific `config` object. Because checking `NODE_ENV` occurs at the point of selecting the correct `config` object, the need for `switch` statments and ternary operators is removed.
+
+<div class="filename">pseudocode</div>
+
+```javascript
+
+const dbHost = process.env.NODE_ENV == 'production' ? 'production.database' : process.env.NODE_ENV == 'test' ? 'test.database' : 'development.database';
+
+// turns into
+
+const dbHost = config.dbHost;
+```
+
+This solves scalability in the following ways:
+
+1. As new **environment variables** are added, the process for development is to add the variable to each environment's object, and access the variable within the JavaScript as `config.<property>`.
+
+2. As new **environments** are added -- such as a remote test environment for a continuous integration workflow -- configuring a environment is as simple as adding a new top-level configuration object, and setting `NODE_ENV` to the proper value at server initialization.
+
+3. There is no complex logic involved in determining the correct set of environment variables to use.
+
+### Security
+The need for security arises when a web application needs access to data that should not be checked into source code. This is clearly illustrated in the example database credentials within the `environments` object:
+
+<div class="filename">pseudocode</div>
+
+```javascript
+const environments = {
+  "production": {
+    "dbUser": "my-app",
+    "dbPassword": "myappXYZ123",
+    "dbName": "my-app",
+    "dbHost": 'heroku-postgres://my-app',
+  }
+};
+```
+
+If this code is checked into the source repository using `git commit`, a nefarious internet abuser would be able to impersonate the application, and gain full access to the database. While there are many safeguards in place to encrypt transmissions carrying the source code, e.g. HTTPS, there are many areas of the deployment pipeline where application code is readable in plaintext.
+
+**Do not save private keys and passwords to source code.** More than a best practice, this is standard operating procedure for organizational and user security.
+
+We have been speaking of environment variables in terms of their use in a web application, but have glossed over their practical feature as it pertains to application development at large. An environment variable, conventionally written in `ALL_CAPS` snakecase, is set at the *operating system* or *process* level. This is external to the JavaScript application. The `process.env` variable within Node.js has access to these lower-level variables.
+
+After setting the variables within the operating system environment, using these variables within the app is as simple as `process.env`.
+
+```javascript
+const environments = {
+  "production": {
+    "dbUser": process.env.DB_USER,
+    "dbPassword": process.env.DB_PASS,
+    "dbName": process.env.DB_NAME,
+    "dbHost": process.env.DB_HOST,
+  }
+};
+```
+
+While the secure variable now will be defined external to the application, an open question remains: *"Where will environment variables be defined?"*
+
+For local development, a file that's been added to `.gitignore` suffices. Heroku, the deployed environment, provides both a CLI and graphic interface for entering custom environment variables. The Node.js community has converged on the `dotenv` library to manage environment variables in application code. We will add `dotenv` to the application at the point of implementing per-environment variables.
+
+### Review
+Environment variables provide a standard interface for developers to specifiy configuration on a per-environment basis. By extracting environment-dependent configuration into a structured object, we simplify the application code. The code is simplified by a reduction of logic and a compacting of locations where environment variable data can be found.
+
+Environment variables are also used to keep secure data out of application logic. By defining and providing variables *external* to the application, these values are not accessible to unethical hackers who may get access to source code.
+
+### Resources
+Environment variable: [https://en.wikipedia.org/wiki/Environment_variable](https://en.wikipedia.org/wiki/Environment_variable)
+
+Working with Environment Variables in Node.js: [https://www.twilio.com/blog/working-with-environment-variables-in-node-js-html](https://www.twilio.com/blog/working-with-environment-variables-in-node-js-html)
+
+---
+
+## Using Environment Variables
+
 
 ---
 
