@@ -1202,7 +1202,7 @@ Within the Auth0 interface, the application will need to be configured to listen
 
 ### 1. Modify the Auth0 configuration
 
-Add `https://[YOUR_APP].herokuapp.com` alongside the `https://localhost` entries.
+Add `https://<your-app>.herokuapp.com` alongside the `https://localhost` entries.
 
 [image callback_urls.png]
 
@@ -1217,7 +1217,7 @@ Within `index.js`, alter the Auth0 configuration to conditionally use the Heroku
 // Auth0
 const config = {
   baseURL:
-    process.env.NODE_ENV == 'production' ? 'https://[YOUR_APP].herokuapp.com' : 'https://localhost:3001',
+    process.env.NODE_ENV == 'production' ? 'https://<your-app>.herokuapp.com' : 'https://localhost:3001',
   ...
 };
 ```
@@ -1267,7 +1267,7 @@ Specifically, the application needed to be aware of which environment it was run
 ```javascript
 const config = {
   baseURL:
-    process.env.NODE_ENV == 'production' ? 'https://[YOUR_APP].herokuapp.com' : 'https://localhost:3001',
+    process.env.NODE_ENV == 'production' ? 'https://<your-app>.herokuapp.com' : 'https://localhost:3001',
   ...
 };
 ```
@@ -1592,6 +1592,31 @@ Dotenv: [https://www.npmjs.com/package/dotenv](https://www.npmjs.com/package/dot
 OpenSSL on Windows: [https://stackoverflow.com/a/68253950/18752242](https://stackoverflow.com/a/68253950/18752242)
 
 Random String Generator: [https://www.random.org/strings/](https://www.random.org/strings/)
+
+---
+
+## Environment Variables in Production
+A cursory glance at the code changes in the last section reveals that we have removed references to `https://<your-app>.herokuapp.com`, but have yet to replace this value. When `require('dotenv').config()` is invoked, *no values will be appended to* `process.env` *since there is no* `.env` *file in the filesystem pushed to Heroku.*
+
+Different deployment strategies have different requirements for how environment variables are set. Deployment onto a remote Linux machine may require accessing the server via SSH and manualy creating a `.env` file in the remote environment. Containerized deployment often uses platform-specific configuation files -- such as `docker-compose.yml` for organizing the environment.
+
+Heroku's platform-as-a-service solves deployed environment variables in simple terms. Each Heroku application comes with a Settings page for configuring variables within Heroku's web UI. As well, the `heroku` CLI utility provides a one-line command for setting environment variables remotely.
+
+### Heroku Configuration Variables: Graphic Interface
+Heroku calls environment variables "Config Vars," and these can be found within an application's Settings page.
+
+[heroku application settings.png]
+
+Click "Reveal Config Vars" button to show all variables and reveal input fields to edit them. If there are no Config Vars, a descriptive message will be shown. In both cases, a developer can add a new configuration variable directly in this interface by entering a new `KEY` and `VALUE`, and clicking "Add".
+
+[heroku empty config vars.png]
+
+Feel free to use the graphic interface to set environment variables. The `my-app` walkthrough details using Heroku's CLI to accomplish this task.
+
+### Heroku Config Vars: Command-Line Interface
+
+### Resources
+Heroku config CLI: [https://devcenter.heroku.com/articles/config-vars](https://devcenter.heroku.com/articles/config-vars)
 
 ---
 
