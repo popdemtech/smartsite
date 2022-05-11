@@ -2871,7 +2871,7 @@ Add the Click Tracker app to the list of pages on the homepage.
 
 ### 10. Commit and deploy
 1. Commit the repository
-Git commit the new changes and deploy to Heroku to see the results in a doeployed environment.
+Git commit the new changes and deploy to Heroku to see the results in a deployed environment.
 ```
 $ git add .
 $ git commit -m 'Add Click Tracker'

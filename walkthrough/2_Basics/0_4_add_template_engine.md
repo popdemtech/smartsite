@@ -100,7 +100,7 @@ app.get('/', function(request, response) {
 
 `localhost:3000` should now render the familiar "Welcome!" message.
 
-3. Set the view engine
+4. Set the view engine
 Express' `app.set` method provides a way for developers to configure application-wide settings. A standard setting is "view engine" which is used to configure the default file extension for views. Adding the view engine setting allows for developers to omit the file extension from calls to `app.render`.
 
 Add the setting to `index.js` and remove the `.liquid` extension in the root route.
@@ -115,7 +115,7 @@ app.get('/', function(request, response) {
 
 The application should work as expected.
 
-### 5. `git commit`
+### 4. `git commit`
 Configuring and initializing the view engine within `my-app` is a significant unit of development. This is a perfect time to bookmark filesystem state within version control.
 
 <div class="filename">command line</div>
@@ -129,8 +129,6 @@ $ git commit -m 'Add template engine'
 **Keep in mind:** As application development continues, place template files in the `/views` directory with a file extension of `.liquid`. The files may contain static or dynamic content.
 
 ### Resources
-Template engines in Express: [https://expressjs.com/en/guide/using-template-engines](https://expressjs.com/en/guide/using-template-engines.html)
-
 Express' `app.set`: [https://expressjs.com/en/api.html](https://expressjs.com/en/api.html#app.set)
 
 Express' `response.render`: [https://expressjs.com/en/api.html](https://expressjs.com/en/api.html#res.render)
