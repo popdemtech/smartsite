@@ -54,80 +54,15 @@ Open a web browser and navigate to `localhost:3000`. You should see a large head
 
 [image welcome to my app]
 
-### 4. Setting up filesystem watcher for development
-At this point, if you were to change the sent response from "Welcome to My App" to "Hello World" and refresh the browser, you would see no change in the response. This is because when the application is run with `node index.js`, all application files are cached in the state they were in when the command was called. To see the changed response, stop the currently running server with `CMD+C` or `CTRL+C` depending on your operating system, and restart it with `npm run start`. Navigating to the browser now will display the updated text.
-
-Restartiing the server after every change will get annoying pretty quick. Luckily, there are programs that will handle automatically restarting the server after every change. These programs are called "filesystem watchers." The filesystem watcher `my-app` will use is nodemon (pronounced "node-mon").
-
-1. Install nodemon
-Because nodemon is a library that is used to initialize a process from the local operating system, it's not considered an application dependency. It is a development dependency. Install the library as a development dependency.
-
-<div class="filename">command line</div>
-
-```bash
-$ npm install --save-dev nodemon
-```
-
-2. Use nodemon
-nodemon wraps the `node` process with an additional file-checking functionality. Change the start script within `package.json` to use `nodemon` instead of `node` to start the server process.
-
-<div class="filename">package.json</div>
-
-```javascript
-{
-  ...,
-  "scripts": {
-    "start": "npx nodemon .",
-    ...
-  },
-  ...
-}
-```
-
-The `npx` command can be thought of as "**n**ode **p**ackage e**x**ecute." This signals to use the executable provided by a program found within the local `node_modules` directory -- in this case `nodemon`.
-
-3. Restart the server
-Running `npm run start` will now invoke `nodemon`. `nodemon` will start the application as usual and restart the server process as code within the directory is changed. Restart the server.
+### 6. Git commit the changes
+This was a significant unit of development. The Express library was added and the initial web route was added to the application. `git commit` the changes to signify the completion of this development.
 
 <div class="filename">command line</div>
 
 ```
-$ npm run start
+$ git add .
+$ git commit -m 'Add express'
 ```
-
-### 5. Send an HTML file
-Currently, the application is configured to send an HTML string when the root route, `/`, is requested. While this is valid, it is more valuable to pull the HTML into its own document, and configure the route handler to serve the HTML file. The separation of concerns between web application and view is standard practice. It allows the developer to utilize the benefits of the full HTML specification without filling `index.js` with pages of HTML.
-
-1. Create a file named `index.html` in the root directory.
-
-<div class="filename">index.html</div>
-
-```html
-<!DOCTYPE html>
-<head>
-  <title>My App</title>
-</head>
-<html>
-  <body>
-    <h1>Welcome to My App!</h1>
-  </body>
-</html>
-```
-
-2. Send the `index.html` as the response from `/`.
-Modify the route handler of `/` to use `sendFile` instead of `send`.
-
-<div class="filename">index.js</div>
-
-```javascript
-app.get('/', function(request, response) {
-  response.sendFile(__dirname + '/index.html');
-});
-```
-
-`__dirname` is a Node.js variable containing the directory name of the currently executing file. Because we know the location of `index.html` to be in the same directory as `index.js`, simply appending the HTML's filename to `__dirname` yields the correct location for the file.
 
 ### Resources
-
 Express: [expressjs.com](https://expressjs.com)
-Nodemon: [npmjs.com/package/nodemon](https://www.npmjs.com/package/nodemon)

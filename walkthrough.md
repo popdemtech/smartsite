@@ -469,6 +469,56 @@ You should see the output `Welcome to My App!` in the console. Just like that we
 
 ---
 
+## Git Usage
+Git is the industry-leading version control management tool. It provides character by character change tracking and syncing of changes between local and shared environment. Git commands and algorithms warrant a deep dive of their own. This walkthrough provides the simplest possible `git` workflow for a solo developer.
+
+A useful advantage are the branching and merge strategies provided by Git which allow for multiple developers to work within the same codebase while keeping in sync with other developers' changes. For a solo developer, these strategies are useful in organizing product development and capturing each incremental change in a visualizable format.
+
+Git is also required for Heroku, the deployed environment used in this walkthough. This will keep the files we develop locally in sync with the public server's filesystem.
+
+### 1. Create .gitignore file
+A `.gitignore` file is used to define which files and folders should not be saved to version control. Common elements not saved to version control are in-project dependency folders, such as `node_modules`, files containing sensitive information (such as private keys), and certain files used only by the developer's local operating system, such as Apple's `.DS_Store` file.
+
+Create a file named `.gitignore` in the root directory with the following:
+
+<div class="filename">.gitignore</div>
+
+```
+/node_modules
+npm-debug.log
+.DS_Store
+/*.env
+```
+
+### 2. Save changes with `git`
+As changes are made in local development, Git keeps track of them, but does not automatically save the changes to version control. Saving to version control is a two step process. First the changes must be "staged". This is essentially a holding area for changes that the developer can review before finalizing the changes. The second step is to finalize, or "commit", the changes.
+
+The command to stage changes is `git add`. The command to finalize the changes into version control is `git commit`.
+
+1. `git add`
+Git's `add` command takes a list of files and directories that should be staged as a parameter.
+
+<div class="filename">command line</div>
+
+```
+$ git add .
+```
+
+The `.` symbol is shorthand for "the current working directory." Calling `git add` with this parameter signals to Git to save all changes in the current directory. The command can also be run with a list file and directory names as parameters -- e.g. `git add index.js package.json`.
+
+2. `git commit`
+Git enforces that every commit have a commit message describing why the commit was made. A repository's commit messages should be a human-readable log of the changes over time. Use the `-m` flag with `git commit` to add a commit message inline. If the `-m` flag is not used, the terminal will open the default text editor for the developer to enter the commit message.
+
+<div class="filename">command line</div>
+
+```
+$ git commit -m 'Initialize my app'
+```
+
+Git provides an immense catalog of functionality for repository management. As a developer's needs grow more complex, an expanded Git repetoire is a must. I recommend is this [Simple Guide to Git](http://rogerdudler.github.io/git-guide/)(http://rogerdudler.github.io/git-guide/) for next steps in building Git proficiency.
+
+---
+
 # Basics
 
 ## Create the Web Server
@@ -527,14 +577,58 @@ Open a web browser and navigate to `localhost:3000`. You should see a large head
 
 [image welcome to my app]
 
-### 4. Setting up filesystem watcher for development
-At this point, if you were to change the sent response from "Welcome to My App" to "Hello World" and refresh the browser, you would see no change in the response. This is because when the application is run with `node index.js`, all application files are cached in the state they were in when the command was called. To see the changed response, stop the currently running server with `CMD+C` or `CTRL+C` depending on your operating system, and restart it with `npm run start`. Navigating to the browser now will display the updated text.
+### 6. Git commit the changes
+This was a significant unit of development. The Express library was added and the initial web route was added to the application. `git commit` the changes to signify the completion of this development.
 
-Restartiing the server after every change will get annoying pretty quick. Luckily, there are programs that will handle automatically restarting the server after every change. These programs are called "filesystem watchers." The filesystem watcher `my-app` will use is nodemon (pronounced "node-mon").
+<div class="filename">command line</div>
+
+```
+$ git add .
+$ git commit -m 'Add express'
+```
+
+### Resources
+Express: [expressjs.com](https://expressjs.com)
+
+---
+
+## Add a Filesystem Watcher
+A filesystem watcher is a program that ensures a running development application is providing the most recent changes to code. The use case for a filesystem watcher is best illustrated by example. 
+
+1. Ensure the node server is running `npm run start`
+
+2. Modify a `index.js`
+The current state of the root route in `index.js` is that it returns an HTML string with the phrase `Hello World`.
+
+<div class="filename">index.js</div>
+
+```javascript
+app.get('/', function(request, response) {
+  response.send('<h1>Welcome to My App!</h1>');
+});
+```
+
+Change the sent response to read `Hello World` instead of `Welcome to My App`, and save the file.
+
+<div class="filename">index.js</div>
+
+```javascript
+app.get('/', function(request, response) {
+  response.send('<h1>Hello World!</h1>');
+});
+```
+
+3. Check for changes
+In the broswer, navigate to `localhost:3000`, and check out the heading. It still says `Hello World!`.
+
+This is because when the application is run with `node index.js`, all application files are cached in the state they were in when the command was invoked. To see the modified response, stop the currently running server with `CMD+C` or `CTRL+C` depending on your operating system, and restart it with `npm run start`. Navigating to the browser now will display the updated text.
+
+Restarting the server after every change is tedious and will seem *more* tedious over time. And presents a near impossible developer experience long-term. As such, `my-app` will implement the file watching library `nodemon`.
+
+### 1. Add nodemon
+Nodemon is a library that is used to initialize a process from the local operating system, and is therefore a development dependency rather than an application dependency. Install the library as a dev dependency.
 
 1. Install nodemon
-Because nodemon is a library that is used to initialize a process from the local operating system, it's not considered an application dependency. It is a development dependency. Install the library as a development dependency.
-
 <div class="filename">command line</div>
 
 ```bash
@@ -568,8 +662,53 @@ Running `npm run start` will now invoke `nodemon`. `nodemon` will start the appl
 $ npm run start
 ```
 
-### 5. Send an HTML file
-Currently, the application is configured to send an HTML string when the root route, `/`, is requested. While this is valid, it is more valuable to pull the HTML into its own document, and configure the route handler to serve the HTML file. The separation of concerns between web application and view is standard practice. It allows the developer to utilize the benefits of the full HTML specification without filling `index.js` with pages of HTML.
+4. Modify the code
+Change the text sent from the root route back to `Welcome to My App`, and *do not* restart the server.
+
+<div class="filename">index.js</div>
+
+```javascript
+app.get('/', function(request, response) {
+  response.send('<h1>Welcome to My App!</h1>');
+});
+```
+
+5. Check for changes
+In the broswer, navigate to `localhost:3000`, and check out the heading. It now says `Welcome to My App!` without needing a server restart. The filesystem watcher is working!
+
+### 6. Git commit the changes
+This was a significant unit of development. A development library was added, and it's functionality was fully implemented. `git commit` the changes to signify the completion of this development.
+
+<div class="filename">command line</div>
+
+```
+$ git add .
+$ git commit -m 'Add nodemon'
+```
+
+### Resources
+Nodemon: [npmjs.com/package/nodemon](https://www.npmjs.com/package/nodemon)
+
+---
+
+## Sending Web Pages
+Currently, the application is configured to send an HTML string when the root route, `/`, is requested. While this is a valid use of Express route handling, a better approach is to keep end-user presentation and the application logic into separate files.
+
+<dl>
+    <dt>Application Logic</dt>
+    <dd>The scripted code that handles the request/response cycle</dd>
+    <dt>Presentation</dt>
+    <dd>The response displayed to the consumer</dd>
+</dl>
+
+The separation of concerns between the routing and view layers is standard practice. This technique allows developer to optimize and organize the two areas separately which will become more important as the application grows.
+
+### The Presentation Layer
+It is safe to expect web-traffic to be viewed using a internet browsing application such as Chrome or Microsoft Edge. Modern internet broswers are equipped to translate many common web response formats into human usable form. The most familiar of these formats is likely HTML.
+
+To start `my-app`'s presentation layer, we will send a basic HTML file.
+
+### Sending HTML
 
 1. Create a file named `index.html` in the root directory.
 
@@ -601,59 +740,223 @@ app.get('/', function(request, response) {
 `__dirname` is a Node.js variable containing the directory name of the currently executing file. Because we know the location of `index.html` to be in the same directory as `index.js`, simply appending the HTML's filename to `__dirname` yields the correct location for the file.
 
 ### Resources
+Separation of Concerns: [https://deviq.com/principles/separation-of-concerns](https://deviq.com/principles/separation-of-concerns)
 
-Express: [expressjs.com](https://expressjs.com)
-Nodemon: [npmjs.com/package/nodemon](https://www.npmjs.com/package/nodemon)
+What is HTML?: [https://www.hostinger.com/tutorials/what-is-html](https://www.hostinger.com/tutorials/what-is-html)
 
 ---
 
-## Git Usage
-Git is the industry-leading version control management tool. It provides character by character change tracking and syncing of changes between local and shared environment. Git commands and algorithms warrant a deep dive of their own. This walkthrough provides the simplest possible `git` workflow for a solo developer.
+## Dynamically Generated Web Pages
 
-A useful advantage are the branching and merge strategies provided by Git which allow for multiple developers to work within the same codebase while keeping in sync with other developers' changes. For a solo developer, these strategies are useful in organizing product development and capturing each incremental change in a visualizable format.
+Static HTML files make up the majority of web pages delivered on the internet. An HTML file is considered "static" because the content is the same regardless of user identity or any other real-time factors. The benefit of a web *application* is that the application layer has the ability to process the user request and deliver a dynamic experience.
 
-Git is also required for Heroku, the deployed environment used in this walkthough. This will keep the files we develop locally in sync with the public server's filesystem.
+The ability to deliver a dynamic experience at the view layer is accomplished by use of **view templating.** This allows developers to create files that are a mix of static content and variables which are determined at the time the template is rendered, e.g. in response to a user request.
 
-### 1. Create .gitignore file
-A `.gitignore` file is used to define which files and folders should not be saved to version control. Common elements not saved to version control are in-project dependency folders, such as `node_modules`, files containing sensitive information (such as private keys), and certain files used only by the developer's local operating system, such as Apple's `.DS_Store` file.
+A template file is written in a **template language**. Template languages are often HTML-like, and support variable injection and often more complex scripting logic such as `for` loops. Modern web browsers cannot natively read the template language. A **templating engine** handles the conversion of a template and variables to an HTML file which is then delivered to the users' browsers.
 
-Create a file named `.gitignore` in the root directory with the following:
+A view template may have the content `<p>Hello, {{ user.name }}!</p>`, and a template engine would render `<p>Hello, Alexa!</p>`.
 
-<div class="filename">.gitignore</div>
+There are several template languages from which to choose. Because of the separation of presentational concerns from application logic, a given language is usually not specfic to a given application architecture, e.g. Node.js. Learning the template language once is transferrable  The application logic will invoke the template *engine* with parameters for which template file to render and what variables should be rendered therein, so it is important to choose a language with a respective template engine compatible with the application.
 
-```
-/node_modules
-npm-debug.log
-.DS_Store
-/*.env
-```
+Given the ubiquity of view templating across all web server architectures, the problem of compatibility is not generally a concern. Many architectures come with built-in template rendering and a default templating language, and a developer can customize away from the default by adding a new rendering library.
 
-### 2. Save changes with `git`
-As changes are made in local development, Git keeps track of them, but does not automatically save the changes to version control. Saving to version control is a two step process. First the changes must be "staged". This is essentially a holding area for changes that the developer can review before finalizing the changes. The second step is to finalize, or "commit", the changes.
+The Express ecosystem supports many trusted template languages. `my-app` will use the Liquid template language.
 
-The command to stage changes is `git add`. The command to finalize the changes into version control is `git commit`.
-
-1. `git add`
-Git's `add` command takes a list of files and directories that should be staged as a parameter.
+### 1. Install template libraries
+The Node.js application requires functionality for parsing and rendering the template language into HTML. The package `liquidjs` provides the JavaScript bindings for Liquid template rendering. use `npm install` to add the library.
 
 <div class="filename">command line</div>
 
 ```
+$ npm install liquidjs
+```
+
+### 2. Register the Liquid template engine
+Using `liquidjs` as the template engine in the application server requires importing the library, initializing it, and registering it with the Express `app`.
+
+Code like the following should be added to `index.js` before the route declarations.
+
+<div class="filename">index.js</div>
+
+```javascript
+const { Liquid } = require('liquidjs');
+app.engine('liquid', new Liquid().express());
+```
+
+Express' `app.engine` method relates a file extension with a rendering engine. As Liquid files are created, they should be created with the `.liquid` file extension (e.g. `filename.liquid`). Express allows multiple `app.engine`s to be set. As such, multiple extensions and multiple rendering engines are valid.
+
+### 3. Create a view template
+A liquid template file supports all valid HTML with the additional functionality of variable rendering and logicial operators. They use a file extension of `.liquid` instead of `.html`. Copy the current `index.html` into a new file named `index.liquid` in the root directory of the application.
+
+<div class="filename">index.liquid</div>
+
+```html
+<!DOCTYPE html>
+<head>
+  <title>My App</title>
+</head>
+<html>
+  <body>
+    <h1>Welcome to My App!</h1>
+  </body>
+</html>
+```
+
+### 4. Render the view template
+To send a static HTML file, Express' `response.sendFile` method was used. In the case of view template rendering, a different method must be used to indicate the desired response to send to the user must first be generated through a templating engine, `response.render`.
+
+`response.render` accepts two parameters, 1) the filename and 2) an object of variables with which to render the file.
+
+1. Use `response.render` within the root route handler in place of `response.sendFile`.
+
+<div class="filename">index.js</div>
+
+```javascript
+app.get('/', function(request, response) {
+  response.render(__dirname + '/index.liquid');
+});
+```
+
+2. Save and navigate to `localhost:3000`.
+
+[image welcome to my app]
+
+
+### 3. Configure view options
+An Express application can be configured with a variety of view options. Setting these options globally well explicity set filesystem architecture, and often allow for cleaner code in Express' middleware and 
+
+To continue the trend of clearly separating concerns, the architecture of `my-app` will utilize a views directory. Once created, files that are meant to be rendered and/or sent as a user response should be placed in this folder to clearly separate the presentation layer from the JavaScript logic.
+
+1. Create a new folder named `views` in the root directory
+Express, by default, will look for views (i.e. templates) in a directory named `views`. Specifically, it will look for a directory matching the definition `process.cwd() + '/views'`, where `process.cwd()` is the "current working directory" (`cwd`). As most node applications initialize from the root directory, the expanded file path is `<root directory>/views`. Although `my-app` will utilize the default, this setting is configurable.
+
+2. Move `index.liquid` into the `views` folder.
+
+<div class="filename">views/index.liquid</div>
+
+```html
+<!DOCTYPE html>
+<head>
+  <title>My App</title>
+</head>
+<html>
+  <body>
+    <h1>Welcome to My App!</h1>
+  </body>
+</html>
+```
+
+At this point, visiting `localhost:3000` should lead to an error response returned. follow the next step to correct this.
+
+3. Modify `index.js` to render `views/index.liquid`
+With the Express application set to default its search for views in `/views`, route handlers no longer have to specify the full file path to renderable files. Modify the handler of `/` by removing references to `_dirname`.
+
+<div class="filename">index.js</div>
+
+```javascript
+app.get('/', function(request, response) {
+  response.render('index.liquid');
+});
+```
+
+`localhost:3000` should now render the familiar "Welcome!" message.
+
+3. Set the view engine
+Express' `app.set` method provides a way for developers to configure application-wide settings. A standard setting is "view engine" which is used to configure the default file extension for views. Adding the view engine setting allows for developers to omit the file extension from calls to `app.render`.
+
+Add the setting to `index.js` and remove the `.liquid` extension in the root route.
+
+```javascript
+app.set('view engine', 'liquid');
+
+app.get('/', function(request, response) {
+  response.render('index');
+});
+```
+
+The application should work as expected.
+
+### 4. Render dynamic content
+A benefit of using view templates is the ability to add content to be rendered at the point of a user request. Within a Liquid template, use the syntax `{{ variable_name }}` to indicate a value passed at render time should be rendered to string. In addition, Liquid's `if/else` syntax `{% if variable_name %} ... {% else %} ... {% endif %}`, offers basic logical switching to determine what block of content to render based on whether the variable is defined at render time. If the statement evaluates to true, 
+
+To directly render a variable, use the double curly brace syntax, `{{ }}`. To script non-rendered view logic, use the curly brace and percent sign syntax, `{% %}`.
+
+1. Modify the view to respond to dynamically injected variables.
+Add a section to `index.liquid` that renders passed in variables. 
+
+<div class="filename">views/index.liquid</div>
+
+```html
+<!DOCTYPE html>
+<head>
+  <title>My App</title>
+</head>
+<html>
+  <body>
+    <h1>Welcome to My App!</h1>
+    <p>This application is running in the <b>{{ nodeEnv }}</b> environment.</p>
+    {% if debug %}
+      <p><b>Debug Information</b></p>
+      <p>Node version: {{ nodeVersion }}</p>
+      <p>Server Time: {{ serverTime }}</p>
+    {% endif %}
+    <p></p>
+  </body>
+</html>
+```
+
+Notice that the "Debug Information" section will only render if the `debug` variable is defined. If you navigate to the page at `localhost:3000`, there will be no visible difference. We need to render the page with at least the `debug` variable.
+
+2. Render the template with variables.
+Modify the `/` route handler to define the variables `debug`, `nodeVersion`, and `serverTime`, and pass them in as the second parameter to `response.render`.
+
+<div class="filename">index.js</div>
+
+```javascript
+app.get('/', function(request, response) {
+  const debug = request.query.debug;
+  const nodeVersion = process.version;
+  const serverTime = new Date();
+  response.render('index', { debug, nodeVersion, serverTime });
+});
+```
+
+Notice the definition of the `debug` variable: `request.query.debug`. The `query` property of Express `Request` objects returns the query parameters section of the requested URL string. By default, query parameters found at `request.query` are formatted as a JavaScript object. For example, the query string of `?debug=true&limit=10` will be of the form `{ debug: 'true', limit: '10' }`.
+
+**Note:** Query string values are necessarily coerced to string for HTTP transport. While a developer may intend to use a boolean or number value from the query string, Express provides the values as strings that must be type cast for use as a boolean or number, etc.
+
+3. Load the page
+With the above changes in place, loading the page at `localhost:3000` renders the same landing page.
+
+To see the new changes, request the page with a `debug` query string parameter: `localhost:3000?debug=true`. The page should now display a section of "Debug Information."
+
+[image debug information]
+
+### 5. `git commit`
+Configuring and initializing the view engine within `my-app` is a significant unit of development. This is a perfect time to bookmark filesystem state within version control.
+
+<div class="filename">command line</div>
+
+```
+$ git status
 $ git add .
+$ git commit -m 'Add template engine'
 ```
 
-The `.` symbol is shorthand for "the current working directory." Calling `git add` with this parameter signals to Git to save all changes in the current directory. The command can also be run with a list file and directory names as parameters -- e.g. `git add index.js package.json`.
+### Summary
 
-2. `git commit`
-Git enforces that every commit have a commit message describing why the commit was made. A repository's commit messages should be a human-readable log of the changes over time. Use the `-m` flag with `git commit` to add a commit message inline. If the `-m` flag is not used, the terminal will open the default text editor for the developer to enter the commit message.
+As application development continues, place template files in the `/views` directory with a file extension of `.liquid`. The files may contain static or dynamic content. If the content should be dynamically rendered, provide an object of local variables as the second parameter `response.render`.
 
-<div class="filename">command line</div>
+The Liquid template language provides additional functiontality to the HTML specification in the form of flow control (`if/else`), iteration, and many more advanced operations. Visit the Liquid reference guide in **Resources** section to explore Liquid's full feature set.
 
-```
-$ git commit -m 'Initialize my app'
-```
+### Resources
+Template engines in Express: [https://expressjs.com/en/guide/using-template-engines](https://expressjs.com/en/guide/using-template-engines.html)
 
-Git provides an immense catalog of functionality for repository management. As a developer's needs grow more complex, an expanded Git repetoire is a must. I recommend is this [Simple Guide to Git](http://rogerdudler.github.io/git-guide/)(http://rogerdudler.github.io/git-guide/) for next steps in building Git proficiency.
+Express' `app.set`: [https://expressjs.com/en/api.html](https://expressjs.com/en/api.html#app.set)
+
+Express' `response.render`: [https://expressjs.com/en/api.html](https://expressjs.com/en/api.html#res.render)
+
+Liquid Template Language: [https://shopify.github.io/liquid/](https://shopify.github.io/liquid/)
 
 ---
 
@@ -1019,14 +1322,21 @@ Data attributes: [https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_
 
 ---
 
-## Add Authentication with Auth0
-A web **application** is different than a web **site**. A web application is configured to offer dynamic content based on a user's "session." This ability to provide user-based content is greatly enhanced by giving users the ability to authenticate themselves with the application. In layman's terms, this is the ability to register a user account with the app, and sign in and out on request.
+## Authentication
+User authentication allows developers of a web application to craft individualized experiences. In practice, this means allowing access to priveleged material such as creating database records and visiting . This ability to deliver dynamic content individualized per visitor session is the general differentiator between a web*site* and a web *application*.
+
+The ability to register a user account with the app, and sign in and out on request is the basis of user authentication. Identity and Access Management systems is a discipline in its own right. It is a foundational component to the interactive internet. Consider the example of a social media platform.
 
 Once a user logs in, the application can display content based on user preferences and saved data. Consider the FaceBook profile page. Every user of FaceBook can navigate to `facebook.com/profile`, and be presented with a profile page. Despite receiving the same webpage template, the page is customized to display the feed and information of the currently logged in user
 
 Further, if a user *is not* a logged in user of FaceBook, the page does not display and instead redirects to registration form. The ability to gate features is an additional benefit of adding an authentication component to a web application.
 
-`my-app` will utilize the Auth0 service for authentication. Auth0 is a drop-in solution to add authentication and authorization services to an application. Notably, it comes with single-sign on which will allow users of `my-app` to sign up with the social provider (e.g. Google, Apple) of their choice. In addition to the fundamental authentication flow featured in `my-app` Basics, Auth0 offers further authentication features such as multi-factor authentication, custom two-factor authentication, and multi-domain applications.
+---
+
+## Add Authentication with Auth0
+
+### Auth0
+`my-app` will utilize the Auth0 service for authentication. Auth0 is a drop-in IAM solution to add authentication and authorization services to an application. Notably, it comes with single-sign on which will allow users of `my-app` to sign up with the social provider (e.g. Google, Apple) of their choice. In addition to the fundamental authentication flow featured in `my-app` Basics, Auth0 offers further authentication features such as multi-factor authentication, custom landing pages, and multi-domain applications.
 
 ### 1. Sign up for Auth0
 Auth0 provides a user interface for configuring applications' authentication settings. Setting up an application in the interface is a step-by-step walkthrough process.
@@ -1551,8 +1861,70 @@ $ npm run start
 
 The authentication flow should perform as usual.
 
+### 6. Add a Route
+Add to the chronicle of `my-app` by adding a webpage that renders dynamic content based on environment variables.
+
+1. Create a `GET` route
+Define a route on the Express app that renders a template, `env-vars.liquid`, with local variables.
+
+<div class="filename">index.js</div>
+
+```javascript
+app.get('/env-vars', function (request, response) {
+  const isProduction = process.env.NODE_ENV == 'production';
+  const auth0BaseUrl = process.env.AUTH0_BASE_URL;
+  response.render('env-vars', { isProduction, auth0BaseUrl })
+});
+```
+
+2. Create the view template
+Display the `isProduction` and `auth0BaseUrl` local variables within a simple template.
+
+<div class="filename">app/views/env-vars.liquid</div>
+
+```html
+{% layout 'layouts/default-html.liquid' %}
+{% block content %}
+<div>
+  <h1>Environment Variables</h1>
+
+  <p>
+    This webpage has been
+    {% if isProduction %}
+      <b> served from the production environment.</b>
+    {% else %}
+      <b> served from a non-production environment.</b>
+    {% endif %}
+  </p>
+
+  <p>
+    The Auth0 base URL is
+    {% if auth0BaseUrl %}
+      <b>{{ auth0BaseUrl }}</b>
+    {% else %}
+      <b> not defined.</b>
+    {% endif %}
+  </p>
+</div>
+{% endblock %}
+```
+
+3. Add this new page to the site navigation in `index.liquid`.
+
+<div class="filename">app/views/index.liquid</div>
+
+```html
+<li><a href="/env-vars">env-vars</a></li>
+```
+
+With your development server started, you can now navigate to `/env-vars` from the home page and visualize some of the application's environment variables.
+
+[env-vars-webpage.png image]
+
+This simplistic page is for demonstration purposes; the primary takeaway should be the new abilities to set application configuration on a per-environment basis.
+
 ### 6. Distribute Environment Variables
-Environmnet variables should be kept out of version control. If you used the `.gitignore` provided by this walkthough, `.env` is already included to be ignored.
+Environment variables should be kept out of version control. If you used the `.gitignore` provided by this walkthough, `.env` is already included to be ignored.
 
 Despite keeping the sensitive information out of the version control, developers will need a way to share a list of what environment variables are required to configure the application. The standard solution to this is to distribute a `.env.dist` file with source control which contains the environment variable names, but not the sensitive values.
 
@@ -1674,27 +2046,35 @@ $ git push heroku master
 $ heroku open
 ```
 
-After the deployment process, run `heroku open` to open the Heroku app. Test that all changes are successful by traversing the authentication flow.
+After the deployment process, run `heroku open` to open the Heroku app. Test that all changes are successful by traversing the authentication flow. Navigate to the `/env-vars` route to see the programmed display messages.
 
 ### Resources
 Heroku config CLI: [https://devcenter.heroku.com/articles/config-vars](https://devcenter.heroku.com/articles/config-vars)
 
 ---
 
-## Install PostgreSQL on Windows
+## Databases
+
+
+
+---
+
+## 1. Install PostgreSQL on Windows
 There is a PostgreSQL installer distributed by Enterprise DB (EDB), an enterprise-level Postgres solution. Download the Windows installer from EDB, and follow the steps. https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 
 Keep note of what is set as the installation directory. The default location is a `C:\Program Files\PostgreSQL\[##]` directory, where `[##]` is the numerical version number of the installation. For example, the installation directory for version 14 is `C:\Program Files\PostgreSQL\14\`.
 
 Keep note of the password set for the default user as well.
 
-### Configure binary paths
-The PostgreSQL installation comes with a library of binary executables. These executables, such as `psql`, `pg_dump`, and `createdb`, live within the `/bin` directory of the installation folder, and are how a computer user or different program can interact with the database server. The binary path of my version 14 Postgres installation is `C:\Program Files\PostgreSQL\14\bin\`. Yours will be in the installation directory specified in the wizard suffixed with `\bin\`.
+### 2. Configure binary paths
+The PostgreSQL installation comes with a library of binary executables. These executables, such as `psql`, `pg_dump`, and `createdb`, live within the `/bin` directory of the installation folder, and are how a computer user or different program can interact with the database server. The binary path will be the installation directory from Step 1 suffixed with `\bin\`.
 
-**Note:** Within any software package or application, binary files and executables are conventionally placed within a directory named `\bin\`. 
+For example, the default binary path for version 14 is `C:\Program Files\PostgreSQL\14\bin`.
+
+**Note:** Within any software package or application, binary files and executables are conventionally placed within a directory named `\bin\`. PostgreSQL follows this convention.
 
 #### Add the binary path to `$PATH`
-To be able to interact with the database servers, we will need to be able to run the exectuables from the command-line. For this, add the binary path to the system's $PATH variable
+To be able to interact with the database servers, we will need to be able to run the binary exectuables from the terminal. For this, add the binary path to the system's `$PATH` variable
 
 1. Search Windows for the Edit System Environment Variables dialog by pressing Windows key and typing "environment variables". Select the result, and a System Properties dialog should appear.
 
@@ -1717,18 +2097,24 @@ The EDB Installation wizard installs the pgAdmin program, a graphical interface 
 
 [pgadmin_binary_paths.png]
 
-### Start the Database
+### 3. Start the Database
 
 1. Start a database server
-The `pg_ctl` command is used to manage Postgres database servers. Start and stop a database server by specifying the data directory, and supplying the `start` or `stop` subcommand, respectively. The data directory was set in the installation wizard. It defaults to `[POSTGRESQL_INSTALLATION_DIRECTORY]\data\`
+The `pg_ctl` command is used to manage Postgres database servers. Start and stop a database server by specifying the data directory, and supplying the `start` or `stop` subcommand, respectively. The data directory was set in the installation wizard. It defaults to `[POSTGRESQL_INSTALLATION_DIRECTORY]\data\`.
+
+<div class="filename">command line</div>
+
 ```
 > pg_ctl restart -D C:\Program Files\PostgreSQL\14\data\
 > pg_ctl stop -D C:\Program Files\PostgreSQL\14\data\
 > pg_ctl start -D C:\Program Files\PostgreSQL\14\data\
 ```
 
-### Create a non-default user
+### 4. Create a non-default user
 The `createuser` command is used to create PostgreSQL users. Note that this is a separate list of users than the Windows login users. For example, it is common to create a separate user per software application with database access.
+
+<div class="filename">command line</div>
+
 ```
 > createuser --superuser --pwprompt --username=postgres $Env:Username
 ```
@@ -1740,10 +2126,13 @@ This command:
 * connects to the database server as the `postgres` user
 * sets the user's name to `$Env:Username`, and environment variable within Windows Terminal
 
-### Create a non-default database
+### 5. Create a non-default database
 The `createdb` command is used to create PostgreSQL databases. The database server serves a "database cluster." A database cluster collection of databases that is managed by a single instance of a running database server. In file system terms, it is a single directory in which all data will be stored (i.e. Postgres' `/data` directory.)
 
 The PostgreSQL installer created a default database named `postgres`. It is convention for each software program to have its own, uniquely-named database. For practice and utility with the `psql` command in upcoming sections, create a new database named after your Windows user.
+
+<div class="filename">command line</div>
+
 ```
 > createdb $Env:Username --username=$Env:Username
 ```
@@ -1753,8 +2142,11 @@ This command:
 * named after the logged in user
 * using the PostgreSQL user named after the logged in user
 
-### Test the Installation
+### 6. Test the Installation
 If all has gone well, you have the PostgreSQL command-line tools, a running database server, and a user and database within that server. Test all of these by issuing the `psql` command from the command line. This command defaults to connecting with a username of the currently logged in user, and connecting to a database with the same name as the logged in user. This simple command will test all three aspects of installation.
+
+<div class="filename">command line</div>
+
 ```
 > psql
 ```

@@ -68,6 +68,12 @@ app.get('/invoice-creator', function(request, response) {
   response.render('invoice-creator');
 });
 
+app.get('/env-vars', function (request, response) {
+  const isProduction = process.env.NODE_ENV == 'production';
+  const auth0BaseUrl = process.env.AUTH0_BASE_URL;
+  response.render('env-vars', { isProduction, auth0BaseUrl })
+});
+
 app.get('/posts', async (request, response) => {
   response.render('posts', {
     posts: await Post.findAll()

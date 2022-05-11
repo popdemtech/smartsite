@@ -1,0 +1,24 @@
+{% layout 'layouts/default-html.liquid' %}
+{% block content %}
+<div>
+  <h1>Environment Variables</h1>
+
+  <p>
+    This webpage has been
+    {% if isProduction %}
+      <b> served from the production environment.</b>
+    {% else %}
+      <b> served from a non-production environment.</b>
+    {% endif %}
+  </p>
+
+  <p>
+    The Auth0 base URL is
+    {% if auth0BaseUrl %}
+      <b>{{ auth0BaseUrl }}</b>
+    {% else %}
+      <b> not defined.</b>
+    {% endif %}
+  </p>
+</div>
+{% endblock %}
