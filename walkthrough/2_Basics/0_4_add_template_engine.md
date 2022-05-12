@@ -61,8 +61,8 @@ app.get('/', function(request, response) {
 [image welcome to my app]
 
 
-### 3. Configure view options
-An Express application can be configured with a variety of view options. Setting these options globally well explicity set filesystem architecture, and often allow for cleaner code in Express' middleware and 
+### 5. Configure view options
+An Express application can be configured with a variety of view options. Setting these options globally well explicity set filesystem architecture, and often allows for cleaner code in Express middleware and improves developer experience.
 
 To continue the trend of clearly separating concerns, the architecture of `my-app` will utilize a views directory. Once created, files that are meant to be rendered and/or sent as a user response should be placed in this folder to clearly separate the presentation layer from the JavaScript logic.
 
@@ -115,7 +115,7 @@ app.get('/', function(request, response) {
 
 The application should work as expected.
 
-### 4. `git commit`
+### 6. `git commit`
 Configuring and initializing the view engine within `my-app` is a significant unit of development. This is a perfect time to bookmark filesystem state within version control.
 
 <div class="filename">command line</div>

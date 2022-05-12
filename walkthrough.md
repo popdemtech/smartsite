@@ -746,7 +746,7 @@ What is HTML?: [https://www.hostinger.com/tutorials/what-is-html](https://www.ho
 
 ---
 
-## Dynamically Generated Web Pages
+## View Templates
 
 Static HTML files make up the majority of web pages delivered on the internet. An HTML file is considered "static" because the content is the same regardless of user identity or any other real-time factors. The benefit of a web *application* is that the application layer has the ability to process the user request and deliver a dynamic experience.
 
@@ -760,6 +760,13 @@ There are several template languages from which to choose. Because of the separa
 
 Given the ubiquity of view templating across all web server architectures, the problem of compatibility is not generally a concern. Many architectures come with built-in template rendering and a default templating language, and a developer can customize away from the default by adding a new rendering library.
 
+### Resources
+
+Template Engines: [https://expressjs.com/en/guide/using-template-engines.html](https://expressjs.com/en/guide/using-template-engines.html)
+
+---
+
+## Add a Template Engine
 The Express ecosystem supports many trusted template languages. `my-app` will use the Liquid template language.
 
 ### 1. Install template libraries
@@ -822,8 +829,8 @@ app.get('/', function(request, response) {
 [image welcome to my app]
 
 
-### 3. Configure view options
-An Express application can be configured with a variety of view options. Setting these options globally well explicity set filesystem architecture, and often allow for cleaner code in Express' middleware and 
+### 5. Configure view options
+An Express application can be configured with a variety of view options. Setting these options globally well explicity set filesystem architecture, and often allows for cleaner code in Express middleware and improves developer experience.
 
 To continue the trend of clearly separating concerns, the architecture of `my-app` will utilize a views directory. Once created, files that are meant to be rendered and/or sent as a user response should be placed in this folder to clearly separate the presentation layer from the JavaScript logic.
 
@@ -861,7 +868,7 @@ app.get('/', function(request, response) {
 
 `localhost:3000` should now render the familiar "Welcome!" message.
 
-3. Set the view engine
+4. Set the view engine
 Express' `app.set` method provides a way for developers to configure application-wide settings. A standard setting is "view engine" which is used to configure the default file extension for views. Adding the view engine setting allows for developers to omit the file extension from calls to `app.render`.
 
 Add the setting to `index.js` and remove the `.liquid` extension in the root route.
@@ -876,12 +883,33 @@ app.get('/', function(request, response) {
 
 The application should work as expected.
 
-### 4. Render dynamic content
-A benefit of using view templates is the ability to add content to be rendered at the point of a user request. Within a Liquid template, use the syntax `{{ variable_name }}` to indicate a value passed at render time should be rendered to string. In addition, Liquid's `if/else` syntax `{% if variable_name %} ... {% else %} ... {% endif %}`, offers basic logical switching to determine what block of content to render based on whether the variable is defined at render time. If the statement evaluates to true, 
+### 6. `git commit`
+Configuring and initializing the view engine within `my-app` is a significant unit of development. This is a perfect time to bookmark filesystem state within version control.
+
+<div class="filename">command line</div>
+
+```
+$ git status
+$ git add .
+$ git commit -m 'Add template engine'
+```
+
+**Keep in mind:** As application development continues, place template files in the `/views` directory with a file extension of `.liquid`. The files may contain static or dynamic content.
+
+### Resources
+Express' `app.set`: [https://expressjs.com/en/api.html](https://expressjs.com/en/api.html#app.set)
+
+Express' `response.render`: [https://expressjs.com/en/api.html](https://expressjs.com/en/api.html#res.render)
+
+---
+
+## Dynamically Render Content
+
+A benefit of using view templates is the ability to add content to be rendered at the point of a user request. Within a Liquid template, use the syntax `{{ variable_name }}` to indicate a value passed at render time should be rendered to string. In addition, Liquid's `if/else` syntax `{% if variable_name %} ... {% else %} ... {% endif %}`, offers basic logical switching to determine what block of content to render based on whether the variable is defined (and truthy) at render time.
 
 To directly render a variable, use the double curly brace syntax, `{{ }}`. To script non-rendered view logic, use the curly brace and percent sign syntax, `{% %}`.
 
-1. Modify the view to respond to dynamically injected variables.
+### 1. Modify the view to respond to dynamically injected variables.
 Add a section to `index.liquid` that renders passed in variables. 
 
 <div class="filename">views/index.liquid</div>
@@ -907,7 +935,7 @@ Add a section to `index.liquid` that renders passed in variables.
 
 Notice that the "Debug Information" section will only render if the `debug` variable is defined. If you navigate to the page at `localhost:3000`, there will be no visible difference. We need to render the page with at least the `debug` variable.
 
-2. Render the template with variables.
+### 2. Render the template with variables.
 Modify the `/` route handler to define the variables `debug`, `nodeVersion`, and `serverTime`, and pass them in as the second parameter to `response.render`.
 
 <div class="filename">index.js</div>
@@ -925,52 +953,222 @@ Notice the definition of the `debug` variable: `request.query.debug`. The `query
 
 **Note:** Query string values are necessarily coerced to string for HTTP transport. While a developer may intend to use a boolean or number value from the query string, Express provides the values as strings that must be type cast for use as a boolean or number, etc.
 
-3. Load the page
+### 3. Load the page
 With the above changes in place, loading the page at `localhost:3000` renders the same landing page.
 
 To see the new changes, request the page with a `debug` query string parameter: `localhost:3000?debug=true`. The page should now display a section of "Debug Information."
 
 [image debug information]
 
-### 5. `git commit`
-Configuring and initializing the view engine within `my-app` is a significant unit of development. This is a perfect time to bookmark filesystem state within version control.
+### 4. `git commit`
+Dynamically rendering the index view within `my-app` is a significant unit of development. This is a perfect time to save state to version control.
 
 <div class="filename">command line</div>
 
 ```
 $ git status
 $ git add .
-$ git commit -m 'Add template engine'
+$ git commit -m 'Dynamically render index.liquid'
 ```
 
 ### Summary
 
-As application development continues, place template files in the `/views` directory with a file extension of `.liquid`. The files may contain static or dynamic content. If the content should be dynamically rendered, provide an object of local variables as the second parameter `response.render`.
+Dynamic display content must be located in the `/views` directory with a file extension of `.liquid`. The files may contain static or dynamic content. If the content should be dynamically rendered, provide an object of local variables as the second parameter `response.render` within the route handler.
 
 The Liquid template language provides additional functiontality to the HTML specification in the form of flow control (`if/else`), iteration, and many more advanced operations. Visit the Liquid reference guide in **Resources** section to explore Liquid's full feature set.
 
 ### Resources
-Template engines in Express: [https://expressjs.com/en/guide/using-template-engines](https://expressjs.com/en/guide/using-template-engines.html)
-
-Express' `app.set`: [https://expressjs.com/en/api.html](https://expressjs.com/en/api.html#app.set)
-
-Express' `response.render`: [https://expressjs.com/en/api.html](https://expressjs.com/en/api.html#res.render)
-
 Liquid Template Language: [https://shopify.github.io/liquid/](https://shopify.github.io/liquid/)
 
 ---
 
-## Deploying to Heroku
+## Liquid Templating
+A benefit of a template engine is the ability to separate units of presentation. This allows developers to define view logic once, and reuse the template across multiple pages. This concept will become more explicit by practice. This section details reusing template components between pages to eliminate the need to repeat and maintain separate view scripts.
+
+### 1. Create a new page
+Within the `views` directory, create a new file names `hello-world.liquid`.
+
+<div class="filename">views/hello-world.liquid</div>
+
+```html
+<!DOCTYPE html>
+<head>
+  <title>My App</title>
+</head>
+<html>
+  <body>
+    <h1>Hello World!</h1>
+
+    {% if showDog %}
+      <img src="https://i.imgur.com/5Swc751.png" alt="brown dog marley" width="150px"/>
+    {% endif %}
+
+    <p>Show Marley with query parameter <code>showDog</code>.</p>
+    <p><code>Page loaded at {{ serverDate }}.</code></p>
+  </body>
+</html>
+```
+
+### 2. Create a new route
+Register a route with the application to allow users to access the new page from a web browser.
+
+<div class="filename">index.js</div>
+
+```javascript
+app.get('/hello-world', function(request, response) {
+  const showDog = request.query.showDog;
+  response.render('hello-world', {
+    showDog,
+    serverDate: new Date()
+  });
+});
+```
+
+With the server running (`npm run start`), navigate to `localhost:3000/hello-world`, and you should be presented with the greeting "Hello World!"
+
+### The Need for Templating
+
+Take a look at `index.liquid` and `hello-world.liquid`. Both pages have the standard HTML boilerplate -- `<html>`, `<head>`, `<body>` -- in common. In fact, any new HTML page will need the basic HTML layout. As front-end development development, it is highly likely that `CSS` and JavaScript assets will be shared between pages. Given the current paradigm of fully separating each web page, a developer adding a global CSS asset would have to add a `<link>` tag *each* .liquid file.
+
+Standard application of the DRY principle (Don't Repeat Yourself) dictates we isolate and define repeated patterns, and reference the one-time definition where necessary. To DRY up `my-app`'s presentational layer, we need to isolate the base HTML markup layout, and implement the layout in each of the view scripts. This strategy is known as "template inheritance."
+
+### 3. Add a Liquid `layout`
+Liquid has a standard concept of a "layout" template. A layout template defines whatever view logic it is meant to encapsulate, and defines areas within its markup meant to be customized by each implementer of the layout.
+
+Create a file to serve as the layout. This file will contain HTML boilerplate, as well as a delimited section for child pages to provide custom content.
+
+<div class="filename">views/default-layout.liquid</div>
+
+```html
+<!DOCTYPE html5>
+<html>
+  <head>
+    <title>my-app</title>
+  </head>
+  <body>
+    <header>
+      <a href="/">home</a>
+    </header>
+    {% block content %}
+      default-html.liquid's default content is showing.
+    {% endblock %}
+    <br/><br/>
+    <footer>&copy; by Popular Demand</footer>
+  </body>
+</html>
+```
+
+The syntax `{% block <block_name> %}{% endblock %}` specifies an area of the template to be overwritten by child pages. A developer can provide default markup within the layouts `block`; the default content is rendered if the child page does not define its own markup for the area.
+
+### 4. Use the layout
+The `block` to be referenced in the sub-pages is named `content`. An individual sub-page must reference the parent layout, `default-layout.liquid`, and define its own `content` block. A reference to the parent layout is defined with a `layout` block.
+
+Modify `hello-world.liquid` to implement the layout and define custom `content`.
+
+<div class="filename">views/hello-world.liquid</div>
+
+```html
+{% layout 'default-layout.liquid' %}
+
+{% block content %}
+  <h1>Hello World!</h1>
+
+  {% if showDog %}
+    <img src="https://i.imgur.com/5Swc751.png" alt="brown dog marley" width="150px"/>
+  {% endif %}
+
+  <p>Show Marley with query parameter <code>showDog</code>.</p>
+  <p><code>Page loaded at {{ serverDate }}.</code></p>
+{% endblock %}
+```
+
+Notice this page no longer features any boiler plate HTML. It only defines two features -- a `layout`
+block and a `content` block.
+
+From the browser, reload the `/hello-world` route to be delivered the page with its newly defined layout. The main content of the pages, a heading and two paragraphs should remain visible. There should also be two elements added from the `default-layout.liquid` layout -- a page header with a link to the root route and a footer element with site information.
+
+### 5. Refactor `index.liquid`
+<dl>
+  <dt>Refactor</dt>
+  <dd>restructure the code of an application so as to improve it without altering functionality</dd>
+</dl>
+
+Isolating the base HTML into a layout was an improvement to the codebase in terms of maintainability. Let's reuse this architecture in all of the pages of the application.
+
+<div class="filename">views/index.liquid</div>
+
+```html
+{% layout 'default-layout.liquid' %}
+
+{% block content %}
+  <h1>Welcome to My App!</h1>
+  {% if debug %}
+    <p><b>Debug Information</b></p>
+    <p>Node version: {{ nodeVersion }}</p>
+    <p>Server Time: {{ serverTime }}</p>
+  {% endif %}
+{% endblock %}
+```
+
+Again, the child page must define its parent `layout` and the `content` block to fill in the layout's `content` block.
+
+Navigating to the root route, `/`, in the broswer should render the `Welcome to My App!` heading as well as the Header and footer defined in `default-layout.liquid`.
+
+### Review
+
+`block` is a standard tag provided by Liquid. A layout file uses a `block` tag to define an area that will be replaces with a child page's content. A child page uses `block` to define what to render in its layout's identically named `block`.
+
+`layout` is a functional tag provided by Liquid. It is used in a child page to define what layout the defined markup should be rendered within.
+
+In the specific case of these changes, "`content`" is a developer defined variable name that references an area within the parent layout to be replaced by the markup of a identically named block within the child page.
+
+
+### 6. Add a link to Hello World!
+As new pages are added to the application, it is good practice to give users an easy method of navigating to the page. Below the heading on the index page, add a link to `hello-world`. (**Note:** In this code block and going forward, only the affected parts of the code are shown. It's unnecessary to alter the unshown elements. Use discernment.)
+
+<div class="filename">views/index.liquid</div>
+
+```html
+<h1>Welcome to My App!</h1>
+<p>Links</p>
+<ul>
+  <li><a href="/hello-world">hello-world</a></li>
+</ul>
+```
+
+### 7. `git commit`
+Creating a view layout architecture within `my-app` is a significant unit of development. Time to save to version control.
+
+<div class="filename">command line</div>
+
+```
+$ git status
+$ git add .
+$ git commit -m 'Add default layout and hello-world'
+```
+
+### Reference
+1. Liquid's `layout`: [https://liquidjs.com/tags/layout.html](https://liquidjs.com/tags/layout.html)
+
+---
+
+## A Deployed Environment
 
 So far, `my-app` has only been served from a local development server. To open the application for public web traffic, the application has to have a public IP address, the proper configuration with OSI layer-7 programs allowing public web traffic. Chances are you do not want to open your personal computer to public traffic. As well, learning how to provision a operating system level server is a walkthrough in its own. Luckily, there are Platforms-as-a-Service that provide fully-provisioned server space for launching public web applications with ease. One such platform is Heroku.
 
-Heroku provides server-space in the form of what they call "dynos." Heroku's free-tier includes unlimited dynos and 550 dyno hours per month. Verifying the account with a credit card will increase the number of free dyno hours to 1100. Dynos on the free tier will sleep after 30 minutes of inactivity. Visiting the web address of a sleeping dyno will take longer than usual to render the first request as the dyno is activated from the sleeping state.
+### Heroku
+
+Heroku provides the public server space `my-app` needs. The Heroku platform offers server-processing in the form of what they call "dynos." Heroku's free-tier includes unlimited dynos and 550 dyno hours per month. Verifying the account with a credit card will increase the number of free dyno hours to 1100. Dynos on the free tier will sleep after 30 minutes of inactivity. Visiting the web address of a sleeping dyno will take longer than usual to render the first request as the dyno is activated from the sleeping state.
 
 When an application is ready for production-level availability, simply upgrade the dyno to a paid tier to have the application accessible 24/7. At the time of this writing, paid tiers start at $7 per month per dyno.
 
 In addition to upgrading application availability, Heroku has an Add-ons marketplace which provides database, cache, and application monitoring services to name a few. These services include industry standard tools specially configured for plug-and-play interfacing with the Heroku platform. Each add-on has it's own tiered pricing system, and there are many with a free tier which match Heroku's free tier on being perfectly suited for learning and prototyping.
 
-### 1. Heroku Prerequisites
+---
+
+## Deploying to Heroku
+
+### Prerequisites
 Heroku manages application deployments with Git. A Git application repository is Prerequisite 0, and necessary for Heroku deployment. A `my-app` Git repository was initialized in a previous section, but keep this requirement in mind for any future new build.
 
 1. Create a Heroku account
@@ -1032,310 +1230,31 @@ The deployed application can be accessed by navigating in the browser to the URL
 $ heroku open
 ```
 
----
-
-## Add Functionality to the Frontend
-Adding functionality to a website takes it from being a presentational asset to an interactive asset. This functionality is what will keep you and the site's visitors engaged and coming back.
-
-We'll make something useful -- a PDF invoice generator. All of the code will be browser-based with a server-side route to deliver the static assets (HTML/CSS/JS).
-
-### 1. Add `generate-pdf.liquid` View
-Within the views folder, add a webpage that will be delivered when the user navigates to the "/generate-pdf" route of the website.
-
-If you've been following along, copy and paste the boilerplate templating from the `hello-world.liquid` example. Within the `{% block content %}` block, add the following code. Feel free to add your own twist. We'll be fleshing out the JavaScript in a moment.
-```html
-<h1>Generate PDF</h1>
-
-<button onclick="generatePDF()">Generate PDF</button>
-
-<script>
-  function generatePDF() {
-    alert('pdf generating');
-  }
-</script>
-```
-
-### 2. Add Route to `index.js`
-When the user navigates to `/generate-pdf`, they should receive the newly added view. Within `index.js`, add a route that delivers `generate-pdf.liquid`.
-```javascript
-app.get('/generate-pdf', function(request, response) {
-  response.render('generate-pdf');
-});
-```
-
-### 3. Include `jspdf`
-The library `jspdf` will be used to convert text and HTML to the PDF file format.
-
-1. Go to the [JsPDF repository](https://github.com/parallax/jsPDF) and navigate to the [docs](http://raw.githack.com/MrRio/jsPDF/master/docs/index.html).
-
-2. Copy the CDN link. It will be used as the `src` value of a `<script>` tag. My CDN link is `https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js`.
-
-3. Add the script to `generate-pdf.liquid`.
-Above the existing script tag, add the following script:
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-```
-
-4. Generate a PDF
-Replace the code within `generatePDF` with code that will actually generate a PDF!
-```javascript
-const { jsPDF } = window.jspdf;
-const doc = new jsPDF();
-doc.text("The PDF text", 10, 10);
-doc.save("generate-pdf.pdf");
-```
-
-### 4. Customize the PDF
-
-1. Configure `jspdf` to produce a desired page layout.
-The [jsPDF constuctor](http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html) accepts an options object for configuring the PDF.
-
-```
-# Configuration keys with default values
-new jsPDF({
- orientation: 'p',
- unit: 'mm',
- format: 'a4',
- putOnlyUsedFonts:true,
- compress: false,
- precision: 16,
- userUnit: 16,
- encryption: {
- 	userPassword:,
- 	ownerPassword:,
- 	userPermissions:,
- },
- floatPrecision: 16
-});
-```
-
-For a portrait, letter-sized page, measured by inches, use the following constructor:
-```javascript
-const { jsPDF } = window.jspdf;
-const doc = new jsPDF({
-  unit: 'px',
-  format: 'letter'
-});
-doc.text("The PDF text", 100, 100); // 100px from left and top
-```
-
-### 5. Generate the PDF from HTML
-For the invoice generator, we will use the `html()` method available on the `jsPDF` object. This requires an additional library be included.
-
-1. Add the following script after the `jspdf` script tag:
-```
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
-```
-
-2. Add an HTML element to the page that will contain the PDF's html.
-```html
-<div style="border: 1px solid black;width:fit-content;">
-  <div id="pdf-html" style="width:6.5in; padding:1in;font-family:sans-serif;">
-
-    <div class="invoice">
-      <div class="invoice-number">Invoice #0045</div>
-      <div class="invoice-date">Date: 04/02/2022</div>
-      <div class="invoice-due-date">Due Date: 04/17/2022</div>
-      <div class="invoice-balance-due">Balance Due: $1000.00</div>
-    </div>
-
-    <div class="company">
-      <div class="company-name small-heading">POPULAR DEMAND</div>
-      <div class="company-contact">popdemtech@gmail.com</div>
-      <div class="company-address">www.popdemtech.com</div>
-    </div>
-
-    <br>
-
-    <div class="bill-to">
-      <div class="bill-to small-heading">BILL TO</div>
-      <div class="bill-to-name">Love's Presents</div>
-      <div class="bill-to-contact">support@lovespresents.com</div>
-    </div>
-
-    <br><hr><br>
-
-    <h2 class="section-heading">Invoice</h2>
-
-    <table class="line-items">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Description</th>
-          <th>Rate</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr class="line-item-1">
-          <td class="line-item-date">04/2022</td>
-          <td class="line-item-description">Business Management</td>
-          <td class="line-item-rate">$1000/mo</td>
-          <td class="line-item-amount">$1000.00</td>
-        </tr>
-      </tbody>
-
-      <tfoot>
-        <tr class="padding-row" style="color:transparent;">
-          <td>padding-row</td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="balance-due"><b>Balance Due</b></td>
-          <td class="balance-amount">$1000.00</td>
-        </tr>
-      </tfoot>
-    </table>
-
-    <br><br>
-
-    <div class="memo">
-      <div class="memo small-heading">MEMO</div>
-      <div class="memo-text">Pleasure doing buisness with you :)</div>
-    </div>
-  </div>
-</div>
-```
-
-We will be selecting the element `#pdf-html` and converting it to PDF. Whatever the HTML content of this element is will end up in the generated PDF. For now it is static boiler plate for an invoice. See **References** for CSS styles to make the PDF more visually appealing.
-
-3. Use JavaScript to convert the HTML to PDF
-Within `generatePDF`, select `#pdf-html` and use it within `.html()` to set the content of the PDF.
-```javascript
-const { jsPDF } = window.jspdf;
-const doc = new jsPDF({
-  unit: 'px',
-  format: 'letter',
-  hotfixes: ['px_scaling']
-});
-
-const pdfHtml = document.getElementById('pdf-html');
-
-doc.html(pdfHtml, {
-  callback: function (pdf) {
-    pdf.save('generate-pdf.pdf');
-  }
-});
-```
-
-The `callback` option provides access to the PDF data generated from the HTML. This `callback` area is the only place the generated PDF is exposed. Save it, email it, or do what you need with it in the `callback` function.
-
-Initialize the `jsPDF` with `hotfixes: ['px_scaling']`. As of this writing, this hotfix is required for HTML elements to render at the correct scale within the PDF. For the curious, remove the hotfix and see what happens.
-
-You should now be able to run the server, and generate a PDF at the `/generate-pdf` route.
-
-4. Add `/generate-pdf` to the navigation list of `index.liquid`.
-
 ### Resources
-1. Should I add script tags to `<head>` or `<body>`?: [https://stackoverflow.com/a/23185283](https://stackoverflow.com/a/23185283)
-
-2. Add the following CSS to the page to have a more visually friendly PDF:
-```html
-<style>
-.small-heading {
-  font-weight: 700;
-  font-variant: small-caps;
-  font-size: 1.1em;
-}
-
-.section-heading {
-  margin-top: 0;
-}
-
-#pdf-html {
-  position: relative;
-}
-
-.top-box {
-  position:absolute;
-  top:0;
-  left:0;
-  width:8.5in;
-  height:.5in;
-  background-color:#ccc;
-  z-index:-1;
-}
-
-.invoice {
-  float: right;
-  width: 2in;
-  padding: .1in;
-  border: 2px solid black;
-}
-
-.line-items {
-  width: 100%;
-  text-align: left;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: .1in 0;
-}
-
-.padding-row {
-  color: transparent;
-}
-
-.balance-due {
-  background-color: #ccc;
-  border: 1px solid black;
-}
-
-.balance-amount {
-  border: 1px solid black;
-}
-
-.balance-due, .balance-amount {
-  padding: .1in;
-}
-</style>
-```
-
----
-
-## Invoice Creator
-The use case for an invoice generator is a sole proprietor or business needing to provide an invoice for services they provided. An invoice is an itemized list that records the products or services you provided to your customers, the total amount due, and a method for them to pay you for those items or services.
-
-The PDF generated in the `/generate-pdf` module is perfect in this use case as a template. Some details, such as company name, email, and line items need to be filled in after the user has loaded the page. We will use a `<input>` elements with JavaScript to accomplish this.
-
-
-### Maintaining Code
-As I copy `generate-pdf.liquid` as a template for the new file, I immediately recognize a common sense refactor that will improve legibility -- there are `class` attributes throughout the HTML that are not being used and are not providing much new context. It's a cleaner look without these redundant values.
-
-A question arises: Should I also clean up the code in `generate-pdf.liquid`? The answer to this question, like most if not all development questions is the usual: It depends.
-
-What is the purpose of the `generate-pdf.liquid` file? In this specialty case, the file exists as an artifact to the `/generate-pdf` module. In a more standard use case for web development, the intermediate step of delivering a singularly useful PDF would not remain as a standalone webpage. The HTML for `generate-pdf.liquid` and `invoice-creator.liquid` would *not* be duplicated. Any refactors for the later revision of the page would exist as the state of the webpage.
-
-For `invoice-creator.liquid`, I will remove the redundant classes. In `generate-pdf.liquid`, I leave the code for posterity
-
-### Pseudocode
-The strategy for selecting and replacing text with JavaScript is to keep a record of known replaceable fields. The replaceable fields will be indicated by a `<span>` with a unique `data-pdf-field` attibute. We will map each field to an `<input/>` element, and allow the user to update each field individually.
-
-### Resources
-Data attributes: [https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes)
+The Heroku CLI: [https://devcenter.heroku.com/articles/heroku-cli](https://devcenter.heroku.com/articles/heroku-cli)
 
 ---
 
 ## Authentication
-User authentication allows developers of a web application to craft individualized experiences. In practice, this means allowing access to priveleged material such as creating database records and visiting . This ability to deliver dynamic content individualized per visitor session is the general differentiator between a web*site* and a web *application*.
+
+**Authentication** is the process of verifying the identity of an individual. User authentication allows developers of a web application to craft individualized experiences. In practice, this means allowing access to priveleged material such as creating database records and visiting . This ability to deliver dynamic content individualized per visitor session is the general differentiator between a web*site* and a web *application*.
 
 The ability to register a user account with the app, and sign in and out on request is the basis of user authentication. Identity and Access Management systems is a discipline in its own right. It is a foundational component to the interactive internet. Consider the example of a social media platform.
 
-Once a user logs in, the application can display content based on user preferences and saved data. Consider the FaceBook profile page. Every user of FaceBook can navigate to `facebook.com/profile`, and be presented with a profile page. Despite receiving the same webpage template, the page is customized to display the feed and information of the currently logged in user
+Once a user logs in, the application can display content based on user preferences and saved data. Consider the FaceBook profile page. Every user of FaceBook can navigate to `facebook.com/profile`, and be presented with a profile page. Despite receiving the same webpage template, the page is customized to display the feed and information of the currently logged in user.
 
 Further, if a user *is not* a logged in user of FaceBook, the page does not display and instead redirects to registration form. The ability to gate features is an additional benefit of adding an authentication component to a web application.
+
+### Authorization
+**Authorization** is a term closely related to Authentication. Where authentication refers to the ability to verify the user's identity, authorization refers to allowing or restricting a user's access to certain resources.
+
+In the example of a social media network, a user that has *not* authenticated with the server (i.e. not signed in) will likely be blocked from accessing a `/profile` page. Further, even if a user is signed in, certain actions like updating a different user's profile information is likely prohibited. For Software-as-a-Service (SAAS) web applications, authorization comes in the form of allowing and restricting application features based on a user's payment tier.
+
+While the need for authorization is generally universal for web applications, authorization concerns are specific to the "business logic" or domain rules of the application. Questions like how many tiers of user access are necessary and what resources should be available to whom are answered in examination of the real-world business rules the application is built to model.
 
 ---
 
 ## Add Authentication with Auth0
-
-### Auth0
 `my-app` will utilize the Auth0 service for authentication. Auth0 is a drop-in IAM solution to add authentication and authorization services to an application. Notably, it comes with single-sign on which will allow users of `my-app` to sign up with the social provider (e.g. Google, Apple) of their choice. In addition to the fundamental authentication flow featured in `my-app` Basics, Auth0 offers further authentication features such as multi-factor authentication, custom landing pages, and multi-domain applications.
 
 ### 1. Sign up for Auth0
@@ -1492,9 +1411,13 @@ $ git commit -m 'Add auth in development'
 
 ### Resources
 Auth0: https://auth0.com/docs/
+
 Auth0 Explainer Video: https://auth0.com/resources/videos/auth0-explainer-video
+
 Auth0 Express: https://auth0.com/docs/quickstart/webapp/express
+
 HTTPS in Development: https://auth0.com/docs/libraries/secure-local-development
+
 Run Node Commands Simultaneously: https://itnext.io/4-solutions-to-run-multiple-node-js-or-npm-commands-simultaneously-9edaa6215a93
 
 
@@ -2055,7 +1978,48 @@ Heroku config CLI: [https://devcenter.heroku.com/articles/config-vars](https://d
 
 ## Databases
 
+End-users of an application are more engaged if the web application is dynamic. This dynamism can be accomplished with presentational logic alone, yet an improvement to user engagement a web application can provide is if data state can be saved and retrieved across user sessions.
 
+As an example, imagine a feature that allows the user to log in and create an invoice. A user can log in and create a document with this Invoice Creator. The usefulness of the Invoice Creator application can be increased for the user if, the next time they log in, they see a list of previously created documents. A further increase in feature set -- such as the ability to edit previously saved documents -- is an increase of usability.
+
+A solution to saving and retrieving user data is to save this data in a database.
+
+Approaching the term from a general sense, a database is for persistent data storage. Data storage can be handled in many ways. At the most basic, pen and paper or Google Sheets suffice. Different technical solutions may require different paradigms of database solutions.
+
+A solution to saving and retrieving user data is to save this data in a persisted storage database. This data stays in the application's database when the user is logged in or not, and can be retrieved by the user interacting with the web page or by a developer running analytics on the data.
+
+
+### Deciding on Database Software
+To reiterate, a database is for persistent data storage. Data storage can be handled in many ways. At the most basic, pen and paper or Google Sheets suffice. Different technical solutions may require different paradigms of database solutions -- such as relational, graph or time-series.
+
+[image of relational and influxdb architecture]
+
+The question to answer when deciding on a products database technology is, as usual:
+
+What is it for?
+
+* What types of data will go in the database?
+* Are there clear domain models or is there simply a need to set and retrieve singular datum?
+* Is this data clearly represented by relationships between the domain models (e.g. books and authors)?
+* Will the data need to be queried for time-series (e.g. a graph display temperature sensor measurements)
+* Do the objects of a given domain model always have the sames attributes or can different objects have different attribute structures?
+* Who is the end user of the queries for the database -- end-users of the product or business analytics tools like Tableau?
+
+Finally, consider overarching questions that relate to development and maintance of the database:
+* What is the budget for the database?
+* What is the time-budget for implementing a database? A developer will have more speed with technology they are already familiar with.
+* What is the experience of maintainers with the technology?
+* Is there a solution offered on the technology platform already in production (e.g. Heroku, AWS)?
+
+From questions such as these, parse out the top three considerations that are important to the decision.
+
+For `my-app`, three requirements stick out:
+
+* Heroku add-ons: `my-app` already deployed on Heroku. A single-click, Heroku add-on will be ideal.
+* Free tier: `my-app` is an open-source walkthrough that offers introductory Node.js guidance for developers of all budgets.
+* SQL: SQL is **the** industry standard language of relational databases. It's likely a builder of `my-app` is already familiar with its syntax, and, if not, there are decades worth of resources to extend one's knowledge of it.
+
+`my-app` will use PostgreSQL as its persistent database. Postgres is a open-source and battle-tested SQL based database server and library. There is a Heroku add-on, Heroku Postgres, that will be used for the production database. Locally, developers will need to install the Postgres database.
 
 ---
 
@@ -2100,7 +2064,7 @@ The EDB Installation wizard installs the pgAdmin program, a graphical interface 
 ### 3. Start the Database
 
 1. Start a database server
-The `pg_ctl` command is used to manage Postgres database servers. Start and stop a database server by specifying the data directory, and supplying the `start` or `stop` subcommand, respectively. The data directory was set in the installation wizard. It defaults to `[POSTGRESQL_INSTALLATION_DIRECTORY]\data\`.
+The `pg_ctl` command is used to manage Postgres database servers. Start and stop a database server by specifying the data directory, and supplying the `start` or `stop` subcommand, respectively. The data directory was set in the installation wizard. It defaults to `<postgresql_installation_directory>\data\`.
 
 <div class="filename">command line</div>
 
@@ -2124,7 +2088,7 @@ This command:
 * with superuser privileges
 * prompts for the user's password after creation
 * connects to the database server as the `postgres` user
-* sets the user's name to `$Env:Username`, and environment variable within Windows Terminal
+* sets the user's name to `$Env:Username`, an environment variable within Windows Terminal
 
 ### 5. Create a non-default database
 The `createdb` command is used to create PostgreSQL databases. The database server serves a "database cluster." A database cluster collection of databases that is managed by a single instance of a running database server. In file system terms, it is a single directory in which all data will be stored (i.e. Postgres' `/data` directory.)
@@ -2165,12 +2129,18 @@ How to start PostgreSQL on Windows: [https://stackoverflow.com/questions/3662996
 Homebrew is a popular package manager for MacOS. A package manager provides the ability to quickly install packages, their dependency packages, and keep the packages up to date. "Packages" are software libraries and executables generally runnable from a command-line interface.
 
 1. Install Homebrew
-While we will use Homebrew to install PostgreSQL and its dependencies, we first need to install the Homebrew package itself. If you do not already have Homebrew installed, run the following from a MacOS commandline:
+While we will use Homebrew to install PostgreSQL and its dependencies, we first need to install the Homebrew package itself. If you do not already have Homebrew installed, run the following from a MacOS terminal:
+
+<div class="filename">command line</div>
+
 ```bash
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
 2. Install PostgreSQL
+
+<div class="filename">command line</div>
+
 ```bash
 $ brew update
 $ brew install postgresql
@@ -2179,6 +2149,9 @@ $ postgres --v
 
 3. Create a database cluster
 A database storage area on disk must be initialized before. A database cluster is a collection of databases that is managed by a single instance of a running database server. In file system terms, it is a single directory in which all data will be stored. There is no default location for this to be stored; we will set the location to be `/usr/local/var/postgres`:
+
+<div class="filename">command line</div>
+
 ```bash
 $ initdb /usr/local/var/postgres
 ```
@@ -2187,16 +2160,25 @@ You may see the error message: `initdb: directory "/usr/local/var/postgres" exis
 
 4. Start the database server
 Use the command [`pg_ctl`](https://www.postgresql.org/docs/current/app-pg-ctl.html) to control PostgreSQL database servers. The parameter to the `-D` flag indicates the data directory. Use the data directory created in the previous step via `initdb`.
+
+<div class="filename">command line</div>
+
 ```bash
 $ pg_ctl -D /usr/local/var/postgres start
 ```
 This will log the initialization processes, output `server started`, and return function of the CLI to the user. This command started the database process in the background. To stop the database process, run
+
+<div class="filename">command line</div>
+
 ```bash
 $ pg_ctl -D /usr/local/var/postgres stop
 ```
 
 5. Create a database
 Within the database cluster, the `initdb` command created a database named `postgres`. Make an additional database named by your MacOS username with the following command:
+
+<div class="filename">command line</div>
+
 ```bash
 $ createdb $USER
 ```
@@ -2212,11 +2194,17 @@ PostgreSQL Security Best Practices: [https://resources.2ndquadrant.com/hubfs/Whi
 The command `psql` allows the developer to enter into a PostgreSQL command line environment for executing SQL and other tasks involving the data in the database. Despite, the examples in this section using the `$` bash shell prompt, these commands work on Windows as well as Unix-based systems.
 
 To enter into the postgres shell, use the command `psql` and indicate the database. If `psql` is used with no arguments, a database of the current user's name is assumed.
+
+<div class="filename">command line</div>
+
 ```
 $ psql postgres
 ```
 
 In this mode, the command line is prefixed by `[DATABASE NAME]=#`. To see this in action, type `exit` to exit the process for the `postgres` database, and enter into a session with the database named by your username by using `psql` with no arguments.
+
+<div class="filename">command line</div>
+
 ```
 postgres=# exit
 
@@ -2243,6 +2231,9 @@ Like a web server, the PostgreSQL server is accessed via TCP -- that is to say, 
 The host for local development is `localhost`. The database name, user name, and password are known by the developer.
 
 To see connection information, enter the `psql` interface and use the `\conninfo` command. It will output the database, user, and port of the active `psql` session.
+
+<div class="filename">command line</div>
+
 ```
 $ psql databasename
 databasename=# \conninfo
@@ -2268,41 +2259,54 @@ Once the connection with PostgreSQL is configured, we will introduce a JavaScrip
 
 ### 1. Install Sequelize and Postgres Libraries
 Use the package manager to add the sequeilze and postgres client libraries.
+
+<div class="filename">command line</div>
+
 ```
 $ npm install --save sequelize sequelize-cli pg pg-hstore 
 ```
+
 `sequelize` and `sequelize-cli` are the developer interface, and contain the functions and classes we will be using primarily. `pg` and `pg-hstore` are lower-level client drivers between Node and Postgres. These libraries are required for runtime in production, so use the `--save` flag to add them as dependencies in `package.json`.
 
 ### 2. Initialize Sequelize
 1. Create a file in the root of the project named `.sequelizerc` with the following contents:
-```
+
+<div class="filename">.sequelizerc</div>
+
+```javascript
 const path = require('path');
 
 module.exports = {
   'config': path.resolve('config', 'sequelize.js'),
-  'models-path': path.resolve('app', 'models'),
+  'models-path': path.resolve('models'),
   'migrations-path': path.resolve('db', 'migrations'),
   'seeders-path': path.resolve('db', 'seeds'),
 };
 ```
 
 2. Run the `sequelize-cli init` command for the library to add the required boilerplate.
+
+<div class="filename">command line</div>
+
 ```
 $ npx sequelize-cli init
 ```
 
 Based on the configuration within `.sequelizerc`, the command creates following folders:
-* ./config/sequelize.js -- the Sequelize config file which tells CLI how to connect with database
-* ./app/models -- the directory for the data models for your project
-* ./db/migrations -- the directory for the database migration files
-* ./db/seeds -- the directory for the database seed files
+* config/sequelize.js -- the Sequelize config file which tells CLI how to connect with database
+* models -- the directory for the data models for your project
+* db/migrations -- the directory for the database migration files
+* db/seeds -- the directory for the database seed files
 
-3. Configure database credentials
+### 3. Configure database credentials
 For the Node.js application to connect to the Postgres server, it must be configured with the a) server's address, b) user name, and c) user password. The file `./config/sequelize.js`, contains the database connection configuration for three environments -- `development`, `test`, and `production`. set the username, password, database, and dialect.
 
 Change the username and password for the `development` connection to credentials of your Postgres user. Change the database to the name of the database your application should use. Sequelize will create the database if one by the name specified does not already exist. Change the dialect to `postgres`. 
 
 The `test` and `production` configurations will need to be corrected before running database transactions in those environment.
+
+<div class="filename">config/sequelize.js</div>
+
 ```
 module.exports = {
   "development": {
@@ -2316,10 +2320,13 @@ module.exports = {
 }
 ```
 
-As shown in the code example, export the configuration object using `module.experts = ` at the beginning of the file.
+As shown in the code example, export the configuration object using `module.exports = ` at the beginning of the file.
 
-4. Create the database
+### 4. Create the database
 Create the application's database.
+
+<div class="filename">command line</div>
+
 ```
 $ npx sequelize db:create
 ```
@@ -2327,7 +2334,7 @@ $ npx sequelize db:create
 ### Resources
 `sequlize-cli` documentation: [https://github.com/sequelize/cli](https://github.com/sequelize/cli)
 
-What is an ORM [https://stackoverflow.com/a/1279678/18752242](https://stackoverflow.com/a/1279678/18752242)
+What is an ORM?: [https://stackoverflow.com/a/1279678/18752242](https://stackoverflow.com/a/1279678/18752242)
 
 ---
 
@@ -2351,11 +2358,14 @@ In an ORM, this structure is made accessible in the programming language, such a
 We can use `sequelize-cli` to generate both the database tables and JavaScript classes. 
 
 ### 1. Generate a `posts` migration and JS classes using the `model:generate` command.
+
+<div class="filename">command line</div>
+
 ```
 $ npx sequelize model:generate --name Post --attributes title:string,content:text,publishDate:date
 ```
 This creates two files
-* app/models/post.js
+* models/post.js
 * db/migrations/[timestamp]-create-post.js
 
 ### 2. Run the migration.
@@ -2366,6 +2376,9 @@ Database migration files are like a version control system for the application d
 Looking at the migration file generated by `model:generate`, we can see that Sequelize added two attributes `createdAt` and `updatedAt`. This is convention, and the values will be set and kept up to date by the Sequelize engine.
 
 Run the migration command to create the `posts` table in the database.
+
+<div class="filename">command line</div>
+
 ```
 $ npx sequelize db:migrate
 ```
@@ -2383,6 +2396,9 @@ To "seed" the database is to programmatically insert values into the database --
 Unlike migrations, database seeding events are not stored anywhere by default. This means every time the `db:seed:all` command is run, the database will be re-seeded with previously run seeds. To change from the default behavior, add the configuration `"seederStorage": "sequelize"` to the development object of `config/sequelize.js`.
 
 This will save to the database which seeds have been run, allowing for use of the developer friendly `db:seed:all`.
+
+<div class="filename">config/sequelize.js</div>
+
 ```
 module.exports = {
   "development": {
@@ -2395,6 +2411,9 @@ module.exports = {
 
 2. Generate a new seed file
 Use the `seed:generate` command provided by `sequelize-cli` to generate a seed file for the Post model.
+
+<div class="filename">command line</div>
+
 ```
 $ npx sequelize seed:generate --name first-posts
 ```
@@ -2402,6 +2421,9 @@ $ npx sequelize seed:generate --name first-posts
 This command creates a file, `db/seeds/[timestamp]-first-posts.js`. Like a migration, the seed file implements an `up/down` interface. The `up` command specifies what actions should be performed to seed the database. The `down` function should specify how to undo the actions.
 
 3. Define a few post objects in an array:
+
+<div class="filename">db/seeds/[timestamp]-first-posts.js</div>
+
 ```javascript
 const posts = [{
   title: 'Hello World',
@@ -2426,20 +2448,26 @@ const posts = [{
 
 4. Define the `up` and `down` methods
 In the `up` method, use the provided `queryInterface` class to bulk insert the posts into the database.
+
+<div class="filename">db/seeds/[timestamp]-first-posts.js</div>
+
 ```javascript
 async up (queryInterface, Sequelize) {
   await queryInterface.bulkInsert('Posts', posts, {});
 },
 ```
 
-In the `down` method, perform the reverse action of the `up` method by deleting the posts. To use Sequelize's `Op` (operator) library, import it at the top of the file.
+In the `down` method, perform the reverse action of the `up` method by deleting the posts. To use Sequelize's `Op` (short for "operation") library, import it at the top of the file.
+
+<div class="filename">db/seeds/[timestamp]-first-posts.js</div>
+
 ```javascript
 const { Op } = require("sequelize");
 
 const posts = [...];
 
 module.exports = {
-  ...
+  async up (queryInterface, Sequelize) { ... },
 
   async down (queryInterface, Sequelize) {
      await queryInterface.bulkDelete('Posts', {
@@ -2457,6 +2485,9 @@ DELETE FROM "Posts" WHERE posts.title IN ["Hello World", "Lorem Ipsum"];
 ```
 
 3. Seed the database
+
+<div class="filename">command line</div>
+
 ```
 $ npx sequelize-cli db:seed:all
 ```
@@ -2467,6 +2498,9 @@ The purpose of a database is to keep data organized. The purpose of keeping the 
 
 1. Create the route.
 Create a route `/posts` in `index.js`.
+
+<div class="filename">index.js</div>
+
 ```javascript
 app.get('/posts', (request, response) => {
   response.render('posts', {
@@ -2477,6 +2511,9 @@ app.get('/posts', (request, response) => {
 
 2. Create the template
 Create a new file, `app/views/posts.liquid` with the following code:
+
+<div class="filename">views/posts.liquid</div>
+
 ```html
 {% layout 'layouts/default-html.liquid' %}
 {% block content %}
@@ -2497,9 +2534,12 @@ Create a new file, `app/views/posts.liquid` with the following code:
 Navigate to `localhost:3000/posts`. Because the `posts` template variable is hard-coded to be an empty array, you should see a page that says "There are no posts to display."
 
 3. Query the database for posts
-Sequelize as an ORM provides JavaScript classes as abstraction over the SQL query language. The `Post` class found in `/app/models/post.js` is such a class. We will import the class into `index.js` and use the `.findAll()` method to populate the `posts` template variable.
+Sequelize as an ORM provides JavaScript classes as abstraction over the SQL query language. The `Post` class found in `models/post.js` is such a class. We will import the class into `index.js` and use the `.findAll()` method to populate the `posts` template variable.
+
+<div class="filename">index.js</div>
+
 ```javascript
-const { Post } = require('./app/models');
+const { Post } = require('./models');
 
 app.get('/posts', async function(request, response) {
   response.render('posts', {
@@ -2515,8 +2555,11 @@ Place the require statement at near the top of the file with the other `require`
 Refreshing the `/posts` web page now shows the two posts seeded in the database.
 
 4. Add a link to Posts on the homepage.
-Show off the database! Add a navigation link to the `app/views/index.liquid`.
-```
+Show off the database! Add a navigation link to the `views/index.liquid`.
+
+<div class="filename">index.liquid</div>
+
+```html
 <li><a href="/posts">Posts</a></li>
 ```
 
@@ -2539,12 +2582,18 @@ The platform we will be using to host the PostgreSQL server is Heroku Postgres, 
 
 ### 1. Add the Heroku Postgres add-on
 1. From the command-line interface, use the `heroku addons:create` command to add the Heoku Postgres add-on, hobby-dev tier.
+
+<div class="filename">command line</div>
+
 ```
 $ heroku addons:create heroku-postgresql:hobby-dev
 ```
 
 2. Use the `DATABASE_URL` environment variable in production
-Within `./config/sequelize.js` **production** environment, set the key `use_environment_variable` and `ssl.rejectUnauthorized`. Remove the unneeded piecewise credentials; `DATABASE_URL` contains user and database location information.
+Within the `config/sequelize.js` **production** object, set the keys `use_environment_variable` and `ssl.rejectUnauthorized`. Remove the unneeded piecewise credentials; `DATABASE_URL` contains user and database location information. The following code snippet includes the full `production` object.
+
+<div class="filename">config/sequelize.js</div>
+
 ```
 "production": {
   "use_env_variable": "DATABASE_URL",
@@ -2558,12 +2607,18 @@ Within `./config/sequelize.js` **production** environment, set the key `use_envi
 ```
 
 3. Ensure the NODE_ENV environment variable is set on Heroku server.
+
+<div class="filename">command line</div>
+
 ```
 $ heroku config:set NODE_ENV=production
 ```
 
 ### 2. Run the application
 1. Commit and push the new changes to Heroku
+
+<div class="filename">command line</div>
+
 ```
 $ git add .
 $ git commit -m 'Use Heroku Postgres'
@@ -2571,18 +2626,27 @@ $ git push heroku HEAD
 ```
 
 2. Run the database migration on Heroku
-Use the `heroku run` command to execute a command in Heroku's server environment.
+Use the `heroku run` command to execute the Sequelize CLI commands in Heroku's server environment.
+
+<div class="filename">command line</div>
+
 ```
 $ heroku run npx sequelize db:migrate --env production
 ```
 
 3. Seed the database
+
+<div class="filename">command line</div>
+
 ```
 $ heroku run npx sequelize db:seed:all
 ```
 
 4. View the app
 Issue the command `heroku open` to open the deployed application. Navigate to the `/posts` route to see the seeded posts.
+
+<div class="filename">command line</div>
+
 ```
 $ heroku open
 ```
@@ -2602,7 +2666,7 @@ Deploy Sequelize to Heroku: [https://anjelicaa.medium.com](https://anjelicaa.med
 ---
 
 ## Capturing User Information
-The strength of a database comes into play when the developer uses it to capture user interaction within the web application.
+The strength of a database comes into play when the developer uses it to capture user interaction within the web application. This saved information can then be displayed to the user to demonstrate the applications interactivity.
 
 ### Click Tracker Application
 This feature will allow any user to click a button and counter will increment. This counter increments over time as users click the button. If you think about it, users from anywhere on the globe can log into this application, and click this button. Pretty cool.
@@ -2624,6 +2688,9 @@ updatedAt  | DATE
 To find how many times the button has been clicked, a SQL `COUNT(*)` command can be used. This data model has the additional benefit of saving user information with the click event. This will be aided by the authentication system, and allows for a follow-up feature of displaying how many times a particular user has clicked the button.
 
 Generate a model and migration using Sequelize's `model:generate` command, and migrate the database with `db:migrate`.
+
+<div class="filename">command line</div>
+
 ```
 $ npx sequelize model:generate --name Click --attributes user:string
 $ npx sequelize db:migrate
@@ -2635,12 +2702,18 @@ Within `index.js`, create a route, `/click-tracker`. This route should render a 
 The number of times the button has been clicked in total will be saved in a database, and fetched at the initial user request. The liquid-HTML template will be rendered with this number. Hard-code the value to 10 for now.
 
 1. Import the `Click` class from Sequelize's model directory.
+
+<div class="filename">index.js</div>
+
 ```javascript
 const { Post, Click } = require('./app/models');
 ```
 
 2. Create the route.
 The route handler must be labeled async to be able to use the asynchronous `await Click.count()`. Send the result of `Click.count()` to the view as the template variable `timesClicked`.
+
+<div class="filename">index.js</div>
+
 ```javascript
 app.get('/click-tracker', async function (request, response) {
   response.render('click-tracker', {
@@ -2650,6 +2723,10 @@ app.get('/click-tracker', async function (request, response) {
 ```
 
 3. Create the webpage.
+A view template named `click-tracker.liquid` must be created.
+
+<div class="filename">views/click-tracker.liquid</div>
+
 ```html
 {% layout 'layouts/default-html.liquid' %}
 {% block content %}
@@ -2663,6 +2740,9 @@ You should now be able to start the server, navigate to `https://localhost:3000/
 
 ### 3. Handle user interaction
 At this point, nothing happens if a user clicks the on-screen button. Let's change this by adding a JavaScript click event listener on the button. Add a `<script>` tag within the `content` block.
+
+<div class="filename">views/click-tracker.liquid</div>
+
 ```html
 <script>
   const button = document.getElementById('click-me');
@@ -2680,6 +2760,9 @@ From the front-end, we will use the Fetch API to make and handle the network req
 The `fetch()` method returns a Promise. A JavaScript Pro
 
 Replace the `console.log` within the click handler with a `fetch` call.
+
+<div class="filename">views/click-tracker.liquid</div>
+
 ```html
 <script>
   const button = document.getElementById('click-me');
@@ -2697,6 +2780,9 @@ The `response.ok` is a utility property on the `Response` object returned by `fe
 In line with RESTful standards, we will make a route that accepts a `POST` request to `/clicks` to create a click resource. The the `POST` request is successful, we will return to the user the new total number of clicks in the database.
 
 1. Create the POST `/clicks` route
+
+<div class="filename">indes.js</div>
+
 ```javascript
 app.post('/api/clicks', async function(request, response) {
   const user = request.oidc.user ? request.oidc.user.email : null;
@@ -2711,18 +2797,27 @@ Due to validations and user input errors, creating database records is a process
 The Express way to handle errors is to use its middleware framework. We have already used Express' middleware in implementing the `auth()` functionality. The middleware framework is a pipeline of functions that have access to the `request` and `response` objects. A given middleware can execute any code and make changes to the `request` and `response` objects. When it is done with its computation, it must end the request/response cycle or call the `next` middleware function in the pipeline.
 
 In this way, every route that is defined -- e.g. `GET /hello-world` -- is part of the middleware pipeline. The routes created thus far end the request/response cycle by not calling a `next` middleware. In fact, because `next` has not been needed, I have left this variable out of the route handler definitions. An Express route handler has the following signature:
+
+<div class="filename">pseudocode</div>
+
 ```javascript
 const routeHandler = function(request, response, next) { ... };
 app.get('/path', routeHandler);
 ```
 
 A middleware handler has the similar signature:
+
+<div class="filename">pseudocode</div>
+
 ```javascript
 const middleware = function(request, response, next) { ... };
 app.use(middlewareHandler);
 ```
 
 Error handling middleware has a slightly differing signature; the first parameter is a JavaScript error object.
+
+<div class="filename">pseudocode</div>
+
 ```javascript
 const errorHandlingMiddleware = function(error, request, response, next) { ... };
 app.use(errorHandlingMiddleware);
@@ -2731,6 +2826,9 @@ The application knows to use the error handling middleware if `next` is invoked 
 
 1. Create the error handling middleware.
 As will all middleware, Express will invoke the functions in the order they are applied to the application with `app.use()`, top to bottom. As such, `app.use` this middleware below the route definitions within `index.js`.
+
+<div class="filename">index.js</div>
+
 ```javascript
 app.use(function (error, request, response, next) {
   if (!error.apiError) {
@@ -2749,6 +2847,8 @@ An important aspect of this code is that it returns a JSON response. Express' de
 With the error handler is in place, the route handler must be changed to pass any errors to the error handling middleware. The third parameter, `next`, should be added to the handler's function definition. It has always been passed in at runtime, but because it was unnecessary, it hasn't been added to the code until now.
 
 `Click.create` will throw an error if the create is unsuccessful. Wrap this function call in a `try/catch` block. If an error is caught, set the properties on it the custom error handling middleware is expecting -- `apiError` and `statusCode` -- and invoke the `next` middleware the error.
+
+<div class="filename">index.js</div>
 
 ```javascript
 app.post('/api/clicks', async function(request, response, next) {
@@ -2776,6 +2876,8 @@ A response handler must be written within the front-end JavaScript to process th
 
 The `fetch` call resolves to a `Response` interface that represents the response to a request. The `json()` method on this interface returns a promise of the result of parsing the response body into JSON. We'll want to access the `timesClicked` property we set on the response body.
 
+<div class="filename">views/click-tracker.liquid</div>
+
 ```html
 <script>
   const button = document.getElementById('click-me');
@@ -2783,6 +2885,7 @@ The `fetch` call resolves to a `Response` interface that represents the response
     fetch('/api/clicks', { method: 'POST' })
     .then((response) => {
       if (!response.ok) return;
+      
       response.json()
       .then((data) => {
         document.getElementById('times-clicked').innerHTML = data.timesClicked;
@@ -2801,7 +2904,10 @@ It is good practice to inform the user of an application error. It's wise to con
 The case of the Click Tracker application coming into an error state is more of the latter. The plan is to place an error message within the HTML. It will be hidden by default, but when an error response is received, it will be displayed. Whenever a new request is initalized -- when the user re-clicks the button -- the error message will be re-hidden while the new `fetch` request is sent and allowed to return successfully or not.
 
 1. Add the HTML/CSS for error handling.
-For this, we will need to add the error message element, and set it to be hidden by default. Add the new element after the `click-me` button. Add the style tags within the `content` block,the `head` block, or an external CSS file with `<link>` tag.
+For this, we will need to add the error message element, and set it to be hidden by default. Add the new element after the `click-me` button. Add the style tags within the `content` block.
+
+<div class="filename">views/click-tracker.liquid</div>
+
 ```html
 <span id="error" class="hidden">Oops, something happened.</span>
 
@@ -2818,6 +2924,9 @@ For this, we will need to add the error message element, and set it to be hidden
 
 2. Add error handling JavaScript
 When an error response is encountered, remove the `hidden` class on the `#error` element to remove the `display: none` attribute. In the case of resubmitting the button click, hide the element again by re-adding the `hidden` class.
+
+<div class="filename">views/click-tracker.liquid</div>
+
 ```html
 <script>
   const button = document.getElementById('click-me');
@@ -2841,6 +2950,9 @@ When an error response is encountered, remove the `hidden` class on the `#error`
 ```
 
 To test the error handling, you can force the API to return an error response.
+
+<div class="filename">index.js</div>
+
 ```javascript
 app.post('/api/clicks', async function(request, response, next) {
   // const user = request.oidc.user ? request.oidc.user.email : null;
@@ -2865,6 +2977,9 @@ Be sure to revert this intermediate step for the application to function as plan
 
 ### 9. Add a homepage link
 Add the Click Tracker app to the list of pages on the homepage.
+
+<div class="filename">views/index.liquid</div>
+
 ```html
 <li><a href="/click-tracker">Click Tracker</a></li>
 ```
@@ -2872,6 +2987,9 @@ Add the Click Tracker app to the list of pages on the homepage.
 ### 10. Commit and deploy
 1. Commit the repository
 Git commit the new changes and deploy to Heroku to see the results in a deployed environment.
+
+<div class="filename">command line</div>
+
 ```
 $ git add .
 $ git commit -m 'Add Click Tracker'
@@ -2880,14 +2998,22 @@ $ git push heroku HEAD
 
 2. Migrate the production database
 There is now a new table the application expects to be in the database. A database migration must be run on the Heroku Postgres instance to create this table.
+
+<div class="filename">command line</div>
+
 ```
 $ heroku run sequelize db:migrate
 ```
 
-3. Run the Click Tracker Application
+3. Run the deployed application
+
+<div class="filename">command line</div>
+
 ```
 $ heroku open
 ```
+
+Navigate to `/click-tracker` directly or via the homepage link, and verify the incrementing Click Tracker.
 
 ### Resources
 

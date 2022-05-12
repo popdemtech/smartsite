@@ -1,8 +1,5 @@
 ## Deciding on Database Software
-Databases are used for persisting data long-term, and I'll be approaching
-this term in such a general sense. Data storage can be handled in many ways.
-At the most basic, pen and paper or Google Sheets suffice.
-Different technical solutions may require different paradigms of database solutions -- such as relational, graph or time-series.
+Approaching the term from a general sense, a database is for persistent data storage. Data storage can be handled in many ways. At the most basic, pen and paper or Google Sheets suffice. Different technical solutions may require different paradigms of database solutions -- such as relational, graph or time-series.
 
 [image of relational and influxdb architecture]
 
@@ -17,19 +14,21 @@ What is it for?
 * Do the objects of a given domain model always have the sames attributes or can different objects have different attribute structures?
 * Who is the end user of the queries for the database -- end-users of the product or business analytics tools like Tableau?
 
-Finally, consider overarching questions that relate to development and maintance of the database?
+Finally, consider overarching questions that relate to development and maintance of the database:
 * What is the budget for the database?
 * What is the time-budget for implementing a database? A developer will have more speed with technology they are already familiar with.
 * What is the experience of maintainers with the technology?
-* Is there a solution offered on the technology platform already in production (e.g. AWS, DigitalOcean)?
+* Is there a solution offered on the technology platform already in production (e.g. Heroku, AWS)?
 
 From questions such as these, parse out the top three considerations that are important to the decision.
 
-For the production of `pd-service`, I landed on three requirements and will continue the walkthrough implementing the solution:
+For the production of `my-app`, three requirements and will continue the walkthrough implementing the solution:
 
-* Heroku add-ons: pd-service already deployed on heroku. single click heroku addon
-* Free tier: pd offers walkthroughs for all developers
-* SQL: Industry-standard, speed of development
+* Heroku add-ons: pd-service already deployed on heroku. A single-click, Heroku add-on will be ideal.
+* Free tier: `my-app` is an open-source walkthrough that offers introductory guidance for developers of all budgets
+* SQL: SQL is **the** industry standard language of relational databases. It's likely a builder of `my-app` is already familiar with its syntax, and, if not, there are decades worth of resources to extend one's knowledge of it.
+
+`my-app` will use PostgreSQL as its persistent database. Postgres is a open-source and battle-tested SQL based database server and library.
 
 ---
 
@@ -54,9 +53,9 @@ A relational database is a fine choice for representing the domain models of pd-
 
 ## Saving Data
 
-End-users of an application are more engaged if the web application is dynamic. As seen in the Invoice Creator project, this can be accomplished with front-end JavaScript alone. An improvement on the level of engagement the web app can provide is if data state can be saved and retrieved across user sessions.
+End-users of an application are more engaged if the web application is dynamic. This dynamism can be accomplished with presentational logic alone, yet an improvement to user engagement a web application can provide is if data state can be saved and retrieved across user sessions.
 
-As an example, imagine a user logs in and creates a document with the Invoice Creator. The usefulness of the Invoice Creator app can be increased for the user if, the next time they log in, they see a list of previously created documents. A further increase in feature set -- such as the ability to edit previously saved documents -- is an increase of usability.
+As an example, a feature that allows the user to log in and create an invoice. Imagine a user logs in and creates a document with this Invoice Creator. The usefulness of the Invoice Creator app can be increased for the user if, the next time they log in, they see a list of previously created documents. A further increase in feature set -- such as the ability to edit previously saved documents -- is an increase of usability.
 
 A solution to saving and retrieving user data is to save this data in a persisted storage database such as PostgreSQL. This data stays in the application's database when the user is logged in or not, and can be retrieved by the user interacting with the web page or by a developer running analytics on the data.
 

@@ -66,7 +66,7 @@ $ git add .
 $ git commit -m 'Dynamically render index.liquid'
 ```
 
-### Summary
+### Review
 
 Dynamic display content must be located in the `/views` directory with a file extension of `.liquid`. The files may contain static or dynamic content. If the content should be dynamically rendered, provide an object of local variables as the second parameter `response.render` within the route handler.
 
