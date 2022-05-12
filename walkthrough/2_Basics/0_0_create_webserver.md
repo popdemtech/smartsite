@@ -13,8 +13,7 @@ Express has been a mainstay library for since the early days of Node.js, and beg
 
 ### 1. Install Express
 
-1. Use `npm` to install Express
-Within `my-app`'s root directory, run the following:
+Use `npm` to install Express. Within `my-app`'s root directory, run the following:
 
 <div class="filename">command line</div>
 
