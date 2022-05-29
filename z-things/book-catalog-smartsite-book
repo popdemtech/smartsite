@@ -5,6 +5,24 @@ book has parts
 parts have chapters
 chapters have sections
 
+book
+book has parts
+parts have child-parts
+parts have parent-parts
+
+
+<book title="">
+  <part name="front-matter">
+  	<part name="table-of-contents" title="Table of Contents" />
+  	<part name="introduction" title="Introduction" />
+  </part>
+
+  <part>
+
+  </part>
+</book>
+
+
 books
 1. build a website
 2. build a smartsite
