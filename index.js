@@ -9,7 +9,7 @@ const engine = new Liquid();
 const port = process.env.PORT || 3000;
 
 // Models
-const { Post, Click, Book } = require('./app/models');
+const { Post, Click, Book, BookSection } = require('./app/models');
 
 // Views
 app.engine('liquid', engine.express());
@@ -92,7 +92,10 @@ app.get('/books', async function(request, response) {
 });
 
 app.get('/books/:slug', async function(request, response, next) {
-  const book = await Book.findOne({ where: { slug: request.params.slug }});
+  const book = await Book.findOne({
+    where: { slug: request.params.slug },
+    include: BookSection
+  });
   if (book == null) {
     response.status(404);
     next();
