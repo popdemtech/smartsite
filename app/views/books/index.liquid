@@ -1,0 +1,18 @@
+{% layout 'layouts/default-html.liquid' %}
+{% block content %}
+<div>
+  <h1>Books</h1>
+
+  {% for book in books %}
+    <a href="books/{{ book.slug }}">
+      <span class="book-panel">
+        <h2>{{ book.title }}</h2>
+        <p><i>{{ book.author }}</i></p>
+        <p>{{ book.blurb }}</p>
+      </span>
+    </a>
+  {% else %}
+    <p><i>There are no books to display.</i></p>
+  {% endfor %}
+</div>
+{% endblock %}

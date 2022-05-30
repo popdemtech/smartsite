@@ -22,6 +22,20 @@ parts have parent-parts
   </part>
 </book>
 
+Data models
+Book
+- title
+- description
+- blurb
+- author
+
+BookPart
+- title
+- slug
+- content
+- parent_part
+- book
+
 
 books
 1. build a website

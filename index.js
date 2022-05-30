@@ -9,7 +9,7 @@ const engine = new Liquid();
 const port = process.env.PORT || 3000;
 
 // Models
-const { Post, Click } = require('./app/models');
+const { Post, Click, Book } = require('./app/models');
 
 // Views
 app.engine('liquid', engine.express());
@@ -86,6 +86,21 @@ app.get('/click-tracker', async function (request, response) {
   });
 });
 
+app.get('/books', async function(request, response) {
+  const books = await Book.findAll();
+  response.render('books/index', { books });
+});
+
+app.get('/books/:slug', async function(request, response, next) {
+  const book = await Book.findOne({ where: { slug: request.params.slug }});
+  if (book == null) {
+    response.status(404);
+    next();
+    return;
+  }
+  response.render('books/show', { book });
+});
+
 app.post('/api/clicks', async function(request, response, next) {
   const user = request.oidc.user ? request.oidc.user.email : null;
   try {
@@ -96,6 +111,14 @@ app.post('/api/clicks', async function(request, response, next) {
     e.statusCode = 422;
     next(e);
   }
+});
+
+app.use(function(request, response, next) {
+  if (response.statusCode === 404) {
+    response.render('404');
+    return;
+  }
+  next();
 });
 
 app.use(function (error, req, res, next) {

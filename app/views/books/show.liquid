@@ -1,0 +1,11 @@
+{% layout 'layouts/default-html.liquid' %}
+{% block content %}
+<div>
+  <div class="breadcrumbs">
+    <a href="/books">Books</a> > {{ book.title }}
+  </div>
+  <h1>{{ book.title }}</h1>
+  <p><i>{{ book.author }}</i></p>
+  <p>{{ book.description }}</p>
+</div>
+{% endblock %}
