@@ -5,7 +5,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     const book = await Book.findOne({ where: { title: 'Build a SmartSite' } }, ['id']);
     const parts = bookSections.map((section) => {
-      let { childFiles, ...bookSection } = section;
+      let { childSections, ...bookSection } = section;
       bookSection.bookId = book.id;
       bookSection.createdAt = new Date();
       bookSection.updatedAt = new Date();
@@ -15,6 +15,10 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-     await queryInterface.bulkDelete('BookSections', null, {});
+    const book = await Book.findOne({ where: { title: 'Build a SmartSite' } }, ['id']);
+    await queryInterface.bulkDelete('BookSections', {
+      bookId: book.id,
+      sectionType: 'part'
+    });
   }
 };

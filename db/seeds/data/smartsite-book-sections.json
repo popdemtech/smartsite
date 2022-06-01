@@ -6,7 +6,7 @@
     "sectionType": "part",
     "sequence": 0,
     "parentSectionId": null,
-    "childFiles": []
+    "childSections": []
   },
   {
     "title": "Setup",
@@ -15,7 +15,7 @@
     "sectionType": "part",
     "sequence": 1,
     "parentSectionId": null,
-    "childFiles": [
+    "childSections": [
       {
         "title": "Git My-app",
         "slug": "git-my-app",
@@ -97,7 +97,7 @@
     "sectionType": "part",
     "sequence": 2,
     "parentSectionId": null,
-    "childFiles": [
+    "childSections": [
       {
         "title": "Create Webserver",
         "slug": "create-webserver",
@@ -383,7 +383,7 @@
     "sectionType": "part",
     "sequence": 3,
     "parentSectionId": null,
-    "childFiles": [
+    "childSections": [
       {
         "title": "Book Catalog",
         "slug": "Book-Catalog",
