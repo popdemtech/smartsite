@@ -10,11 +10,11 @@ The current state of the root route in `index.js` is that it returns an HTML str
 
 ```javascript
 app.get('/', function(request, response) {
-  response.send('<h1>Welcome to My App!</h1>');
+  response.send('<h1>Welcome to SmaRtsite!</h1>');
 });
 ```
 
-Change the sent response to read `Hello World` instead of `Welcome to My App`, and save the file.
+Change the sent response to read `Hello World` instead of `Welcome to SmaRtsite`, and save the file.
 
 <div class="filename">index.js</div>
 
@@ -29,7 +29,7 @@ In the broswer, navigate to `localhost:3000`, and check out the heading. It stil
 
 This is because when the application is run with `node index.js`, all application files are cached in the state they were in when the command was invoked. To see the modified response, stop the currently running server with `CMD+C` or `CTRL+C` depending on your operating system, and restart it with `npm run start`. Navigating to the browser now will display the updated text.
 
-Restarting the server after every change is tedious and will seem *more* tedious over time. And presents a near impossible developer experience long-term. As such, `my-app` will implement the file watching library `nodemon`.
+Restarting the server after every change is tedious and will seem *more* tedious over time. And presents a near impossible developer experience long-term. As such, `smartsite` will implement the file watching library `nodemon`.
 
 ### 1. Add nodemon
 Nodemon is a library that is used to initialize a process from the local operating system, and is therefore a development dependency rather than an application dependency. Install the library as a dev dependency.
@@ -69,18 +69,18 @@ $ npm run start
 ```
 
 4. Modify the code
-Change the text sent from the root route back to `Welcome to My App`, and *do not* restart the server.
+Change the text sent from the root route back to `Welcome to SmaRtsite`, and *do not* restart the server.
 
 <div class="filename">index.js</div>
 
 ```javascript
 app.get('/', function(request, response) {
-  response.send('<h1>Welcome to My App!</h1>');
+  response.send('<h1>Welcome to SmaRtsite!</h1>');
 });
 ```
 
 5. Check for changes
-In the broswer, navigate to `localhost:3000`, and check out the heading. It now says `Welcome to My App!` without needing a server restart. The filesystem watcher is working!
+In the broswer, navigate to `localhost:3000`, and check out the heading. It now says `Welcome to SmaRtsite!` without needing a server restart. The filesystem watcher is working!
 
 ### 6. Git commit the changes
 This was a significant unit of development. A development library was added, and it's functionality was fully implemented. `git commit` the changes to signify the completion of this development.

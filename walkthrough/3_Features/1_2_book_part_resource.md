@@ -4,6 +4,8 @@ BookPart
 - title
 - slug
 - content
+- sectionType
+- sequence
 - parent_part
 - book
 
@@ -11,10 +13,10 @@ BookPart
 
 1. Generate model
 ```
-npx sequelize model:generate --name BookSection --attributes title:string,slug:string,content:text,bookId:integer
+npx sequelize model:generate --name BookSection --attributes title:string,slug:string,content:text,sectionType:string,sequence:integer,bookId:integer
 ```
 
-2. Customize generated file
+2. Customize generated files
 Customize the generated model and migration files to refect the Book to Book Section one-to-many relatonship.
 model file:
 
@@ -26,7 +28,7 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class BookSection extends Model {
     static associate(models) {
-      BookSection.belongsTo(models.Book);
+      BookSection.belongsTo(models.Book, { foreignKey: 'bookId' });
     }
   }
 
@@ -34,10 +36,19 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     slug: DataTypes.STRING,
     content: DataTypes.TEXT,
+    sectionType: DataTypes.STRING,
+    sequence: DataTypes.INTEGER,
     bookId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'Books',
+        key: 'id'
+      }
+    },
+    parentSectionId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'BookSections',
         key: 'id'
       }
     }
@@ -70,6 +81,12 @@ module.exports = {
       },
       content: {
         type: Sequelize.TEXT
+      },
+      sectionType: {
+        type: Sequelize.STRING
+      },
+      sequence: {
+        type: Sequelize.INTEGER
       },
       bookId: {
         type: Sequelize.INTEGER,

@@ -1,5 +1,5 @@
 ## Add Authentication with Auth0
-`my-app` will utilize the Auth0 service for authentication. Auth0 is a drop-in IAM solution to add authentication and authorization services to an application. Notably, it comes with single-sign on which will allow users of `my-app` to sign up with the social provider (e.g. Google, Apple) of their choice. In addition to the fundamental authentication flow featured in `my-app` Basics, Auth0 offers further authentication features such as multi-factor authentication, custom landing pages, and multi-domain applications.
+`smartsite` will utilize the Auth0 service for authentication. Auth0 is a drop-in IAM solution to add authentication and authorization services to an application. Notably, it comes with single-sign on which will allow users of `smartsite` to sign up with the social provider (e.g. Google, Apple) of their choice. In addition to the fundamental authentication flow featured in `smartsite` Basics, Auth0 offers further authentication features such as multi-factor authentication, custom landing pages, and multi-domain applications.
 
 ### 1. Sign up for Auth0
 Auth0 provides a user interface for configuring applications' authentication settings. Setting up an application in the interface is a step-by-step walkthrough process.
@@ -14,8 +14,8 @@ Auth0 provides a user interface for configuring applications' authentication set
 * Set "Allowed Logout URLs"
   * Set this value to `https://localhost:3001`
 
-### 2. Add Auth0 to `my-app`
-Now that the third-party service is configured to accept requests, we must now add code within `my-app` that makes calls to Auth0's application interface (API). While using raw HTTP calls to accomplish this is possible, `my-app` will utilize Auth0 provided API wrapping library, `express-openid-connect`. This package abstracts the HTTP routing and configuration to JavaScript functions and classes with developer-friendly interfaces.
+### 2. Add Auth0 to `smartsite`
+Now that the third-party service is configured to accept requests, we must now add code within `smartsite` that makes calls to Auth0's application interface (API). While using raw HTTP calls to accomplish this is possible, `smartsite` will utilize Auth0 provided API wrapping library, `express-openid-connect`. This package abstracts the HTTP routing and configuration to JavaScript functions and classes with developer-friendly interfaces.
 
 1. Install the `express-openid-connect` authentication middleware.
 
@@ -56,7 +56,7 @@ const config = {
 app.use(auth(config));
 ```
 
-Next, the snippet provides an example route that utilizes the `isAuthenticated` helper method provided by the `auth` middleware. `my-app` already has a `/` route, so if you intend to keep the example route, rename its path to avoid pathname conflicts.
+Next, the snippet provides an example route that utilizes the `isAuthenticated` helper method provided by the `auth` middleware. `smartsite` already has a `/` route, so if you intend to keep the example route, rename its path to avoid pathname conflicts.
 
 <div class="filename">index.js</div>
 

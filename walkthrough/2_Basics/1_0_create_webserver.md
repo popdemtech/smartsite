@@ -1,5 +1,5 @@
 ## Create the Web Server
-As it stands, `my-app` is a functioning Node.js application, but it doesn't do much. It prints a message in the terminal. We're here to build an application that serves web traffic. This means a user can navigate to our web pages and functionality from an internet browser.
+As it stands, `smartsite` is a functioning Node.js application, but it doesn't do much. It prints a message in the terminal. We're here to build an application that serves web traffic. This means a user can navigate to our web pages and functionality from an internet browser.
 
 For the purposes of this guide, the term "web server" should be taken to mean an application that serves web traffic. The term "web server" can (and often does) apply to any physical or digital component that makes up the OSI model. These components funtionally operate different levels of abstraction, and in the most general sense, constitute a pipeline of request handling. Node.js web servers operate at the "Application Layer" of the model.
 
@@ -13,7 +13,7 @@ Express has been a mainstay library for since the early days of Node.js, and beg
 
 ### 1. Install Express
 
-Use `npm` to install Express. Within `my-app`'s root directory, run the following:
+Use `npm` to install Express. Within `smartsite`'s root directory, run the following:
 
 <div class="filename">command line</div>
 
@@ -26,7 +26,7 @@ This command adds Express as a dependency to the application, and installs the l
 ### 2. Create the Express server
 Express provides JavaScript classes and functions that, when used within a Node.js script, start a webserver process. To do so, we'll need to `require` the Express library, then instantiate an instance of Express.
 
-An instance of Express is conventionally called `app`. The instance provides methods for routing HTTP requests, rendering HTML views, registering a template engine, and configuring middleware. `my-app` will utilize all of these methods.
+An instance of Express is conventionally called `app`. The instance provides methods for routing HTTP requests, rendering HTML views, registering a template engine, and configuring middleware. `smartsite` will utilize all of these methods.
 
 First, modify `index.js` to import in the `express` library and instantiate an `app`. Register a `GET` route to the root route, `/`.
 
@@ -38,18 +38,18 @@ const app = express();
 const PORT = 3000;
 
 app.get('/', function(request, response) {
-  response.send('<h1>Welcome to My App!</h1>');
+  response.send('<h1>Welcome to SmaRtsite!</h1>');
 });
 
 app.listen(PORT, () => {
-  console.log(`My App listening on port ${PORT}`);
+  console.log(`SmaRtsite listening on port ${PORT}`);
 });
 ```
 
 ### 3. Run the Application
 Starting the application with `npm run start` will begin the Express server. Based on the code above, this web server can be accessed by navigating to `http://localhost:3000` in a web browser.
 
-Open a web browser and navigate to `localhost:3000`. You should see a large heading with the words "Welcome to My App!".
+Open a web browser and navigate to `localhost:3000`. You should see a large heading with the words "Welcome to SmaRtsite!".
 
 [image welcome to my app]
 

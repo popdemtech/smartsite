@@ -1,4 +1,4 @@
-## Git `my-app`
+## Git `smartsite`
 Git the only developer tool required before beginning this walkthrough. It's required for you to run the first command, `git clone`, and sync the starting directory to your local computer.
 
 ### What is Git?
@@ -28,20 +28,20 @@ You're done with Git installation when you can run `git --version` and be presen
 $ git --version
 ```
 
-### 2. Clone `my-app`
-The `git clone` command downloads a git repository from the internet to a local working directory. Within the terminal, navigate to the directory you'd like to save `my-app` and run `git clone`.
+### 2. Clone `smartsite`
+The `git clone` command downloads a git repository from the internet to a local working directory. Within the terminal, navigate to the directory you'd like to save `smartsite` and run `git clone`.
 
 <div class="filename">command line</div>
 
 ```
 $ cd path/to/parent_directory
-$ git clone https://github.com/popdemtech/my-app.git
-$ cd my-app
+$ git clone https://github.com/popdemtech/smartsite.git
+$ cd smartsite
 ```
 
-This series of commands downloads `my-app` and places the terminal in the `my-app` directory.
+This series of commands downloads `smartsite` and places the terminal in the `smartsite` directory.
 
-The starting `my-app` directory is just this walkthrough. Following the steps provided, you will build out a Node.js web server, and the nearly empty directory will blossom into an internet application of whatever you wish it to be.
+The starting `smartsite` directory is just this walkthrough. Following the steps provided, you will build out a Node.js web server, and the nearly empty directory will blossom into an internet application of whatever you wish it to be.
 
 We just gotta create the application now. Let's get to it.
 

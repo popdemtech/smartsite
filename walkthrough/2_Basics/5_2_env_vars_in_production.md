@@ -14,7 +14,7 @@ Click "Reveal Config Vars" button to show all variables and reveal input fields 
 
 [heroku empty config vars.png]
 
-Feel free to use the graphic interface to set environment variables. The `my-app` walkthrough details using Heroku's CLI to accomplish this task.
+Feel free to use the graphic interface to set environment variables. The `smartsite` walkthrough details using Heroku's CLI to accomplish this task.
 
 ### Heroku Config Vars: Command-Line Interface
 The Heroku CLI allows developers to manage Heroku apps directly from the terminal. An app's config vars are accessible via the subcommand `config`. Issuing the command `heroku config --help` displays options for the subcommand.

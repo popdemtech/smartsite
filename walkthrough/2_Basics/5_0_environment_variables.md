@@ -1,5 +1,5 @@
 ## Environment Variables
-The need for environment specific configuration is inherent in developing a web application. Environment variables are variables that describe the environment in which the application or script is being invoked. `my-app` is currently configured to run in two environments: a developer's local system and Heroku for production. As we encountered in the last section, a web application will likely be required to have different configuration for the different environments.
+The need for environment specific configuration is inherent in developing a web application. Environment variables are variables that describe the environment in which the application or script is being invoked. `smartsite` is currently configured to run in two environments: a developer's local system and Heroku for production. As we encountered in the last section, a web application will likely be required to have different configuration for the different environments.
 
 Specifically, the application needed to be aware of which environment it was running in to know with what `baseUrl` to configure the Auth0 middleware.
 
@@ -13,14 +13,14 @@ const config = {
 };
 ```
 
-Environment variables are the solution for the differing configuration variables, yet the implementation varies. Currently, `my-app` uses an inline ternary operator to determine a selection between two publically available datum. This solution a) does not scale, and b) will not work for datasets we would not like to be publically exposed.
+Environment variables are the solution for the differing configuration variables, yet the implementation varies. Currently, `smartsite` uses an inline ternary operator to determine a selection between two publically available datum. This solution a) does not scale, and b) will not work for datasets we would not like to be publically exposed.
 
 To get a good grasp on the issues of scalability and security, let's look at the example of adding a new application configuration that will need to be different per environment. For illustration, we'll consider adding database credentials. A database connection requires the Node.js application to be configured with a username, password, and host URL to authenticate with the database server. These values will be different between environments.
 
 As a look ahead, the foundations covered here will be implemented in the **Database** section.
 
 ### Scalability
-Because `my-app` runs in only two environments, checking if an environment variable is one of the possible values is able to be accomplished in one line. But what if there were more than two environments? To use the example of adding database credentials, the application will need to be configured for development, production and *test* environment -- this would require a check for one of three values.
+Because `smartsite` runs in only two environments, checking if an environment variable is one of the possible values is able to be accomplished in one line. But what if there were more than two environments? To use the example of adding database credentials, the application will need to be configured for development, production and *test* environment -- this would require a check for one of three values.
 
 <div class="filename">pseudocode</div>
 
@@ -56,19 +56,19 @@ const environments = {
   "development": {
     "dbUser": "popdemtech",
     "dbPassword": "popdemtech123",
-    "dbName": "my-app",
+    "dbName": "smartsite",
     "dbHost": "localhost:5432"
   },
   "production": {
-    "dbUser": "my-app",
+    "dbUser": "smartsite",
     "dbPassword": "myappXYZ123",
-    "dbName": "my-app",
-    "dbHost": 'heroku-postgres://my-app',
+    "dbName": "smartsite",
+    "dbHost": 'heroku-postgres://smartsite',
   },
   "test": {
     "dbUser": "popdemtech",
     "dbPassword": "popdemtech123",
-    "dbName": "my-app-test",
+    "dbName": "smartsite-test",
     "dbHost": "localhost:5432"
   }
 };
@@ -105,10 +105,10 @@ The need for security arises when a web application needs access to data that sh
 ```javascript
 const environments = {
   "production": {
-    "dbUser": "my-app",
+    "dbUser": "smartsite",
     "dbPassword": "myappXYZ123",
-    "dbName": "my-app",
-    "dbHost": 'heroku-postgres://my-app',
+    "dbName": "smartsite",
+    "dbHost": 'heroku-postgres://smartsite',
   }
 };
 ```

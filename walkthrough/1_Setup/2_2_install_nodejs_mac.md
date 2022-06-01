@@ -95,7 +95,7 @@ $ node -v
 v16.14.2
 ```
 
-Now that Node is installed, we'll get to building out `my-app`. Keep the following in mind: Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, developer libraries (things that can be `npm install`ed), and more. The Node.js ecosystem is ripe for software creation.
+Now that Node is installed, we'll get to building out `smartsite`. Keep the following in mind: Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, developer libraries (things that can be `npm install`ed), and more. The Node.js ecosystem is ripe for software creation.
 
 ## Resources
 

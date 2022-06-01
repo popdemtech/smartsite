@@ -12,11 +12,11 @@ Add a section to `index.liquid` that renders passed in variables.
 ```html
 <!DOCTYPE html>
 <head>
-  <title>My App</title>
+  <title>SmaRtsite</title>
 </head>
 <html>
   <body>
-    <h1>Welcome to My App!</h1>
+    <h1>Welcome to SmaRtsite!</h1>
     <p>This application is running in the <b>{{ nodeEnv }}</b> environment.</p>
     {% if debug %}
       <p><b>Debug Information</b></p>
@@ -56,7 +56,7 @@ To see the new changes, request the page with a `debug` query string parameter: 
 [image debug information]
 
 ### 4. `git commit`
-Dynamically rendering the index view within `my-app` is a significant unit of development. This is a perfect time to save state to version control.
+Dynamically rendering the index view within `smartsite` is a significant unit of development. This is a perfect time to save state to version control.
 
 <div class="filename">command line</div>
 

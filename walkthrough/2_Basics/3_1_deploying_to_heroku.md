@@ -1,7 +1,7 @@
 ## Deploying to Heroku
 
 ### Prerequisites
-Heroku manages application deployments with Git. A Git application repository is Prerequisite 0, and necessary for Heroku deployment. A `my-app` Git repository was initialized in a previous section, but keep this requirement in mind for any future new build.
+Heroku manages application deployments with Git. A Git application repository is Prerequisite 0, and necessary for Heroku deployment. A `smartsite` Git repository was initialized in a previous section, but keep this requirement in mind for any future new build.
 
 1. Create a Heroku account
 To get started with Heroku, you will need a Heroku account. If you do not yet have a Heroku account, navigate to [heroku.com](https://heroku.com) and create one.
@@ -17,14 +17,14 @@ Run the `heroku create` command. Use the optional `<appName>` parameter to creat
 ```bash
 $ heroku create <appName>
 ```
-Replace `<appName>` with your choice of app name. This affects the application's URL. For example, `heroku create my-app` will be accessible from the URL `my-app.herokuapp.com`. The output of the command will list the remote application's URL.
+Replace `<appName>` with your choice of app name. This affects the application's URL. For example, `heroku create smartsite` will be accessible from the URL `smartsite.herokuapp.com`. The output of the command will list the remote application's URL.
 
 <div class="filename">command line</div>
 
 ```bash
-$ heroku create my-app
-Creating ⬢ my-app... done
-https://my-app.herokuapp.com/ | https://git.heroku.com/my-app.git
+$ heroku create smartsite
+Creating ⬢ smartsite... done
+https://smartsite.herokuapp.com/ | https://git.heroku.com/smartsite.git
 ````
 
 Heroku subdomains must be unique. If the `<appName>` selected is already in use, you will need to re-run the command with a new name. If no `<appName>` is provided, creates the app with a random slug. For example `heroku create` with no name specified will create the URL with a random subdomain such as `sleepy-meadow-81798.herokuapp.com`.

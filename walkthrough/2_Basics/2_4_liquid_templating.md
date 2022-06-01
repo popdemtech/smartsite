@@ -9,7 +9,7 @@ Within the `views` directory, create a new file names `hello-world.liquid`.
 ```html
 <!DOCTYPE html>
 <head>
-  <title>My App</title>
+  <title>SmaRtsite</title>
 </head>
 <html>
   <body>
@@ -46,7 +46,7 @@ With the server running (`npm run start`), navigate to `localhost:3000/hello-wor
 
 Take a look at `index.liquid` and `hello-world.liquid`. Both pages have the standard HTML boilerplate -- `<html>`, `<head>`, `<body>` -- in common. In fact, any new HTML page will need the basic HTML layout. As front-end development development, it is highly likely that `CSS` and JavaScript assets will be shared between pages. Given the current paradigm of fully separating each web page, a developer adding a global CSS asset would have to add a `<link>` tag *each* .liquid file.
 
-Standard application of the DRY principle (Don't Repeat Yourself) dictates we isolate and define repeated patterns, and reference the one-time definition where necessary. To DRY up `my-app`'s presentational layer, we need to isolate the base HTML markup layout, and implement the layout in each of the view scripts. This strategy is known as "template inheritance."
+Standard application of the DRY principle (Don't Repeat Yourself) dictates we isolate and define repeated patterns, and reference the one-time definition where necessary. To DRY up `smartsite`'s presentational layer, we need to isolate the base HTML markup layout, and implement the layout in each of the view scripts. This strategy is known as "template inheritance."
 
 ### 3. Add a Liquid `layout`
 Liquid has a standard concept of a "layout" template. A layout template defines whatever view logic it is meant to encapsulate, and defines areas within its markup meant to be customized by each implementer of the layout.
@@ -59,7 +59,7 @@ Create a file to serve as the layout. This file will contain HTML boilerplate, a
 <!DOCTYPE html5>
 <html>
   <head>
-    <title>my-app</title>
+    <title>smartsite</title>
   </head>
   <body>
     <header>
@@ -117,7 +117,7 @@ Isolating the base HTML into a layout was an improvement to the codebase in term
 {% layout 'default-layout.liquid' %}
 
 {% block content %}
-  <h1>Welcome to My App!</h1>
+  <h1>Welcome to SmaRtsite!</h1>
   {% if debug %}
     <p><b>Debug Information</b></p>
     <p>Node version: {{ nodeVersion }}</p>
@@ -128,7 +128,7 @@ Isolating the base HTML into a layout was an improvement to the codebase in term
 
 Again, the child page must define its parent `layout` and the `content` block to fill in the layout's `content` block.
 
-Navigating to the root route, `/`, in the broswer should render the `Welcome to My App!` heading as well as the Header and footer defined in `default-layout.liquid`.
+Navigating to the root route, `/`, in the broswer should render the `Welcome to SmaRtsite!` heading as well as the Header and footer defined in `default-layout.liquid`.
 
 ### Review
 
@@ -145,7 +145,7 @@ As new pages are added to the application, it is good practice to give users an 
 <div class="filename">views/index.liquid</div>
 
 ```html
-<h1>Welcome to My App!</h1>
+<h1>Welcome to SmaRtsite!</h1>
 <p>Links</p>
 <ul>
   <li><a href="/hello-world">hello-world</a></li>
@@ -153,7 +153,7 @@ As new pages are added to the application, it is good practice to give users an 
 ```
 
 ### 7. `git commit`
-Creating a view layout architecture within `my-app` is a significant unit of development. Time to save to version control.
+Creating a view layout architecture within `smartsite` is a significant unit of development. Time to save to version control.
 
 <div class="filename">command line</div>
 

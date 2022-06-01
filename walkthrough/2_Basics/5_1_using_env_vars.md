@@ -1,5 +1,5 @@
 ## Using Environment Variables
-As covered in the last section, environment variables are used to capture environment specifc configuration. We will use the conventions outlined in the previous section to handle environment variables in `my-app`.
+As covered in the last section, environment variables are used to capture environment specifc configuration. We will use the conventions outlined in the previous section to handle environment variables in `smartsite`.
 
 The Node.js community has converged on the `dotenv` library to manage environment variables in application code. We will add `dotenv` to the application and use environment variables to manage Auth0 configuration variables.
 
@@ -139,7 +139,7 @@ $ npm run start
 The authentication flow should perform as usual.
 
 ### 6. Add a Route
-Add to the chronicle of `my-app` by adding a webpage that renders dynamic content based on environment variables.
+Add to the chronicle of `smartsite` by adding a webpage that renders dynamic content based on environment variables.
 
 1. Create a `GET` route
 Define a route on the Express app that renders a template, `env-vars.liquid`, with local variables.

@@ -1,4 +1,3 @@
-'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('BookSections', {
@@ -17,6 +16,12 @@ module.exports = {
       },
       content: {
         type: Sequelize.TEXT
+      },
+      sectionType: {
+        type: Sequelize.STRING
+      },
+      sequence: {
+        type: Sequelize.INTEGER
       },
       bookId: {
         type: Sequelize.INTEGER,

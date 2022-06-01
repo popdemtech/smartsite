@@ -13,7 +13,7 @@ The separation of concerns between the routing and view layers is standard pract
 ### The Presentation Layer
 It is safe to expect web-traffic to be viewed using a internet browsing application such as Chrome or Microsoft Edge. Modern internet broswers are equipped to translate many common web response formats into human usable form. The most familiar of these formats is likely HTML.
 
-To start `my-app`'s presentation layer, we will send a basic HTML file.
+To start `smartsite`'s presentation layer, we will send a basic HTML file.
 
 1. Create a file named `index.html` in the root directory.
 
@@ -22,11 +22,11 @@ To start `my-app`'s presentation layer, we will send a basic HTML file.
 ```html
 <!DOCTYPE html>
 <head>
-  <title>My App</title>
+  <title>SmaRtsite</title>
 </head>
 <html>
   <body>
-    <h1>Welcome to My App!</h1>
+    <h1>Welcome to SmaRtsite!</h1>
   </body>
 </html>
 ```

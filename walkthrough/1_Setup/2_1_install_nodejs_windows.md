@@ -166,7 +166,7 @@ visualstudio2019buildtools 16.11.9.0
 
 In particular, check for the existance of visualstudio-installer, visualstudio2019-workload-vctools, and visualstudio2019buildtools libraries. (Note: The exact version and name of the Visual Studio tool may have progressed to higher versions than in the example output.)
 
-Now that Node is installed, we'll get to building out `my-app`. Keep the following in mind: Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, developer libraries (things that can be `npm install`ed), and more. The Node.js ecosystem is ripe for software creation.
+Now that Node is installed, we'll get to building out `smartsite`. Keep the following in mind: Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, developer libraries (things that can be `npm install`ed), and more. The Node.js ecosystem is ripe for software creation.
 
 ### Resources
 

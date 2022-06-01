@@ -1,5 +1,5 @@
 ## Add a Template Engine
-The Express ecosystem supports many trusted template languages. `my-app` will use the Liquid template language.
+The Express ecosystem supports many trusted template languages. `smartsite` will use the Liquid template language.
 
 ### 1. Install template libraries
 The Node.js application requires functionality for parsing and rendering the template language into HTML. The package `liquidjs` provides the JavaScript bindings for Liquid template rendering. use `npm install` to add the library.
@@ -32,11 +32,11 @@ A liquid template file supports all valid HTML with the additional functionality
 ```html
 <!DOCTYPE html>
 <head>
-  <title>My App</title>
+  <title>SmaRtsite</title>
 </head>
 <html>
   <body>
-    <h1>Welcome to My App!</h1>
+    <h1>Welcome to SmaRtsite!</h1>
   </body>
 </html>
 ```
@@ -64,10 +64,10 @@ app.get('/', function(request, response) {
 ### 5. Configure view options
 An Express application can be configured with a variety of view options. Setting these options globally well explicity set filesystem architecture, and often allows for cleaner code in Express middleware and improves developer experience.
 
-To continue the trend of clearly separating concerns, the architecture of `my-app` will utilize a views directory. Once created, files that are meant to be rendered and/or sent as a user response should be placed in this folder to clearly separate the presentation layer from the JavaScript logic.
+To continue the trend of clearly separating concerns, the architecture of `smartsite` will utilize a views directory. Once created, files that are meant to be rendered and/or sent as a user response should be placed in this folder to clearly separate the presentation layer from the JavaScript logic.
 
 1. Create a new folder named `views` in the root directory
-Express, by default, will look for views (i.e. templates) in a directory named `views`. Specifically, it will look for a directory matching the definition `process.cwd() + '/views'`, where `process.cwd()` is the "current working directory" (`cwd`). As most node applications initialize from the root directory, the expanded file path is `<root directory>/views`. Although `my-app` will utilize the default, this setting is configurable.
+Express, by default, will look for views (i.e. templates) in a directory named `views`. Specifically, it will look for a directory matching the definition `process.cwd() + '/views'`, where `process.cwd()` is the "current working directory" (`cwd`). As most node applications initialize from the root directory, the expanded file path is `<root directory>/views`. Although `smartsite` will utilize the default, this setting is configurable.
 
 2. Move `index.liquid` into the `views` folder.
 
@@ -76,11 +76,11 @@ Express, by default, will look for views (i.e. templates) in a directory named `
 ```html
 <!DOCTYPE html>
 <head>
-  <title>My App</title>
+  <title>SmaRtsite</title>
 </head>
 <html>
   <body>
-    <h1>Welcome to My App!</h1>
+    <h1>Welcome to SmaRtsite!</h1>
   </body>
 </html>
 ```
@@ -116,7 +116,7 @@ app.get('/', function(request, response) {
 The application should work as expected.
 
 ### 6. `git commit`
-Configuring and initializing the view engine within `my-app` is a significant unit of development. This is a perfect time to bookmark filesystem state within version control.
+Configuring and initializing the view engine within `smartsite` is a significant unit of development. This is a perfect time to bookmark filesystem state within version control.
 
 <div class="filename">command line</div>
 

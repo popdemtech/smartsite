@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     slug: DataTypes.STRING,
     content: DataTypes.TEXT,
+    sectionType: DataTypes.STRING,
+    sequence: DataTypes.INTEGER,
     bookId: {
       type: DataTypes.INTEGER,
       references: {

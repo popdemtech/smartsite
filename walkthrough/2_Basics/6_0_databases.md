@@ -35,10 +35,10 @@ Finally, consider overarching questions that relate to development and maintance
 
 From questions such as these, parse out the top three considerations that are important to the decision.
 
-For `my-app`, three requirements stick out:
+For `smartsite`, three requirements stick out:
 
-* Heroku add-ons: `my-app` already deployed on Heroku. A single-click, Heroku add-on will be ideal.
-* Free tier: `my-app` is an open-source walkthrough that offers introductory Node.js guidance for developers of all budgets.
-* SQL: SQL is **the** industry standard language of relational databases. It's likely a builder of `my-app` is already familiar with its syntax, and, if not, there are decades worth of resources to extend one's knowledge of it.
+* Heroku add-ons: `smartsite` already deployed on Heroku. A single-click, Heroku add-on will be ideal.
+* Free tier: `smartsite` is an open-source walkthrough that offers introductory Node.js guidance for developers of all budgets.
+* SQL: SQL is **the** industry standard language of relational databases. It's likely a builder of `smartsite` is already familiar with its syntax, and, if not, there are decades worth of resources to extend one's knowledge of it.
 
-`my-app` will use PostgreSQL as its persistent database. Postgres is a open-source and battle-tested SQL based database server and library. There is a Heroku add-on, Heroku Postgres, that will be used for the production database. Locally, developers will need to install the Postgres database.
+`smartsite` will use PostgreSQL as its persistent database. Postgres is a open-source and battle-tested SQL based database server and library. There is a Heroku add-on, Heroku Postgres, that will be used for the production database. Locally, developers will need to install the Postgres database.

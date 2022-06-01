@@ -7,7 +7,7 @@ The `npm init` command will start a setup wizard for the Node application. In Te
 <div class="filename">command line</div>
 
 ```bash
-$ cd path/to/my-app
+$ cd path/to/smartsite
 $ npm init
 ```
 
@@ -29,35 +29,35 @@ Use `npm install <pkg>` afterwards to install a package and
 save it as a dependency in the package.json file.
 
 Press ^C at any time to quit.
-package name: (my-app) 
+package name: (smartsite) 
 version: (1.0.0) 
-description: my-app Web Application Guide
+description: smartsite Web Application Guide
 entry point: (index.js) 
 test command: 
-git repository: (https://github.com/popdemtech/my-app.git) 
+git repository: (https://github.com/popdemtech/smartsite.git) 
 keywords: 
 author: Popular Demand
 license: (ISC) 
-About to write to /Users/popdemtech/popdemtech/my-app/package.json:
+About to write to /Users/popdemtech/popdemtech/smartsite/package.json:
 
 {
-  "name": "my-app",
+  "name": "smartsite",
   "version": "1.0.0",
-  "description": "my-app Web Application Guide",
+  "description": "smartsite Web Application Guide",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/popdemtech/my-app.git"
+    "url": "git+https://github.com/popdemtech/smartsite.git"
   },
   "author": "Popular Demand",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/popdemtech/my-app/issues"
+    "url": "https://github.com/popdemtech/smartsite/issues"
   },
-  "homepage": "https://github.com/popdemtech/my-app#readme"
+  "homepage": "https://github.com/popdemtech/smartsite#readme"
 }
 
 
@@ -79,7 +79,7 @@ In the root of the project, create a file titled `index.js`. Any valid JavaScrip
 <div class="filename">index.js</div>
 
 ```javascript
-console.log('Welcome to My App!');
+console.log('Welcome to SmaRtsite!');
 ```
 
 At this point, the application can be run with `node index.js`.
@@ -112,4 +112,4 @@ A script defined in `"scripts"` can be invoked from the command line with `npm r
 $ npm run start
 ```
 
-You should see the output `Welcome to My App!` in the console. Just like that we have a simple yet functional Node.js application.
+You should see the output `Welcome to SmaRtsite!` in the console. Just like that we have a simple yet functional Node.js application.
