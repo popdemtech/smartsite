@@ -92,7 +92,7 @@ app.get('/books', async function(request, response) {
 });
 
 app.get('/books/:slug', async function(request, response, next) {
-  const book = await Book.findOne({
+  const { BookSections, ...book } = await Book.findOne({
     where: { slug: request.params.slug },
     include: BookSection
   });
@@ -101,7 +101,9 @@ app.get('/books/:slug', async function(request, response, next) {
     next();
     return;
   }
-  response.render('books/show', { book });
+  
+  const bookTree = BookSection.toTree(BookSections);
+  response.render('books/show', { book, bookTree });
 });
 
 app.post('/api/clicks', async function(request, response, next) {

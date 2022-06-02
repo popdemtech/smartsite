@@ -9,9 +9,19 @@
   <p>{{ book.description }}</p>
   <hr>
   <div class="book-sections">
-    {% for section in book.BookSections %}
+    {% for section in bookTree %}
       <div class="book-section-panel" style="border:1px solid #ababab;margin-bottom: 20px;padding:20px;">
         <h2>{{ section.title }}</h2>
+
+        {% if section.childSections %}
+          <div class="child-section-list">
+            <ul>
+              {% for childSection in section.childSections %}
+                <li>{{ childSection.title }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
       </div>
     {% endfor %}
   </div>

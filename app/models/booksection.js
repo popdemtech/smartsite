@@ -1,6 +1,5 @@
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+const { groupBy } = require('lodash');
 
 module.exports = (sequelize, DataTypes) => {
   class BookSection extends Model {
@@ -12,6 +11,29 @@ module.exports = (sequelize, DataTypes) => {
       BookSection.hasMany(models.BookSection, {
         foreignKey: 'parentSectionId'
       });
+    }
+
+    static toTree(bookSections) {
+      const byParentSection = groupBy(bookSections, 'parentSectionId');
+      const getChildren = (sectionId) => {
+        const children = byParentSection[sectionId];
+        if (!children) return;
+
+        for (let i = 0; i > children.length; i++) {
+          let child = children[i];
+          let grandChildren = getChildren(byParentSection[child.id]);
+          child['childSections'] = grandChildren;
+        }
+
+        return children;
+      };
+
+      const root = byParentSection[null];
+      root.forEach((section) => {
+        section['childSections'] = getChildren(section.id);
+      });
+
+      return root;
     }
   }
 
