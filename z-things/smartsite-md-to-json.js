@@ -45,17 +45,26 @@ const bookSections = fs.readdirSync(BOOK_DIR).map((filename) => {
   childFiles = childFiles.map((file) => {
     let [parentChapter, sequence, slug, title] = parseFilename(file);
     const content = fs.readFileSync(path.join(filePath, file), { encoding: 'utf8' });
+    const sectionType = sequence == 0 ? 'chapter' : 'section';
+    sequence = sectionType == 'chapter' ? parentChapter : sequence;
+
+    console.log('=============')
+    console.log('sectionType ', sectionType)
+    console.log('sequence ', sequence)
+    console.log('parent section type', sectionType == 'chapter' ? 'part' : 'chapter')
+    console.log('parent section sequence ', parentSectionSequence: sectionType == 'chapter' ? bookSection.sequence : parentChapter)
+    console.log('=============')
 
     return {
       title: title,
       slug: slug,
       content: content,
-      sectionType: sequence == 0 ? 'chapter' : 'section',
+      sectionType: sectionType,
       sequence: sequence,
       parentSection: {
         parentSectionPart: bookSection.sequence,
-        parentSectionType: sequence == 0 ? 'part' : 'chapter',
-        parentSectionSequence: sequence == 0 ? bookSection.sequence : parentChapter
+        parentSectionType: sectionType == 'chapter' ? 'part' : 'chapter',
+        parentSectionSequence: sectionType == 'chapter' ? bookSection.sequence : parentChapter
       }
     };
   });
