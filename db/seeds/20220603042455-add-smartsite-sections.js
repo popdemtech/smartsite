@@ -22,44 +22,63 @@ const sectionsByPartChapter = bookSectionsJson.reduce((sectionsByPartChapter, bo
 module.exports = {
   async up (queryInterface, Sequelize) {
     const book = await Book.findOne({ where: { title: 'Build a SmartSite' } });
-    const bookParts = await BookSection.findAll({
+    const bookSections = await BookSection.findAll({
       where: {
         bookId: book.id,
-        sectionType: 'part'
+        sectionType: 'section'
       }
     });
+    
+    const allSections = [];
+    for (let partSequence in sectionsByPartChapter) {
+      let bookPart = await BookSection.findOne({ where: {
+        bookId: book.id,
+        sectionType: 'part',
+        sequence: Number(partSequence)
+      }});
 
-    const allChapters = [];
-    for (let partSequence in sectionsByChapter) {
-      const part = bookParts.find((p) => p.sequence == partSequence);
-      let chapters = sectionsByChapter[partSequence].map((chapter) => {
-        delete chapter.parentSection;
-        chapter.bookId = part.bookId;
-        chapter.parentSectionId = part.id;
-        chapter.createdAt = new Date();
-        chapter.updatedAt = new Date();
-        return chapter;
-      });
-      allChapters.push(...chapters);
+      for (let chapterSequence in sectionsByPartChapter[partSequence]) {
+        let chapter = await BookSection.findOne({ where: {
+          bookId: book.id,
+          sectionType: 'chapter',
+          parentSectionId: bookPart.id,
+          sequence: Number(chapterSequence)
+        }});
+
+        let sections = sectionsByPartChapter[partSequence][chapterSequence];
+
+        sections = sections.map((section) => {
+          section.parentSectionId = chapter.id;
+          section.bookId = book.id;
+          section.createdAt = new Date();
+          section.updatedAt = new Date();
+          return section;
+        });
+
+        allSections.push(...sections);
+      }
     }
 
-    await queryInterface.bulkInsert('BookSections', allChapters, {});
+    return await queryInterface.bulkInsert('BookSections', allSections, {});
   },
 
   async down (queryInterface, Sequelize) {
     const book = await Book.findOne({ where: { title: 'Build a SmartSite' } });
 
-    const chapterSlugs = bookSectionsJson.reduce((slugs, section) => {
+    const sectionSlugs = bookSectionsJson.reduce((slugs, section) => {
       const { childSections } = section;
       const newSlugs = childSections
-        .filter((childSection) => childSection.sectionType == 'chapter')
+        .filter((childSection) => childSection.sectionType == 'section')
         .map((childSection) => childSection.slug);
       return [...slugs, ...newSlugs];
     }, []);
 
-    await queryInterface.bulkDelete('BookSections', {
+    return await queryInterface.bulkDelete('BookSections', {
       slug: {
-        [Op.in]: chapterSlugs
+        [Op.in]: sectionSlugs
+      },
+      sectionType: {
+        [Op.eq]: 'section'
       },
       bookId: {
         [Op.eq]: book.id

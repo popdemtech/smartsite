@@ -19,9 +19,9 @@ module.exports = (sequelize, DataTypes) => {
         const children = byParentSection[sectionId];
         if (!children) return;
 
-        for (let i = 0; i > children.length; i++) {
+        for (let i = 0; i < children.length; i++) {
           let child = children[i];
-          let grandChildren = getChildren(byParentSection[child.id]);
+          let grandChildren = getChildren(child.id);
           child['childSections'] = grandChildren;
         }
 
