@@ -1,9 +1,0 @@
-<h2>{{ section.title }}</h2>
-
-{% if section.childSections %}
-  <div class="child-section-list">
-	{% for childSection in section.childSections %}
-	{% render 'books/book-section-list-item.liquid', section: childSection, depth: 1 %}
-	{% endfor %}
-  </div>
-{% endif %}

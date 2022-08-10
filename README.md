@@ -1,10 +1,10 @@
-# `pd-service` by Popular Demand
+# Build a `smartsite` by Popular Demand
 
 *Web Application Fundamentals Made Simple*
 
 Hey everyone. Welcome to a guide to Web Development.
 
-The purpose of `pd-service` is to provide interested individuals with
+The purpose of `smartsite` is to provide interested individuals with
 a launch point for building a personal web application.
 
 Before beginning, the individual must be able to:
@@ -71,12 +71,12 @@ Begin with **Setup** -- install the libraries and run the Node installation comm
 As you continue through the tutorial, what began as a directory with not much more than a walkthrough blossoms into a featured and interactive 
 
 ## What Next
-After you've comepleted building out `pd-service`, you will have the tools of web development in your reach. With the skills, you can:
+After you've completed building out the `smartsite`, you will have the tools of web development in your reach. With the skills, you can:
 * Provide value on the internet with your app ideas
 * Continue learning web development in pursuit of a career in software
 * Prototype the next Big Idea (you'll know as much as Zuckerberg)
 
-If you find yourself building out cool new features in your `pd-service`, aid future learners by contributing a walkthrough to the `pd-service` parent repository.
+If you find yourself building out cool new features in your `smartsite`, aid future learners by contributing a walkthrough to the `smartsite` parent repository.
 It will be added to the **Features** section as an optional add-on. Thanks in advance!
 
 Cheers and Happy Building.
