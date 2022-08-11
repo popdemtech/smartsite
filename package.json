@@ -1,0 +1,23 @@
+{
+  "name": "smartsite",
+  "version": "1.0.0",
+  "description": "POPDEMTECH walkthough of build a smartsite",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/popdemtech/smartsite.git"
+  },
+  "keywords": [
+    "innovation"
+  ],
+  "author": "POPDEMTECH",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/popdemtech/smartsite/issues"
+  },
+  "homepage": "https://github.com/popdemtech/smartsite#readme"
+}
