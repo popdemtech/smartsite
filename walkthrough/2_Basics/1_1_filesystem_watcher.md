@@ -40,7 +40,7 @@ Restarting the server after every change is tedious, time-consuming, and present
 
 <hr>
 
-## 1. Add nodemon
+## Add nodemon
 Nodemon is a library that is used to initialize a process from the local operating system, and is therefore a development dependency rather than an application dependency. Install the library as a dev dependency.
 
 ### 1. Install nodemon
@@ -91,7 +91,7 @@ app.get('/', function(request, response) {
 ### 5. Check for changes
 In the broswer, navigate to `localhost:3000`, and check out the heading. It now says `Welcome to SmaRtsite!` without needing a server restart. The filesystem watcher is working!
 
-## 2. Git commit the changes
+### 6. Git commit the changes
 This was a significant unit of development. A development library was added, and it's functionality was fully implemented. `git commit` the changes to signify the completion of this development.
 
 <div class="filename">command line</div>
