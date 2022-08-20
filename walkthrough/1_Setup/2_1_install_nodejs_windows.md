@@ -1,4 +1,4 @@
-## Install Node.js on Windows
+# Install Node.js on Windows
 
 ### 1. Navigate to nodejs.org
 

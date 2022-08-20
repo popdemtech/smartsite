@@ -1,7 +1,7 @@
-## Initialize Node
+# Initialize Node
 It's time to create the first files of the web application. 
 
-### Initialize
+## Initialize
 The `npm init` command will start a setup wizard for the Node application. In Terminal, navigate to the application directory, and run `npm init`.
 
 <div class="filename">command line</div>
@@ -66,14 +66,14 @@ Is this OK? (yes)
 
 This command generates a `package.json` file in the directory in which it is run. `package.json` is used for configuration of Node.js applications, and will be revisited throughout the development process.
 
-### Start the application
+## Start the application
 An application is a software script that is executed on a computer. To "start" this application, like every software, application code must be written and a command that starts the application must be defined.
 
 Node.js scripts are run by passing its filename to the `node` executable. The `node` program reads the file, interprets the Javascript, and runs the functionality specified by the application.
 
 To run the application, first create a file, `index.js` for the application code.
 
-1. Create `index.js`
+### 1. Create `index.js`
 In the root of the project, create a file titled `index.js`. Any valid JavaScript can go in this file -- a `console.log` statement is shown in the example.
 
 <div class="filename">index.js</div>
@@ -84,7 +84,7 @@ console.log('Welcome to SmaRtsite!');
 
 At this point, the application can be run with `node index.js`.
 
-2. Create the start script
+### 2. Create the start script
 A Node.js application's `package.json` is the place to define commonly used commands such as `start` and `test`. A top-level property `"scripts"` is used to map developer-selected command names to executable scripts. `package.json` already contains a `test` script.
 
 Add a script called `start` that executes the `node` executable with `index.js`, and save the file.
@@ -104,7 +104,7 @@ Add a script called `start` that executes the `node` executable with `index.js`,
 
 A script defined in `"scripts"` can be invoked from the command line with `npm run [script]`.
 
-3. Run start script
+### 3. Run start script
 
 <div class="filename">command line</div>
 

@@ -1,4 +1,4 @@
-## Install Node.js on MacOS
+# Install Node.js on MacOS
 
 To develop a Node.js application on MacOS, the Node binaries must be installed. This guide walks through installing Homebrew, Node.js, and Node Version Manager (nvm).
 

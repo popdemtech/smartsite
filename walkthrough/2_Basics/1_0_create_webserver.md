@@ -1,4 +1,4 @@
-## Create the Web Server
+# Create the Web Server
 As it stands, `smartsite` is a functioning Node.js application, but it doesn't do much. It prints a message in the terminal. We're here to build an application that serves web traffic. This means a user can navigate to our web pages and functionality from an internet browser.
 
 For the purposes of this guide, the term "web server" should be taken to mean an application that serves web traffic. The term "web server" can (and often does) apply to any physical or digital component that makes up the OSI model. These components funtionally operate different levels of abstraction, and in the most general sense, constitute a pipeline of request handling. Node.js web servers operate at the "Application Layer" of the model.
@@ -7,7 +7,7 @@ A web server library written for the JavaScript ecosystem will be included into 
 
 Express [https://expressjs.com](https://expressjs.com) is a web framework that checks all of the boxes.
 
-### Express
+## Express
 
 Express provides an abstraction over low-level HTTP handling by using sensible defaults for HTTP configuration, and providing a simple, declarative interface for developing application routes. For advances users, Express allows for low-level configuation as the needs of the application are discovered.
 

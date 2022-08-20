@@ -1,4 +1,4 @@
-## README.md
+# README.md
 This section ensures the you have the required libraries and programs installed.
 
 We will be installing:

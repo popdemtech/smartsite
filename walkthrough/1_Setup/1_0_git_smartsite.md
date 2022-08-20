@@ -1,7 +1,7 @@
-## Git `smartsite`
+# Git `smartsite`
 Git the only developer tool required before beginning this walkthrough. It's required for you to run the first command, `git clone`, and sync the starting directory to your local computer.
 
-### What is Git?
+## What is Git?
 
 Imagine every time you made a change to a project, you had to make a brand new directory, copy your existing work into it, make changes in this totally new directory, then _somehow_ totally replace the old work with the new work both locally and in production when the changes are finished. In the early days of the internet, this was solved with creative use of file transport protocol (FTP). The Git program both solves the tedious workflow and improves on full-file, FTP syncing.
 

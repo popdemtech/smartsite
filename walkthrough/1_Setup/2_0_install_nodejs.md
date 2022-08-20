@@ -1,4 +1,4 @@
-## Install Node.js
+# Install Node.js
 
 This walkthrough will cover building a web server application using Node.js. While JavaScript was initially developed for and still maintains its scripting dominance in a browser environment, Node.js is a JS runtime for use outside of a browser.
 
