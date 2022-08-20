@@ -1,4 +1,4 @@
-## View Templates
+# View Templates
 
 Static HTML files make up the majority of web pages delivered on the internet. An HTML file is considered "static" because the content is the same regardless of user identity or any other real-time factors. The benefit of a web *application* is that the application layer has the ability to process the user request and deliver a dynamic experience.
 
