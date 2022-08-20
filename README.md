@@ -64,6 +64,8 @@ Begin by `git clone`ing the parent repository.
 $ git clone [repo_url]
 ```
 
+If you do not `git` installed yet, see the **Setup: Git SmartSite** section.
+
 The directory comes with the walkthrough containing the steps for building
 out a Node.js application -- complete with local and deployed environment setups.
 
