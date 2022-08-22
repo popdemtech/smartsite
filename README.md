@@ -59,9 +59,9 @@ The Features are standalone front-end or full-stack modules that can be complete
 in any order.
 
 ## How to Begin
-Begin by `git clone`ing the parent repository.
+Begin by `git clone`ing this repository.
 ```
-$ git clone [repo_url]
+$ git clone https://github.com/popdemtech/smartsite.git
 ```
 
 If you do not `git` installed yet, see the **Setup: Git SmartSite** section.
