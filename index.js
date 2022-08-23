@@ -3,7 +3,7 @@ const app = express();
 const PORT = 3000;
 
 app.get('/', function(request, response) {
-  response.send('<h1>Welcome to SmaRtsite!</h1>');
+  response.sendFile(__dirname + '/index.html');
 });
 
 app.listen(PORT, () => {
