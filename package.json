@@ -4,7 +4,7 @@
   "description": "POPDEMTECH walkthough of build a smartsite",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "npx nodemon .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,5 +22,8 @@
   "homepage": "https://github.com/popdemtech/smartsite#readme",
   "dependencies": {
     "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }
