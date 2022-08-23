@@ -21,10 +21,10 @@ To start `smartsite`'s presentation layer, we will send a basic HTML file.
 
 ```html
 <!DOCTYPE html>
-<head>
-  <title>SmaRtsite</title>
-</head>
 <html>
+  <head>
+    <title>SmaRtsite</title>
+  </head>
   <body>
     <h1>Welcome to SmaRtsite!</h1>
     <p>It's a website with computation power!</p>
