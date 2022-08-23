@@ -1,23 +1,28 @@
-## Environment Variables in Production
+# Environment Variables in Production
 A cursory glance at the code changes in the last section reveals that we have removed references to `https://<your-app>.herokuapp.com`, but have yet to replace this value. When `require('dotenv').config()` is invoked, *no values will be appended to* `process.env` *since there is no* `.env` *file in the filesystem pushed to Heroku.*
 
 Different deployment strategies have different requirements for how environment variables are set. Deployment onto a remote Linux machine may require accessing the server via SSH and manualy creating a `.env` file in the remote environment. Containerized deployment often uses platform-specific configuation files -- such as `docker-compose.yml` for organizing the environment.
 
-Heroku's platform-as-a-service solves deployed environment variables in simple terms. Each Heroku application comes with a Settings page for configuring variables within Heroku's web UI. As well, the `heroku` CLI utility provides a one-line command for setting environment variables remotely.
+Heroku's platform-as-a-service solves deployed environment variables quite elegantly. Each Heroku application comes with a Settings page within Heroku's web UI for configuring variables. As well, the `heroku` CLI utility provides a one-line command for setting environment variables remotely.
 
-### Heroku Configuration Variables: Graphic Interface
-Heroku calls environment variables "Config Vars," and these can be found within an application's Settings page.
+## Heroku Configuration Variables: Graphic Interface
+Heroku uses the term **"Config Vars"**, short for "configuation variables," to refer to **environment variables**. Config vars can be found within an application's Settings page.
 
-[heroku application settings.png]
+<div style="text-align:center;padding:20px 0;">
+<img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/smartsite/heroku-settings-page.png?raw=true" alt="screenshot of a heroku application's settings page" style="width:66%;" />
+</div>
 
-Click "Reveal Config Vars" button to show all variables and reveal input fields to edit them. If there are no Config Vars, a descriptive message will be shown. In both cases, a developer can add a new configuration variable directly in this interface by entering a new `KEY` and `VALUE`, and clicking "Add".
+Click "Reveal Config Vars" button to show all variables and reveal input fields to edit them. If there are no Config Vars, a descriptive message will be shown. In both cases, a developer can add a new configuration variable directly in this interface by entering a new `KEY`/`VALUE` pair and clicking "Add".
 
-[heroku empty config vars.png]
+<div style="text-align:center;padding:20px 0;">
+<img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/smartsite/config-vars-empty.png?raw=true" alt="empty list of heroku application config vars" style="width:66%;" />
+<p style="font-size:.8em;" class="image-caption">Empty list of Config vars</p>
+</div>
 
 Feel free to use the graphic interface to set environment variables. The `smartsite` walkthrough details using Heroku's CLI to accomplish this task.
 
-### Heroku Config Vars: Command-Line Interface
-The Heroku CLI allows developers to manage Heroku apps directly from the terminal. An app's config vars are accessible via the subcommand `config`. Issuing the command `heroku config --help` displays options for the subcommand.
+## Heroku Config Vars: Command-Line Interface
+The Heroku CLI allows developers to manage Heroku apps directly from the terminal. An application's config vars are accessible via the subcommand `config`. Issuing the command `heroku config --help` displays options for the subcommand.
 
 <div class="filename">command line</div>
 
@@ -41,20 +46,19 @@ COMMANDS
   config:unset  unset one or more config vars
 ```
 
-### 1. Set a Config Var
-Issue the command `heroku config:set` to set the `NODE_ENV` configuration variable to `production`.
+### 1. Set a config var
+Issue the command `heroku config:set` to set the `NODE_ENV` configuration variable to `production`. Next, check that the variable is set by issuing the command `heroku config` with no options.
 
-**Note:** Remember what Heroku calls "config vars" are more provided to the running application as environment variables.
+**Note:** Remember what Heroku calls "config vars" are more provided to the running application as **environment variables.**
 
 <div class="filename">command line</div>
 
 ```
 $ heroku config:set NODE_ENV=production
+$ heroku config
 ```
 
-Check that the variable is set by issuing the command `heroku config` with no options.
-
-### 2. Set Auth0 Configuration
+### 2. Set the Auth0 configuration
 Use the sme process to set a config var for each of the Auth0 environment variables. The one variable which must be different from local configuration is `AUTH0_BASE_URL`. The example commands cover two methods of setting the variables: one at a time and many at once.
 
 <div class="filename">command line</div>
