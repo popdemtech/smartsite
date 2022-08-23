@@ -44,12 +44,17 @@ const config = {
   secret: 'a long, randomly-generated string stored in env',
   baseURL: 'https://localhost:3001',
   clientID: '[UNIQUE CLIENT ID]',
-  issuerBaseURL: 'https://[UNIQUE ID].us.auth0.com'
+  issuerBaseURL: 'https://[UNIQUE ID].us.auth0.com',
+  routes: {
+    callback: '/auth0/callback'
+  }
 };
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
 ```
+
+**Note:** Be sure to include the `routes` key as shown in the code snippet here. As of this writing, `routes.callback` is required yet not included the code snippet provided by Auth0.
 
 ### 3. Use Auth0
 The snippet provides an example route that utilizes the `isAuthenticated` helper method provided by the `auth` middleware. `smartsite` already has a `/` route, so if you intend to keep the example route, rename its path to avoid pathname conflicts. The following snippet creates a route `/auth-check` which uses the helper method.
@@ -57,7 +62,7 @@ The snippet provides an example route that utilizes the `isAuthenticated` helper
 <div class="filename">index.js</div>
 
 ```javascript
-// req.oidc is provided from the auth router
+// req.oidc is provided by the auth router
 // isAuthenticated is a method on the req.oidc object
 app.get('/auth-check', (req, res) => {
   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
