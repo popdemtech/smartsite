@@ -1,5 +1,9 @@
-## 1. Install PostgreSQL on Windows
-There is a PostgreSQL installer distributed by Enterprise DB (EDB), an enterprise-level Postgres solution. Download the Windows installer from EDB, and follow the steps. https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+# Install PostgreSQL on Windows
+Enterprise DB (EDB), an enterprise-level Postgres solution, distributes the PostgreSQL installer we will use for `smartsite`. Download the Windows installer from EDB, and follow the steps.
+
+<div class="informational">
+The installer is found at https://www.enterprisedb.com/downloads/postgres-postgresql-downloads.
+</div>
 
 Keep note of what is set as the installation directory. The default location is a `C:\Program Files\PostgreSQL\[##]` directory, where `[##]` is the numerical version number of the installation. For example, the installation directory for version 14 is `C:\Program Files\PostgreSQL\14\`.
 

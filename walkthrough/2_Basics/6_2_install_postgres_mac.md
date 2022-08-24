@@ -1,9 +1,12 @@
-## Install PostgreSQL on Mac with Homebrew
+# Install PostgreSQL on Mac
 
-Homebrew is a popular package manager for MacOS. A package manager provides the ability to quickly install packages, their dependency packages, and keep the packages up to date. "Packages" are software libraries and executables generally runnable from a command-line interface.
+To create a database on a MacOS machine, we need to install and initialize the PostgreSQL software. To install PostgreSQL on Mac, we will use the popular Homebrew package manager. Starting the local database is a simple process from there.
 
-1. Install Homebrew
-While we will use Homebrew to install PostgreSQL and its dependencies, we first need to install the Homebrew package itself. If you do not already have Homebrew installed, run the following from a MacOS terminal:
+## Install PostgreSQL
+
+### 1. Homebrew
+
+We covered Homebrew installation in the **Setup** instructions. If you are aware you don't have it installed, install it with the following command:
 
 <div class="filename">command line</div>
 
@@ -11,18 +14,22 @@ While we will use Homebrew to install PostgreSQL and its dependencies, we first 
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-2. Install PostgreSQL
+### 2. Install PostgreSQL
+
+Using Homebrew, install `postgresql`. The final command in this series verifies installation by outputting the installed version.
 
 <div class="filename">command line</div>
 
 ```bash
 $ brew update
 $ brew install postgresql
-$ postgres --v
+$ postgres --version
 ```
 
-3. Create a database cluster
-A database storage area on disk must be initialized before. A database cluster is a collection of databases that is managed by a single instance of a running database server. In file system terms, it is a single directory in which all data will be stored. There is no default location for this to be stored; we will set the location to be `/usr/local/var/postgres`:
+## Create a Database
+
+### 1. Create a database cluster
+A database cluster is the data storage area that is managed by a database server. In file system terms, it is a single directory in which all data will be saved. There is no default location for a cluster, and it *must* be set. We will set the location to be `/usr/local/var/postgres`:
 
 <div class="filename">command line</div>
 
@@ -30,26 +37,29 @@ A database storage area on disk must be initialized before. A database cluster i
 $ initdb /usr/local/var/postgres
 ```
 
-You may see the error message: `initdb: directory "/usr/local/var/postgres" exists but is not empty`. It means the folder you are attempting to create already exists. You are safe to move on to the next step.
+You may see the error message: `initdb: directory "/usr/local/var/postgres" exists but is not empty`. This means the folder you are attempting to create already exists. You are safe to move on to the next step.
 
-4. Start the database server
-Use the command [`pg_ctl`](https://www.postgresql.org/docs/current/app-pg-ctl.html) to control PostgreSQL database servers. The parameter to the `-D` flag indicates the data directory. Use the data directory created in the previous step via `initdb`.
-
-<div class="filename">command line</div>
-
-```bash
-$ pg_ctl -D /usr/local/var/postgres start
-```
-This will log the initialization processes, output `server started`, and return function of the CLI to the user. This command started the database process in the background. To stop the database process, run
+### 2. Start the database server
+The command `pg_ctl` is used to control PostgreSQL database servers. `pg_ctl start` starts a database server. We must also pass the `-D` flag to specify to which data directory the server process should save the data. Use the cluster initialized in the previous step as the data directory.
 
 <div class="filename">command line</div>
 
 ```bash
-$ pg_ctl -D /usr/local/var/postgres stop
+$ pg_ctl start -D /usr/local/var/postgres
 ```
 
-5. Create a database
-Within the database cluster, the `initdb` command created a database named `postgres`. Make an additional database named by your MacOS username with the following command:
+This command starts the database server as a background process and returns function of the terminal interface to the user.
+
+While you should leave the Postgres server running during development of `smartsite`, if you'd like to stop the database server, use the similar `pg_ctl stop` command, and restart it with `pg_ctl start` when desired. Remember to pass the `-D` option.
+
+<div class="filename">command line</div>
+
+```bash
+$ pg_ctl stop -D /usr/local/var/postgres
+```
+
+### 3. Create a database
+In your local environment, you will want a database named after your MacOS user and likely a separate database for each application you develop within locally. For `smartsite`, we will use a Node.js utility to create the application specific database. For now, create a database named after your MacOS user with the PostgreSQL utility command `createdb`.
 
 <div class="filename">command line</div>
 
@@ -58,6 +68,8 @@ $ createdb $USER
 ```
 
 ### References
-Managing Postgres users and privileges: [https://kb.objectrocket.com/postgresql/how-to-list-users-in-postgresql-782](https://kb.objectrocket.com/postgresql/how-to-list-users-in-postgresql-782)
+The `pg_ctl` command - [https://www.postgresql.org/docs](https://www.postgresql.org/docs/current/app-pg-ctl.html)
 
-PostgreSQL Security Best Practices: [https://resources.2ndquadrant.com/hubfs/Whitepaper PDFs/PostgreSQL_Security_Best_Practices_Whitepaper.pdf](https://resources.2ndquadrant.com/hubfs/Whitepaper%20PDFs/PostgreSQL_Security_Best_Practices_Whitepaper.pdf)
+Managing Postgres users and privileges: [https://kb.objectrocket.com/postgresql](https://kb.objectrocket.com/postgresql/how-to-list-users-in-postgresql-782)
+
+PostgreSQL Security Best Practices: [https://resources.2ndquadrant.com](https://resources.2ndquadrant.com/hubfs/Whitepaper%20PDFs/PostgreSQL_Security_Best_Practices_Whitepaper.pdf)
