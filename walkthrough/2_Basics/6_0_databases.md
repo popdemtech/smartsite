@@ -39,4 +39,4 @@ For `smartsite`, three requirements stick out:
 
 ## The Decision
 
-`smartsite` will use PostgreSQL as its persistent database. Postgres is a open-source and battle-tested SQL based database server and library. There is a Heroku add-on, Heroku Postgres, that will be used for the production database. Locally, developers will need to install the Postgres database.
+`smartsite` will use PostgreSQL as its persistent database. PostgreSQL, which is often shortened to "Postgres," is an open-source and massively-used SQL database server and library. There is a Heroku add-on, Heroku Postgres, that will be used for the production database. Locally, developers will need to install the free PostgreSQL software.
