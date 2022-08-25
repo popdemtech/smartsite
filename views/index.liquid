@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>SmartSite</title>
-    </head>
-    <body>
-        <h1>Welcome to SmaRtsite!</h1>
-        <p>This application is running in the <b>{{ nodeEnv }}</b> environment.</p>
-        {% if debug %}
-            <p><b>Debug Information</b></p>
-            <p>Node version: {{ nodeVersion }}</p>
-            <p>Server Time: {{ serverTime }}</p>
-        {% endif %}
-    </body>
-</html>
+{% layout 'default-layout.liquid' %}
+
+{% block content %}
+    <h1>Welcome to SmaRtsite!</h1>
+    <p>This application is running in the <b>{{ nodeEnv }}</b> environment.</p>
+    {% if debug %}
+        <p><b>Debug Information</b></p>
+        <p>Node version: {{ nodeVersion }}</p>
+        <p>Server Time: {{ serverTime }}</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% layout 'default-layout.liquid' %}
+
+{% block content %}
+  <h1>Hello World!</h1>
+
+  {% if showDog %}
+    <img src="https://i.imgur.com/5Swc751.png" alt="brown dog marley" width="150px"/>
+  {% endif %}
+
+  <p>Show Marley with query parameter <code>showDog</code>.</p>
+  <p><code>Page loaded at {{ serverDate }}.</code></p>
+{% endblock %}

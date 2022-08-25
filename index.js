@@ -15,6 +15,14 @@ app.get('/', function(request, response) {
   response.render('index', { debug, nodeVersion, serverTime, nodeEnv });
 });
 
+app.get('/hello-world', function(request, response) {
+  const showDog = request.query.showDog;
+  response.render('hello-world', {
+    showDog,
+    serverDate: new Date()
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`SmaRtsite listening on port ${PORT}`);
 });
