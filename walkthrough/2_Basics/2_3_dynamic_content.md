@@ -47,7 +47,8 @@ app.get('/', function(request, response) {
   const debug = request.query.debug;
   const nodeVersion = process.version;
   const serverTime = new Date();
-  response.render('index', { debug, nodeVersion, serverTime });
+  const nodeEnv = process.env.NODE_ENV || 'development';
+  response.render('index', { debug, nodeVersion, serverTime, nodeEnv });
 });
 ```
 
