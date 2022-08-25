@@ -2,7 +2,7 @@ const express = require('express');
 const { Liquid } = require('liquidjs');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.engine('liquid', new Liquid().express());
 app.set('view engine', 'liquid');
