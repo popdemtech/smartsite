@@ -9,6 +9,8 @@ To get started with Heroku, you will need a Heroku account. If you do not yet ha
 ### 2. Install the Heroku CLI
 Heroku provides a command-line interface so that creating, configuring, and maintaining Heroku applications and add-ons is as easy as a terminal command. These functions ultimately could be done via Heroku's web interface, yet the Heroku terminal commands are much more concise approach to accomplishing these tasks. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) (https://devcenter.heroku.com/articles/heroku-cli).
 
+## Create a Heroku application
+
 ### 1. `heroku create`
 Run the `heroku create` command. Use the optional `<appName>` parameter to create a user friendly slug.
 
@@ -18,7 +20,7 @@ Run the `heroku create` command. Use the optional `<appName>` parameter to creat
 $ heroku create <appName>
 ```
 
-Replace `<appName>` with your choice of app name. The selection of `appName` affects the application's public URLs. For example, `heroku create smartsite` will be accessible from the URL `smartsite.herokuapp.com`. The output of the command will list the remote application's URL.
+Replace `<appName>` with your choice of app name. The selection of `appName` affects the application's public URLs. For example, `heroku create mysmartsite` will be accessible from the URL `mysmartsite.herokuapp.com`. The output of the command will list the remote application's URL.
 
 <div class="filename">command line</div>
 
