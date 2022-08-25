@@ -1,5 +1,8 @@
-## Liquid Templating
+# Liquid Templating
 A benefit of a template engine is the ability to separate units of presentation. This allows developers to define view logic once, and reuse the template across multiple pages. This concept will become more explicit by practice. This section details reusing template components between pages to eliminate the need to repeat code and maintain separate view scripts.
+
+## Create a new web page
+A new web page is accessible to a user once we create the view to be rendered and then provide a web route that renders the view.
 
 ### 1. Create a new page
 Within the `views` directory, create a new file named `hello-world.liquid`.

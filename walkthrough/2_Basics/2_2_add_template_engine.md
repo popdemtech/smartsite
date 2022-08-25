@@ -127,7 +127,7 @@ $ git commit -m 'Add template engine'
 ```
 
 <div class="informational">
-<b>Keep in mind:</b> As application development continues, place template files in the `/views` directory with a file extension of `.liquid`. The files may contain static or dynamic content.
+<b>Keep in mind:</b> As application development continues, place template files in the <code>/views</code> directory with a file extension of <code>.liquid</code>. The files may contain static or dynamic content.
 <div>
 
 ### Resources
