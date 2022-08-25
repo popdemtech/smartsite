@@ -9,6 +9,26 @@ To get started with Heroku, you will need a Heroku account. If you do not yet ha
 ### 2. Install the Heroku CLI
 Heroku provides a command-line interface so that creating, configuring, and maintaining Heroku applications and add-ons is as easy as a terminal command. These functions ultimately could be done via Heroku's web interface, yet the Heroku terminal commands are much more concise approach to accomplishing these tasks. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) (https://devcenter.heroku.com/articles/heroku-cli).
 
+## Modify the app for Heroku deployment
+
+### 1. Create a Procfile
+Heroku looks for a file named `Procfile` to define the command to start the web server. Create an empty file named `Procfile` in the root directory. Within `Procfile` define a `web` command which sets the `NODE_ENV` environment variable then invokes `node index.js`.
+
+<div class="filename">Procfile</div>
+
+```
+web: node index.js
+```
+
+### 2. Use Heroku's `PORT` value
+Heroku's server management system assigns the IP port address on which `smartsite` will be receiving traffic. It exposes it as the environment variable `PORT`. We look more into environment variables in a later section. For now, modify the `PORT` constant in `index.js`.
+
+```javascript
+const PORT = process.env.PORT || 3000;
+```
+
+In this code, PORT is assigned the value of its self-named environment variable if it exists. If the variable is not defined, PORT defaults to a value of 3000.
+
 ## Create a Heroku application
 
 ### 1. `heroku create`
@@ -65,3 +85,5 @@ $ heroku open
 
 ### Resources
 The Heroku CLI: [https://devcenter.heroku.com/articles/heroku-cli](https://devcenter.heroku.com/articles/heroku-cli)
+
+The Heroku Procfile: [https://popdemtech.com](https://popdemtech.com/2022/08/23/heroku-procfile.html)

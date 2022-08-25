@@ -35,10 +35,6 @@ const config = {
 ### 3. Modify the Procfile
 The conditional added in step 2 evaluates to true if the `NODE_ENV` environment variable is set to `'production'`. We cover environment variables in detail in a coming section, but note that if the environment variable is *not set* or is *set to a different value*, the conditional will evaluate to `false`, and the `localhost:3001` URL will be used. We will force the environment variable to be set to `'production'` when Heroku starts the server process.
 
-A common method of providing environment variables to a process is to define them immediately before the process command. Heroku looks for a file named `Procfile` to define the command to start the web server. To this point, we have relied on Heroku's smart defaults to start the server, but now that we need to configure the command, we will specify it in a `Procfile`.
-
-Create an empty file named `Procfile` in the root directory if one does not already exist. Within `Procfile` define a `web` command which sets the `NODE_ENV` environment variable then invokes `node index.js`.
-
 <div class="filename">Procfile</div>
 
 ```
@@ -66,5 +62,3 @@ $ heroku open
 
 ### Resources
 Environment Variables in Node.js: [https://www.twilio.com/blog](https://www.twilio.com/blog/working-with-environment-variables-in-node-js-html)
-
-The Heroku Procfile: [https://popdemtech.com](https://popdemtech.com/2022/08/23/heroku-procfile.html)
