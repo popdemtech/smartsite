@@ -1,6 +1,6 @@
 # A Deployed Environment
 
-So far, `smartsite` has only been served from a local development server. To open the application for public web traffic, the application has to have a public IP address. While the task is accomplishable, chances are you do not want to open your personal computer to public traffic. When allowing public traffic, the host computer requires need-to-have and nice-to-have security and facilitation applications. These programs solve problems ranging from the common security practice of network firewalls to more advanced needs such as reverse proxying, caching, load balancing, et cetera.
+So far, `smartsite` has only been served from a local development server. To open the application for public web traffic, the application has to have a public IP address. While the task is accomplishable with your local computer, chances are you do not want to open your personal computer to public traffic. When allowing public traffic, the host computer requires need-to-have and nice-to-have security and facilitation applications. These programs solve problems ranging from the common security practice of network firewalls to more advanced needs such as reverse proxying, caching, load balancing, et cetera.
 
 A Platform-as-a-Service is a software that provides hardware and software services such as the need for remote web hosting. The service we need is fully-provisioned server space for launching public web applications with ease. One such platform is **Heroku.**
 
