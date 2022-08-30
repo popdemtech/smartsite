@@ -1,154 +1,153 @@
 # Install Node.js on Windows
 
+To develop a Node.js application on Windows, the Node binaries must be installed. This guide walks through installing Node.js using the Windows installer tool.
+
+## Install Node.js
+
 ### 1. Navigate to nodejs.org
 
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_0.png" style="width:50%;min-width:320px;" />
-</p>
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_0.png?raw=true" style="width:66%;" />
+</div>
 
 Navigate to [nodejs.org](https://nodejs.org) and select the version of node you want to download. Even number versions have Long-Term Support (LTS).
 
 Long-term support "typically guarantees that critical bugs will be fixed for a total of 30 months." Production applications should use LTS versions. Use a more recent odd number version to test out latest features.
 
-Read more about node's release schedule in the Resources.
+### 2. Start the wizard
 
-### 2. Setup Wizard
-
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_1.png" style="width:50%;min-width:320px;" />
-</p>
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_1.png?raw=true" style="width:66%;" />
+</div>
 
 Once the installer finishes downloading, open the downloaded file to open the installation wizard.
 
-### 3. Accept Terms
+### 3. Accept terms
 
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_2.png" style="width:50%;min-width:320px;" />
-</p>
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_2.png?raw=true" style="width:66%;" />
+</div>
 
-Accept the terms of the License Agreement if you agree.
+Accept the terms of the License Agreement.
 
-### 4. Select the Installation Directory
+### 4. Select the installation directory
 
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_3.png" style="width:50%;min-width:320px;" />
-</p>
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_3.png?raw=true" style="width:66%;" />
+</div>
 
 The default location, `C:\Program Files\nodejs\`, is fine. If you install in a non-default location, ensure the directory is located within your command-line's `$PATH` variable.
 
-### 5. Customize Features
+### 5. Customize features
 
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_4.png" style="width:50%;min-width:320px;" />
-</p>
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_4.png?raw=true" style="width:66%;" />
+</div>
 
-Click next unless you are certain you want something different. I have never customized this step.
+Click 'Next' unless you are certain you require custom setup.
 
-### 6. Install Tools for Native Modules
+### 6. Install tools for native modules
 
-You will need a few software tools to be installed in addition to NodeJS in order to compile certain JavaScript/C++ npm modules. NPM modules are 3rd party libraries that can be used to extend the functionality of your application.
+You will need a few software tools to be installed in addition to Node.js to compile certain JavaScript/C++ packages. NPM packages are 3rd party libraries that can be used to extend the functionality of a Node.js application.
 
-If you decide not to install the tools, they can be installed later.
+Check the box to install the tools. If you decide not to install the tools, they can be installed later.
 
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_5.png" style="width:50%;min-width:320px;" />
-</p>
-
-I checked the box because I know I want the tools.
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_5.png?raw=true" style="width:66%;" />
+</div>
 
 ### 7. Install
 
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_6.png" style="width:50%;min-width:320px;" />
-</p>
+Click 'Install' and allow the installation to progress.
 
-Install.
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_6.png?raw=true" style="width:66%;" />
+</div>
 
-### 8. Watch the Progress Bar
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_7.png?raw=true" style="width:66%;" />
+</div>
 
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_7.png" style="width:50%;min-width:320px;" />
-</p>
-
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/installing_node_js.gif" style="width:50%;min-width:320px;" />
-</p>
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/installing_node_js.gif?raw=true" style="width:66%;" />
+</div>
 
 The installation took me \~3 minutes total.
 
-### 9. Allow Node.js to make changes to the device
+### 8. Allow Node.js to make changes to the device
 
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_8.png" style="width:50%;min-width:320px;" />
-</p>
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_8.png?raw=true" style="width:66%;" />
+</div>
 
-### 10. After installation, Install Native Module Tools
+### 9. Check the installation
 
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_9.png" style="width:50%;min-width:320px;" />
-</p>
-
-If you selected "Automatically install the necessary tools" in **Step 6**, a window will appear with some information about the libraries that are about to be installed. Continue through the prompts.
-
-### 11. Finish Tools' Install in Powershell 
-
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_10.png" style="width:50%;min-width:320px;" />
-</p>
-
-The process will open a Powershell window with Administrator rights, and finish the installation in Powershell. Allow Powershell to make changes to the device.
-
-### 12. Wait for and Debug Tools Install
-
-This installation process takes longer than the Node.js install. The installer recommends closing *all* programs other than the installer during the install process.
-
-I did not do that, and did not find the performance of my PC affected during install. However, I did experience an installation failure the first time...
-
-### 12a. Repair Native Modules Install
-
-It is common for the native modules installation to "fail" the first time. It's so common the installation wizard comes with a Repair button. If the native modules installation fails the first time, reactivate the Node.js installer download, and select the 'Repair' option. See "Repair Node Installation" in the Resources for details. See the Resourcse as well if you have an installation failure not fixed by this solution:
-
-Find the downloaded file from **Step 1**, and select it.
-
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_11.png" style="width:50%;min-width:320px;" />
-</p>
-
-Select next, then select 'Repair.'
-
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_12.png" style="width:50%;min-width:320px;" />
-</p>
-
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_13.png" style="width:50%;min-width:320px;" />
-</p>
-
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_14.png" style="width:50%;min-width:320px;" />
-</p>
-
-<p style="text-align:center">
-  <img src="/assets/img/posts/install-nodejs-windows/walkthrough_15.png" style="width:50%;min-width:320px;" />
-</p>
-
-### 13. Check Installation
-
-Node and NPM should now be installed. If you installed the native modules, you will have those as well. From Windows Terminal (or similar), run the following commands and check the output:
+Node and NPM should now be installed. From Windows Terminal, issue the following commands to verify the `node` and `npm` installations. The `-v` flags indicate the process should print the **v**ersion of the library.
 
 <div class="filename">command line</div>
 
 ```
 > node -v
-v16.13.2
+v16.14.2
 
 > npm -v
-v8.2.1
+v8.5.0
 ```
 
-`node -v` checks the version of node, and `npm -v` checks the version of npm, node package manager.
+Your terminal may list different versions than what are listed here.
 
-If native modules were installed, run the following to check the version of the installed libraries:
+## Optional: Tools for Native Modules
+If you decided to install Tools for Native Modules, there are additional steps to follow to complete installation.
+
+### 1. Install tools for native modules
+
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_9.png?raw=true" style="width:66%;" />
+</div>
+
+If you selected "Automatically install the necessary tools" in **Step 6**, a window will appear with some information about the libraries that are about to be installed. Continue through the prompts.
+
+### 2. Finish the install in PowerShell 
+
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_10.png?raw=true" style="width:66%;" />
+</div>
+
+The process will open a PowerShell window with Administrator rights. Continue the installation process in this PowerShell interface. Allow PowerShell to make changes to the device.
+
+The installer recommends closing *all* programs other than the installer during the process. In my experience, closing other programs is not necessary. This installation process takes longer than the Node.js install.
+
+### 3. Repair the install
+
+It is common for the installation to "fail" the first time. It's common enough that the installation wizard comes with a 'Repair' button. If the tools for native modules installation fails the first time, reactivate the Node.js installer, and select the 'Repair' option.
+
+Find the downloaded file from **Step 1**, and select it.
+
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_11.png?raw=true" style="width:66%;" />
+</div>
+
+Select 'Next,' then select 'Repair.'
+
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_12.png?raw=true" style="width:66%;" />
+</div>
+
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_13.png?raw=true" style="width:66%;" />
+</div>
+
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_14.png?raw=true" style="width:66%;" />
+</div>
+
+<div style="text-align:center;padding: 20px 0;">
+  <img src="https://github.com/popdemtech/popdemtech.com/blob/master/assets/img/posts/install-nodejs-windows/walkthrough_15.png?raw=true" style="width:66%;" />
+</div>
+
+### 5. Verify the installation
+
+Run the following commands to check the version of the installed libraries:
 
 <div class="filename">command line</div>
 
@@ -164,9 +163,9 @@ visualstudio2019buildtools 16.11.9.0
 21 packages installed.
 ```
 
-In particular, check for the existance of visualstudio-installer, visualstudio2019-workload-vctools, and visualstudio2019buildtools libraries. (Note: The exact version and name of the Visual Studio tool may have progressed to higher versions than in the example output.)
+In particular, check for the existance of `visualstudio-installer`, `visualstudio2019-workload-vctools`, and `visualstudio2019buildtools` libraries. The exact version and name of the Visual Studio tool may have progressed to higher versions than in the example output.
 
-Now that Node is installed, we'll get to building out `smartsite`. Keep the following in mind: Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, developer libraries (things that can be `npm install`ed), and more. The Node.js ecosystem is ripe for software creation.
+With Node.js installed, we can begin building the functional components of `smartsite`. While `smartsite` is going to contain a web server application for handling internet requests, it's worth noting that Node.js is useful for more than serving web requests. Node.js can be used to build desktop applications, command-line scripts, development libraries, and more. The Node.js ecosystem is ripe for software creation.
 
 ### Resources
 
