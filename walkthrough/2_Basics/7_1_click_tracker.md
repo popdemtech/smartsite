@@ -216,22 +216,20 @@ When an error response is returned from the API, remove the `hidden` class on th
 
 ### 3. Test the error message
 
-To test the error handling, you can force the response to have a non-200 status code.
+To test the error handling, you can force the response to have a non-200 status code. This can be accomplished by commenting out the `/api/clicks` route temporarily.
 
 <div class="filename">index.js</div>
 
 ```javascript
-app.post('/api/clicks', async function(request, response) {
-  const user = request.oidc.user ? request.oidc.user.email : null;
-  await Click.create({ user: user });
+// app.post('/api/clicks', async function(request, response) {
+//   const user = request.oidc.user ? request.oidc.user.email : null;
+//   await Click.create({ user: user });
   
-  response.status(400); // add this temporarily
-  
-  response.json({ totalClicks: await Click.count() });
-});
+//   response.json({ totalClicks: await Click.count() });
+// });
 ```
 
-Be sure to revert this intermediate step.
+After making the change, see that the error message red error message displays. Be sure to revert this intermediate step.
 
 ## Wrap Up the Feature
 
