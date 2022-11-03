@@ -1,20 +1,26 @@
 # Add Authentication with Auth0
 `smartsite` will utilize the Auth0 service for authentication. Auth0 is a drop-in IAM solution to add authentication and authorization services to an application. Notably, it comes with single-sign on which will allow users of `smartsite` to sign up with the social provider of their choice (e.g. Google.) In addition to the fundamental authentication flow featured in the previous section, Auth0 offers further authentication features such as multi-factor authentication, custom landing pages, and multi-domain applications.
 
+1. Sign up for Auth0
+2. Add Auth0 library to `smartsite`
+3. Set up the required HTTPS proxy
+4. Test the changes
+
 ## 1. Sign up for Auth0
 Auth0 provides a user interface for configuring applications' authentication settings. Setting up an application in the interface is a step-by-step walkthrough process.
 
-1. Sign up for Auth0's free tier
+1. Sign up for Auth0
 2. Navigate to the Applications Dashboard
 3. "Create Application". Set name and select "Regular Web Application"
 4. Select Node.js from the list of supported frameworks and "Integrate now"
 5. Set the "Allowed Callback URL"
   * Set this value to `https://localhost:3001/callback`.
-  * More the callback URL is covered in the "Caddy reverse proxy" section.
-* Set "Allowed Logout URLs"
+6. Set "Allowed Logout URLs"
   * Set this value to `https://localhost:3001`
 
-## 2. Add Auth0 to `smartsite`
+---
+
+## 2. Add Auth0 configuration to `smartsite`
 Now that Auth0 is configured to accept requests, we must now add code within `smartsite` that makes calls to Auth0's application interface (API). While using raw HTTP calls to accomplish this is possible, `smartsite` will utilize Auth0 provided API wrapping library, `express-openid-connect`. This package abstracts the HTTP routing and configuration to JavaScript functions and classes with developer-friendly interfaces.
 
 ### 1. Install the `express-openid-connect` authentication middleware
@@ -56,7 +62,7 @@ app.use(auth(config));
 
 **Note:** Be sure to include the `routes` key as shown in the code snippet here. As of this writing, `routes.callback` is required yet not included the code snippet provided by Auth0.
 
-### 3. Use Auth0
+### 3. Use the Auth0 library
 The snippet provides an example route that utilizes the `isAuthenticated` helper method provided by the `auth` middleware. `smartsite` already has a `/` route, so if you intend to keep the example route, rename its path to avoid pathname conflicts. The following snippet creates a route `/auth-check` which uses the helper method.
 
 <div class="filename">index.js</div>
@@ -69,7 +75,9 @@ app.get('/auth-check', (req, res) => {
 });
 ```
 
-## 3. Set up an HTTPS proxy
+---
+
+## 3. Set up a local HTTPS proxy
 Notice that the `baseURL` Auth0 is aware of is `https://localhost:3001`. Auth0 requires authentication traffic be delivered via the HTTP**Secure** protocol. HTTPS is an extension to the HTTP protocol, but includes layers of security via encryption and certificate checking to ensure the identity of web servers.
 
 The Auth0 configuration is different in two ways from the Express server in `index.js`:
@@ -85,15 +93,15 @@ In this step, we'll set up a webserver to proxy HTTPS web traffic at port 3001 t
 Note: This solution is for local development. The proxy server will not need to be run in production because Heroku defaults to serving all web traffic over HTTPS.
 </div>
 
-Install the `@leafac/caddy` npm library as a dev dependency.
+### 1. Install the `@leafac/caddy` npm library as a dev dependency.
 
 <div class="filename">command line</div>
 
 ```
-$ npm i --save-dev @leafac/caddy
+$ npm install --save-dev @leafac/caddy
 ```
 
-## 4. Create a start script for the proxy server
+### 2. Create a start script for the proxy server
 
 Create a script named `https-proxy` in `package.json` which starts the proxy server:
 
@@ -110,7 +118,9 @@ The caddy library defaults to interpreting the `--from` parameter as `https` and
 
 We can now run `npm run https-proxy` and the proxy server will initialize and forward traffic HTTPS traffic at port 3001 to port 3000. Open seperate terminal windows to run `npm run start` and `npm run https-proxy` concurrently.
 
-## 5. Test locally
+---
+
+## 4. Test the changes
 
 ### 1. Alter the root route to check authentication
 
@@ -120,8 +130,17 @@ Within `index.js`, alter `/` route to pass the result of `isAuthenticated()` to 
 
 ```javascript
 app.get('/', function(request, response) {
+  const debug = request.query.debug;
+  const nodeVersion = process.version;
+  const serverTime = new Date();
+  const nodeEnv = process.env.NODE_ENV || 'development';
+  const loggedIn = request.oidc.isAuthenticated();
   response.render('index', {
-    loggedIn: request.oidc.isAuthenticated()
+    debug,
+    nodeVersion,
+    serverTime,
+    nodeEnv,
+    loggedIn
   });
 });
 ```
@@ -133,6 +152,7 @@ Alter `index.liquid` to show a Logout or Login button depending on whether there
 
 ```html
 <li>
+  <a href="/check-auth">check auth</a>
   {% if loggedIn %}
   <a href="/logout">Logout</a>
   {% else %}
@@ -143,7 +163,7 @@ Alter `index.liquid` to show a Logout or Login button depending on whether there
 
 ### 3. Test the authentication flow
 
-To see the full changes, first run the Express and Caddy servers (`npm run start` and `npm run dev-proxy` respectively.) Next, open a browser to `localhost:3001`, and navigate through the authentication flow.
+To see the full changes, first run the Express and Caddy servers (`npm run start` and `npm run dev-proxy` respectively.) Next, open a browser to `https://localhost:3001`, and navigate through the authentication flow.
 
 <ol>
   <li>Click Login</li>
@@ -151,6 +171,8 @@ To see the full changes, first run the Express and Caddy servers (`npm run start
   <li>Be redirected back to the base URL, <pre>localhost:3001</pre>.</li>
   <li>Click Logout</li>
 </ol>
+
+---
 
 ## 6. Git commit the changes
 This was a significant unit of development. The server now has the ability to authenticate users, albeit only for the local environment. We will look at authentication for the deployed environment in the next section. For now, `git commit`!
